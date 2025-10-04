@@ -49,9 +49,9 @@ class StartLoadingMessage {
         Stream.WriteVInt(0);
         Stream.WriteVInt(0);
 
-        Stream.WriteDataReference(0); // Map ID
-        Stream.WriteDataReference(0); // Map ID
-        Stream.WriteDataReference(0); // Map ID
+        Stream.WriteDataReference(0); // ?
+        Stream.WriteDataReference(0); // ?
+        Stream.WriteDataReference(0); // ?
 
         return Stream.Payload
     }
