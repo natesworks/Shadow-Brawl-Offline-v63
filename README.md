@@ -15,5 +15,5 @@ If you’re a developer, feel free to submit a pull request.
 
 ## Contact
 You can contact me on Discord or on Telegram
-> Discord : ``soufgame__``
+> Discord : ``soufgame__`` 
 > Telegram : ``@soufgamev2``
