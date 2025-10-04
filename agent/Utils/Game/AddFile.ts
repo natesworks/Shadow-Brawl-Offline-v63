@@ -15,7 +15,7 @@ class ResourceListener {
                 Debugger.Info("[Loader::LoadDebugSC] Loaded debug.sc!");
                 setTimeout(() => {
                     DebugButton.LoadDebugButton();
-                }, 120);
+                }, 3000);
                 SCLoader.detach()
             }
         })

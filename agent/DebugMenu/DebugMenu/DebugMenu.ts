@@ -22,7 +22,7 @@ class DebugMenu {
         Functions.Stage.AddChild(Functions.Stage.sm_instance.readPointer(), DebugMenuBase.ScrollArea);
 
         Interceptor.attach(Environment.LaserBase.add(0x0A40B4), { // GUI::update
-            onEnter() {
+            onLeave() {
                 DebugMenuBase.update(DebugMenuBase.TabScrollArea, 20);
                 DebugMenuBase.update(DebugMenuBase.ScrollArea, 20);
             }

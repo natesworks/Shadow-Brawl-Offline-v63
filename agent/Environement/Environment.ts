@@ -1,3 +1,7 @@
+import Java from "frida-java-bridge";
+import ObjC from "frida-objc-bridge";
+import Debugger from "../Utils/Debugger";
+
 class Environment {
     static script_version: string = "1.0.0";
     static script_branch: string = "dev";
@@ -9,6 +13,17 @@ class Environment {
     static LaserBaseSize: number;
 
     static Init() {
+        if (Java.available) {
+            Environment.platform = "Android";
+        }
+        else if (ObjC.available) {
+            Environment.platform = "iOS";
+        }
+        else {
+            Debugger.Error("wrong way ever to check if a device is ios or android but ngl im lazy bruh");
+        }
+
+
         if (Environment.platform == "iOS") {
             Environment.FindModuleByName("NullsBrawl");
             Environment.FindBaseAddress();

@@ -6,7 +6,7 @@ class LogicBattleModeServer {
     static Spectators: number = 0
     static IsBrawlTV: boolean = false
 
-    static PlayerCount: number = 1//LogicGameModeUtil.GetPlayerCount();
+    static PlayerCount: number = 1 // LogicGameModeUtil.GetPlayerCount();
     static PlayerIndex: number = 0
     static TeamIndex: number = 0
 

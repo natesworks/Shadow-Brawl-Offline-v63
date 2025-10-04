@@ -42,6 +42,7 @@ class Functions {
 
     static MovieClipHelper = class {
         static SetTextFieldVerticallyCentered: any;
+        static SetTextAndScaleIfNecessary: any;
     }
 
     static Sprite = class {
@@ -127,6 +128,7 @@ class Functions {
         Functions.ScrollArea.Update = new NativeFunction(Addresses.ScrollArea_update, 'void', ['pointer', 'int']);
         Functions.ScrollArea.AddContent = new NativeFunction(Addresses.ScrollArea_addContent, 'void', ['pointer', 'pointer'])
         Functions.GameButton.GameButton = new NativeFunction(Addresses.GameButtonCtor, 'void', ['pointer'])
+        Functions.MovieClipHelper.SetTextAndScaleIfNecessary = new NativeFunction(Addresses.MovieClipHelper_setTextAndScaleIfNecessary, 'void', ['pointer', 'pointer', 'int', 'int']);
 
         Functions.Imports.Malloc = new NativeFunction(Addresses.Imports.Malloc, 'pointer', ["uint"]);
         Functions.Imports.Free = new NativeFunction(LibSystem.findExportByName("free")!, "int", ["pointer"]);

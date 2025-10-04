@@ -1,5 +1,5 @@
 📦
-502441 /agent/index.js
+971769 /agent/index.js
 ✄
 var __defProp = Object.defineProperty;
 var __export = (target, all) => {
@@ -90,7 +90,7 @@ function fromByteArray(uint8) {
 
 // frida-shim:node_modules/@frida/ieee754/index.js
 function read(buffer, offset, isLE, mLen, nBytes) {
-  let e, m;
+  let e, m2;
   const eLen = nBytes * 8 - mLen - 1;
   const eMax = (1 << eLen) - 1;
   const eBias = eMax >> 1;
@@ -107,26 +107,26 @@ function read(buffer, offset, isLE, mLen, nBytes) {
     i += d;
     nBits -= 8;
   }
-  m = e & (1 << -nBits) - 1;
+  m2 = e & (1 << -nBits) - 1;
   e >>= -nBits;
   nBits += mLen;
   while (nBits > 0) {
-    m = m * 256 + buffer[offset + i];
+    m2 = m2 * 256 + buffer[offset + i];
     i += d;
     nBits -= 8;
   }
   if (e === 0) {
     e = 1 - eBias;
   } else if (e === eMax) {
-    return m ? NaN : (s ? -1 : 1) * Infinity;
+    return m2 ? NaN : (s ? -1 : 1) * Infinity;
   } else {
-    m = m + Math.pow(2, mLen);
+    m2 = m2 + Math.pow(2, mLen);
     e = e - eBias;
   }
-  return (s ? -1 : 1) * m * Math.pow(2, e - mLen);
+  return (s ? -1 : 1) * m2 * Math.pow(2, e - mLen);
 }
 function write(buffer, value, offset, isLE, mLen, nBytes) {
-  let e, m, c;
+  let e, m2, c;
   let eLen = nBytes * 8 - mLen - 1;
   const eMax = (1 << eLen) - 1;
   const eBias = eMax >> 1;
@@ -136,7 +136,7 @@ function write(buffer, value, offset, isLE, mLen, nBytes) {
   const s = value < 0 || value === 0 && 1 / value < 0 ? 1 : 0;
   value = Math.abs(value);
   if (isNaN(value) || value === Infinity) {
-    m = isNaN(value) ? 1 : 0;
+    m2 = isNaN(value) ? 1 : 0;
     e = eMax;
   } else {
     e = Math.floor(Math.log(value) / Math.LN2);
@@ -154,23 +154,23 @@ function write(buffer, value, offset, isLE, mLen, nBytes) {
       c /= 2;
     }
     if (e + eBias >= eMax) {
-      m = 0;
+      m2 = 0;
       e = eMax;
     } else if (e + eBias >= 1) {
-      m = (value * c - 1) * Math.pow(2, mLen);
+      m2 = (value * c - 1) * Math.pow(2, mLen);
       e = e + eBias;
     } else {
-      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
+      m2 = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
       e = 0;
     }
   }
   while (mLen >= 8) {
-    buffer[offset + i] = m & 255;
+    buffer[offset + i] = m2 & 255;
     i += d;
-    m /= 256;
+    m2 /= 256;
     mLen -= 8;
   }
-  e = e << mLen | m;
+  e = e << mLen | m2;
   eLen += mLen;
   while (eLen > 0) {
     buffer[offset + i] = e & 255;
@@ -540,10 +540,10 @@ function slowToString(encoding, start, end) {
   }
 }
 Buffer2.prototype._isBuffer = true;
-function swap(b, n, m) {
+function swap(b, n, m2) {
   const i = b[n];
-  b[n] = b[m];
-  b[m] = i;
+  b[n] = b[m2];
+  b[m2] = i;
 }
 Buffer2.prototype.swap16 = function swap16() {
   const len = this.length;
@@ -1462,9 +1462,9 @@ Buffer2.prototype.fill = function fill(val, start, end, encoding) {
       throw new TypeError("Unknown encoding: " + encoding);
     }
     if (val.length === 1) {
-      const code2 = val.charCodeAt(0);
-      if (encoding === "utf8" && code2 < 128 || encoding === "latin1") {
-        val = code2;
+      const code4 = val.charCodeAt(0);
+      if (encoding === "utf8" && code4 < 128 || encoding === "latin1") {
+        val = code4;
       }
     }
   } else if (typeof val === "number") {
@@ -1798,6 +1798,14323 @@ function detectPlatform() {
   return platform3 === "windows" ? "win32" : platform3;
 }
 
+// node_modules/frida-java-bridge/lib/android.js
+var android_exports = {};
+__export(android_exports, {
+  ArtMethod: () => ArtMethod,
+  ArtStackVisitor: () => ArtStackVisitor,
+  DVM_JNI_ENV_OFFSET_SELF: () => DVM_JNI_ENV_OFFSET_SELF,
+  HandleVector: () => HandleVector,
+  VariableSizedHandleScope: () => VariableSizedHandleScope,
+  backtrace: () => backtrace,
+  deoptimizeBootImage: () => deoptimizeBootImage,
+  deoptimizeEverything: () => deoptimizeEverything,
+  deoptimizeMethod: () => deoptimizeMethod,
+  ensureClassInitialized: () => ensureClassInitialized,
+  getAndroidApiLevel: () => getAndroidApiLevel,
+  getAndroidVersion: () => getAndroidVersion,
+  getApi: () => getApi,
+  getArtClassSpec: () => getArtClassSpec,
+  getArtFieldSpec: () => getArtFieldSpec,
+  getArtMethodSpec: () => getArtMethodSpec,
+  getArtThreadFromEnv: () => getArtThreadFromEnv,
+  getArtThreadSpec: () => getArtThreadSpec,
+  makeArtClassLoaderVisitor: () => makeArtClassLoaderVisitor,
+  makeArtClassVisitor: () => makeArtClassVisitor,
+  makeMethodMangler: () => makeMethodMangler,
+  makeObjectVisitorPredicate: () => makeObjectVisitorPredicate,
+  revertGlobalPatches: () => revertGlobalPatches,
+  translateMethod: () => translateMethod,
+  withAllArtThreadsSuspended: () => withAllArtThreadsSuspended,
+  withRunnableArtThread: () => withRunnableArtThread
+});
+
+// node_modules/frida-java-bridge/lib/alloc.js
+var {
+  pageSize,
+  pointerSize: pointerSize2
+} = Process;
+var CodeAllocator = class {
+  constructor(sliceSize) {
+    this.sliceSize = sliceSize;
+    this.slicesPerPage = pageSize / sliceSize;
+    this.pages = [];
+    this.free = [];
+  }
+  allocateSlice(spec, alignment) {
+    const anyLocation = spec.near === void 0;
+    const anyAlignment = alignment === 1;
+    if (anyLocation && anyAlignment) {
+      const slice2 = this.free.pop();
+      if (slice2 !== void 0) {
+        return slice2;
+      }
+    } else if (alignment < pageSize) {
+      const { free } = this;
+      const n = free.length;
+      const alignMask = anyAlignment ? null : ptr(alignment - 1);
+      for (let i = 0; i !== n; i++) {
+        const slice2 = free[i];
+        const satisfiesLocation = anyLocation || this._isSliceNear(slice2, spec);
+        const satisfiesAlignment = anyAlignment || slice2.and(alignMask).isNull();
+        if (satisfiesLocation && satisfiesAlignment) {
+          return free.splice(i, 1)[0];
+        }
+      }
+    }
+    return this._allocatePage(spec);
+  }
+  _allocatePage(spec) {
+    const page = Memory.alloc(pageSize, spec);
+    const { sliceSize, slicesPerPage } = this;
+    for (let i = 1; i !== slicesPerPage; i++) {
+      const slice2 = page.add(i * sliceSize);
+      this.free.push(slice2);
+    }
+    this.pages.push(page);
+    return page;
+  }
+  _isSliceNear(slice2, spec) {
+    const sliceEnd = slice2.add(this.sliceSize);
+    const { near, maxDistance } = spec;
+    const startDistance = abs(near.sub(slice2));
+    const endDistance = abs(near.sub(sliceEnd));
+    return startDistance.compare(maxDistance) <= 0 && endDistance.compare(maxDistance) <= 0;
+  }
+  freeSlice(slice2) {
+    this.free.push(slice2);
+  }
+};
+function abs(nptr) {
+  const shmt = pointerSize2 === 4 ? 31 : 63;
+  const mask = ptr(1).shl(shmt).not();
+  return nptr.and(mask);
+}
+function makeAllocator(sliceSize) {
+  return new CodeAllocator(sliceSize);
+}
+
+// node_modules/frida-java-bridge/lib/result.js
+var JNI_OK = 0;
+function checkJniResult(name, result) {
+  if (result !== JNI_OK) {
+    throw new Error(name + " failed: " + result);
+  }
+}
+
+// node_modules/frida-java-bridge/lib/jvmti.js
+var jvmtiVersion = {
+  v1_0: 805371904,
+  v1_2: 805372416
+};
+var jvmtiCapabilities = {
+  canTagObjects: 1
+};
+var { pointerSize: pointerSize3 } = Process;
+var nativeFunctionOptions = {
+  exceptions: "propagate"
+};
+function EnvJvmti(handle2, vm3) {
+  this.handle = handle2;
+  this.vm = vm3;
+  this.vtable = handle2.readPointer();
+}
+EnvJvmti.prototype.deallocate = proxy(47, "int32", ["pointer", "pointer"], function(impl2, mem) {
+  return impl2(this.handle, mem);
+});
+EnvJvmti.prototype.getLoadedClasses = proxy(78, "int32", ["pointer", "pointer", "pointer"], function(impl2, classCountPtr, classesPtr) {
+  const result = impl2(this.handle, classCountPtr, classesPtr);
+  checkJniResult("EnvJvmti::getLoadedClasses", result);
+});
+EnvJvmti.prototype.iterateOverInstancesOfClass = proxy(112, "int32", ["pointer", "pointer", "int", "pointer", "pointer"], function(impl2, klass, objectFilter, heapObjectCallback, userData) {
+  const result = impl2(this.handle, klass, objectFilter, heapObjectCallback, userData);
+  checkJniResult("EnvJvmti::iterateOverInstancesOfClass", result);
+});
+EnvJvmti.prototype.getObjectsWithTags = proxy(114, "int32", ["pointer", "int", "pointer", "pointer", "pointer", "pointer"], function(impl2, tagCount, tags, countPtr, objectResultPtr, tagResultPtr) {
+  const result = impl2(this.handle, tagCount, tags, countPtr, objectResultPtr, tagResultPtr);
+  checkJniResult("EnvJvmti::getObjectsWithTags", result);
+});
+EnvJvmti.prototype.addCapabilities = proxy(142, "int32", ["pointer", "pointer"], function(impl2, capabilitiesPtr) {
+  return impl2(this.handle, capabilitiesPtr);
+});
+function proxy(offset, retType2, argTypes2, wrapper) {
+  let impl2 = null;
+  return function() {
+    if (impl2 === null) {
+      impl2 = new NativeFunction(this.vtable.add((offset - 1) * pointerSize3).readPointer(), retType2, argTypes2, nativeFunctionOptions);
+    }
+    let args = [impl2];
+    args = args.concat.apply(args, arguments);
+    return wrapper.apply(this, args);
+  };
+}
+
+// node_modules/frida-java-bridge/lib/machine-code.js
+function parseInstructionsAt(address, tryParse, { limit }) {
+  let cursor = address;
+  let prevInsn = null;
+  for (let i = 0; i !== limit; i++) {
+    const insn = Instruction.parse(cursor);
+    const value = tryParse(insn, prevInsn);
+    if (value !== null) {
+      return value;
+    }
+    cursor = insn.next;
+    prevInsn = insn;
+  }
+  return null;
+}
+
+// node_modules/frida-java-bridge/lib/memoize.js
+function memoize(compute) {
+  let value = null;
+  let computed = false;
+  return function(...args) {
+    if (!computed) {
+      value = compute(...args);
+      computed = true;
+    }
+    return value;
+  };
+}
+
+// node_modules/frida-java-bridge/lib/env.js
+function Env(handle2, vm3) {
+  this.handle = handle2;
+  this.vm = vm3;
+}
+var pointerSize4 = Process.pointerSize;
+var JNI_ABORT = 2;
+var CALL_CONSTRUCTOR_METHOD_OFFSET = 28;
+var CALL_OBJECT_METHOD_OFFSET = 34;
+var CALL_BOOLEAN_METHOD_OFFSET = 37;
+var CALL_BYTE_METHOD_OFFSET = 40;
+var CALL_CHAR_METHOD_OFFSET = 43;
+var CALL_SHORT_METHOD_OFFSET = 46;
+var CALL_INT_METHOD_OFFSET = 49;
+var CALL_LONG_METHOD_OFFSET = 52;
+var CALL_FLOAT_METHOD_OFFSET = 55;
+var CALL_DOUBLE_METHOD_OFFSET = 58;
+var CALL_VOID_METHOD_OFFSET = 61;
+var CALL_NONVIRTUAL_OBJECT_METHOD_OFFSET = 64;
+var CALL_NONVIRTUAL_BOOLEAN_METHOD_OFFSET = 67;
+var CALL_NONVIRTUAL_BYTE_METHOD_OFFSET = 70;
+var CALL_NONVIRTUAL_CHAR_METHOD_OFFSET = 73;
+var CALL_NONVIRTUAL_SHORT_METHOD_OFFSET = 76;
+var CALL_NONVIRTUAL_INT_METHOD_OFFSET = 79;
+var CALL_NONVIRTUAL_LONG_METHOD_OFFSET = 82;
+var CALL_NONVIRTUAL_FLOAT_METHOD_OFFSET = 85;
+var CALL_NONVIRTUAL_DOUBLE_METHOD_OFFSET = 88;
+var CALL_NONVIRTUAL_VOID_METHOD_OFFSET = 91;
+var CALL_STATIC_OBJECT_METHOD_OFFSET = 114;
+var CALL_STATIC_BOOLEAN_METHOD_OFFSET = 117;
+var CALL_STATIC_BYTE_METHOD_OFFSET = 120;
+var CALL_STATIC_CHAR_METHOD_OFFSET = 123;
+var CALL_STATIC_SHORT_METHOD_OFFSET = 126;
+var CALL_STATIC_INT_METHOD_OFFSET = 129;
+var CALL_STATIC_LONG_METHOD_OFFSET = 132;
+var CALL_STATIC_FLOAT_METHOD_OFFSET = 135;
+var CALL_STATIC_DOUBLE_METHOD_OFFSET = 138;
+var CALL_STATIC_VOID_METHOD_OFFSET = 141;
+var GET_OBJECT_FIELD_OFFSET = 95;
+var GET_BOOLEAN_FIELD_OFFSET = 96;
+var GET_BYTE_FIELD_OFFSET = 97;
+var GET_CHAR_FIELD_OFFSET = 98;
+var GET_SHORT_FIELD_OFFSET = 99;
+var GET_INT_FIELD_OFFSET = 100;
+var GET_LONG_FIELD_OFFSET = 101;
+var GET_FLOAT_FIELD_OFFSET = 102;
+var GET_DOUBLE_FIELD_OFFSET = 103;
+var SET_OBJECT_FIELD_OFFSET = 104;
+var SET_BOOLEAN_FIELD_OFFSET = 105;
+var SET_BYTE_FIELD_OFFSET = 106;
+var SET_CHAR_FIELD_OFFSET = 107;
+var SET_SHORT_FIELD_OFFSET = 108;
+var SET_INT_FIELD_OFFSET = 109;
+var SET_LONG_FIELD_OFFSET = 110;
+var SET_FLOAT_FIELD_OFFSET = 111;
+var SET_DOUBLE_FIELD_OFFSET = 112;
+var GET_STATIC_OBJECT_FIELD_OFFSET = 145;
+var GET_STATIC_BOOLEAN_FIELD_OFFSET = 146;
+var GET_STATIC_BYTE_FIELD_OFFSET = 147;
+var GET_STATIC_CHAR_FIELD_OFFSET = 148;
+var GET_STATIC_SHORT_FIELD_OFFSET = 149;
+var GET_STATIC_INT_FIELD_OFFSET = 150;
+var GET_STATIC_LONG_FIELD_OFFSET = 151;
+var GET_STATIC_FLOAT_FIELD_OFFSET = 152;
+var GET_STATIC_DOUBLE_FIELD_OFFSET = 153;
+var SET_STATIC_OBJECT_FIELD_OFFSET = 154;
+var SET_STATIC_BOOLEAN_FIELD_OFFSET = 155;
+var SET_STATIC_BYTE_FIELD_OFFSET = 156;
+var SET_STATIC_CHAR_FIELD_OFFSET = 157;
+var SET_STATIC_SHORT_FIELD_OFFSET = 158;
+var SET_STATIC_INT_FIELD_OFFSET = 159;
+var SET_STATIC_LONG_FIELD_OFFSET = 160;
+var SET_STATIC_FLOAT_FIELD_OFFSET = 161;
+var SET_STATIC_DOUBLE_FIELD_OFFSET = 162;
+var callMethodOffset = {
+  pointer: CALL_OBJECT_METHOD_OFFSET,
+  uint8: CALL_BOOLEAN_METHOD_OFFSET,
+  int8: CALL_BYTE_METHOD_OFFSET,
+  uint16: CALL_CHAR_METHOD_OFFSET,
+  int16: CALL_SHORT_METHOD_OFFSET,
+  int32: CALL_INT_METHOD_OFFSET,
+  int64: CALL_LONG_METHOD_OFFSET,
+  float: CALL_FLOAT_METHOD_OFFSET,
+  double: CALL_DOUBLE_METHOD_OFFSET,
+  void: CALL_VOID_METHOD_OFFSET
+};
+var callNonvirtualMethodOffset = {
+  pointer: CALL_NONVIRTUAL_OBJECT_METHOD_OFFSET,
+  uint8: CALL_NONVIRTUAL_BOOLEAN_METHOD_OFFSET,
+  int8: CALL_NONVIRTUAL_BYTE_METHOD_OFFSET,
+  uint16: CALL_NONVIRTUAL_CHAR_METHOD_OFFSET,
+  int16: CALL_NONVIRTUAL_SHORT_METHOD_OFFSET,
+  int32: CALL_NONVIRTUAL_INT_METHOD_OFFSET,
+  int64: CALL_NONVIRTUAL_LONG_METHOD_OFFSET,
+  float: CALL_NONVIRTUAL_FLOAT_METHOD_OFFSET,
+  double: CALL_NONVIRTUAL_DOUBLE_METHOD_OFFSET,
+  void: CALL_NONVIRTUAL_VOID_METHOD_OFFSET
+};
+var callStaticMethodOffset = {
+  pointer: CALL_STATIC_OBJECT_METHOD_OFFSET,
+  uint8: CALL_STATIC_BOOLEAN_METHOD_OFFSET,
+  int8: CALL_STATIC_BYTE_METHOD_OFFSET,
+  uint16: CALL_STATIC_CHAR_METHOD_OFFSET,
+  int16: CALL_STATIC_SHORT_METHOD_OFFSET,
+  int32: CALL_STATIC_INT_METHOD_OFFSET,
+  int64: CALL_STATIC_LONG_METHOD_OFFSET,
+  float: CALL_STATIC_FLOAT_METHOD_OFFSET,
+  double: CALL_STATIC_DOUBLE_METHOD_OFFSET,
+  void: CALL_STATIC_VOID_METHOD_OFFSET
+};
+var getFieldOffset = {
+  pointer: GET_OBJECT_FIELD_OFFSET,
+  uint8: GET_BOOLEAN_FIELD_OFFSET,
+  int8: GET_BYTE_FIELD_OFFSET,
+  uint16: GET_CHAR_FIELD_OFFSET,
+  int16: GET_SHORT_FIELD_OFFSET,
+  int32: GET_INT_FIELD_OFFSET,
+  int64: GET_LONG_FIELD_OFFSET,
+  float: GET_FLOAT_FIELD_OFFSET,
+  double: GET_DOUBLE_FIELD_OFFSET
+};
+var setFieldOffset = {
+  pointer: SET_OBJECT_FIELD_OFFSET,
+  uint8: SET_BOOLEAN_FIELD_OFFSET,
+  int8: SET_BYTE_FIELD_OFFSET,
+  uint16: SET_CHAR_FIELD_OFFSET,
+  int16: SET_SHORT_FIELD_OFFSET,
+  int32: SET_INT_FIELD_OFFSET,
+  int64: SET_LONG_FIELD_OFFSET,
+  float: SET_FLOAT_FIELD_OFFSET,
+  double: SET_DOUBLE_FIELD_OFFSET
+};
+var getStaticFieldOffset = {
+  pointer: GET_STATIC_OBJECT_FIELD_OFFSET,
+  uint8: GET_STATIC_BOOLEAN_FIELD_OFFSET,
+  int8: GET_STATIC_BYTE_FIELD_OFFSET,
+  uint16: GET_STATIC_CHAR_FIELD_OFFSET,
+  int16: GET_STATIC_SHORT_FIELD_OFFSET,
+  int32: GET_STATIC_INT_FIELD_OFFSET,
+  int64: GET_STATIC_LONG_FIELD_OFFSET,
+  float: GET_STATIC_FLOAT_FIELD_OFFSET,
+  double: GET_STATIC_DOUBLE_FIELD_OFFSET
+};
+var setStaticFieldOffset = {
+  pointer: SET_STATIC_OBJECT_FIELD_OFFSET,
+  uint8: SET_STATIC_BOOLEAN_FIELD_OFFSET,
+  int8: SET_STATIC_BYTE_FIELD_OFFSET,
+  uint16: SET_STATIC_CHAR_FIELD_OFFSET,
+  int16: SET_STATIC_SHORT_FIELD_OFFSET,
+  int32: SET_STATIC_INT_FIELD_OFFSET,
+  int64: SET_STATIC_LONG_FIELD_OFFSET,
+  float: SET_STATIC_FLOAT_FIELD_OFFSET,
+  double: SET_STATIC_DOUBLE_FIELD_OFFSET
+};
+var nativeFunctionOptions2 = {
+  exceptions: "propagate"
+};
+var cachedVtable = null;
+var globalRefs = [];
+Env.dispose = function(env2) {
+  globalRefs.forEach(env2.deleteGlobalRef, env2);
+  globalRefs = [];
+};
+function register(globalRef) {
+  globalRefs.push(globalRef);
+  return globalRef;
+}
+function vtable(instance) {
+  if (cachedVtable === null) {
+    cachedVtable = instance.handle.readPointer();
+  }
+  return cachedVtable;
+}
+function proxy2(offset, retType2, argTypes2, wrapper) {
+  let impl2 = null;
+  return function() {
+    if (impl2 === null) {
+      impl2 = new NativeFunction(vtable(this).add(offset * pointerSize4).readPointer(), retType2, argTypes2, nativeFunctionOptions2);
+    }
+    let args = [impl2];
+    args = args.concat.apply(args, arguments);
+    return wrapper.apply(this, args);
+  };
+}
+Env.prototype.getVersion = proxy2(4, "int32", ["pointer"], function(impl2) {
+  return impl2(this.handle);
+});
+Env.prototype.findClass = proxy2(6, "pointer", ["pointer", "pointer"], function(impl2, name) {
+  const result = impl2(this.handle, Memory.allocUtf8String(name));
+  this.throwIfExceptionPending();
+  return result;
+});
+Env.prototype.throwIfExceptionPending = function() {
+  const throwable = this.exceptionOccurred();
+  if (throwable.isNull()) {
+    return;
+  }
+  this.exceptionClear();
+  const handle2 = this.newGlobalRef(throwable);
+  this.deleteLocalRef(throwable);
+  const description = this.vaMethod("pointer", [])(this.handle, handle2, this.javaLangObject().toString);
+  const descriptionStr = this.stringFromJni(description);
+  this.deleteLocalRef(description);
+  const error = new Error(descriptionStr);
+  error.$h = handle2;
+  Script.bindWeak(error, makeErrorHandleDestructor(this.vm, handle2));
+  throw error;
+};
+function makeErrorHandleDestructor(vm3, handle2) {
+  return function() {
+    vm3.perform((env2) => {
+      env2.deleteGlobalRef(handle2);
+    });
+  };
+}
+Env.prototype.fromReflectedMethod = proxy2(7, "pointer", ["pointer", "pointer"], function(impl2, method2) {
+  return impl2(this.handle, method2);
+});
+Env.prototype.fromReflectedField = proxy2(8, "pointer", ["pointer", "pointer"], function(impl2, method2) {
+  return impl2(this.handle, method2);
+});
+Env.prototype.toReflectedMethod = proxy2(9, "pointer", ["pointer", "pointer", "pointer", "uint8"], function(impl2, klass, methodId, isStatic) {
+  return impl2(this.handle, klass, methodId, isStatic);
+});
+Env.prototype.getSuperclass = proxy2(10, "pointer", ["pointer", "pointer"], function(impl2, klass) {
+  return impl2(this.handle, klass);
+});
+Env.prototype.isAssignableFrom = proxy2(11, "uint8", ["pointer", "pointer", "pointer"], function(impl2, klass1, klass2) {
+  return !!impl2(this.handle, klass1, klass2);
+});
+Env.prototype.toReflectedField = proxy2(12, "pointer", ["pointer", "pointer", "pointer", "uint8"], function(impl2, klass, fieldId, isStatic) {
+  return impl2(this.handle, klass, fieldId, isStatic);
+});
+Env.prototype.throw = proxy2(13, "int32", ["pointer", "pointer"], function(impl2, obj) {
+  return impl2(this.handle, obj);
+});
+Env.prototype.exceptionOccurred = proxy2(15, "pointer", ["pointer"], function(impl2) {
+  return impl2(this.handle);
+});
+Env.prototype.exceptionDescribe = proxy2(16, "void", ["pointer"], function(impl2) {
+  impl2(this.handle);
+});
+Env.prototype.exceptionClear = proxy2(17, "void", ["pointer"], function(impl2) {
+  impl2(this.handle);
+});
+Env.prototype.pushLocalFrame = proxy2(19, "int32", ["pointer", "int32"], function(impl2, capacity) {
+  return impl2(this.handle, capacity);
+});
+Env.prototype.popLocalFrame = proxy2(20, "pointer", ["pointer", "pointer"], function(impl2, result) {
+  return impl2(this.handle, result);
+});
+Env.prototype.newGlobalRef = proxy2(21, "pointer", ["pointer", "pointer"], function(impl2, obj) {
+  return impl2(this.handle, obj);
+});
+Env.prototype.deleteGlobalRef = proxy2(22, "void", ["pointer", "pointer"], function(impl2, globalRef) {
+  impl2(this.handle, globalRef);
+});
+Env.prototype.deleteLocalRef = proxy2(23, "void", ["pointer", "pointer"], function(impl2, localRef) {
+  impl2(this.handle, localRef);
+});
+Env.prototype.isSameObject = proxy2(24, "uint8", ["pointer", "pointer", "pointer"], function(impl2, ref1, ref2) {
+  return !!impl2(this.handle, ref1, ref2);
+});
+Env.prototype.newLocalRef = proxy2(25, "pointer", ["pointer", "pointer"], function(impl2, obj) {
+  return impl2(this.handle, obj);
+});
+Env.prototype.allocObject = proxy2(27, "pointer", ["pointer", "pointer"], function(impl2, clazz) {
+  return impl2(this.handle, clazz);
+});
+Env.prototype.getObjectClass = proxy2(31, "pointer", ["pointer", "pointer"], function(impl2, obj) {
+  return impl2(this.handle, obj);
+});
+Env.prototype.isInstanceOf = proxy2(32, "uint8", ["pointer", "pointer", "pointer"], function(impl2, obj, klass) {
+  return !!impl2(this.handle, obj, klass);
+});
+Env.prototype.getMethodId = proxy2(33, "pointer", ["pointer", "pointer", "pointer", "pointer"], function(impl2, klass, name, sig) {
+  return impl2(this.handle, klass, Memory.allocUtf8String(name), Memory.allocUtf8String(sig));
+});
+Env.prototype.getFieldId = proxy2(94, "pointer", ["pointer", "pointer", "pointer", "pointer"], function(impl2, klass, name, sig) {
+  return impl2(this.handle, klass, Memory.allocUtf8String(name), Memory.allocUtf8String(sig));
+});
+Env.prototype.getIntField = proxy2(100, "int32", ["pointer", "pointer", "pointer"], function(impl2, obj, fieldId) {
+  return impl2(this.handle, obj, fieldId);
+});
+Env.prototype.getStaticMethodId = proxy2(113, "pointer", ["pointer", "pointer", "pointer", "pointer"], function(impl2, klass, name, sig) {
+  return impl2(this.handle, klass, Memory.allocUtf8String(name), Memory.allocUtf8String(sig));
+});
+Env.prototype.getStaticFieldId = proxy2(144, "pointer", ["pointer", "pointer", "pointer", "pointer"], function(impl2, klass, name, sig) {
+  return impl2(this.handle, klass, Memory.allocUtf8String(name), Memory.allocUtf8String(sig));
+});
+Env.prototype.getStaticIntField = proxy2(150, "int32", ["pointer", "pointer", "pointer"], function(impl2, obj, fieldId) {
+  return impl2(this.handle, obj, fieldId);
+});
+Env.prototype.getStringLength = proxy2(164, "int32", ["pointer", "pointer"], function(impl2, str) {
+  return impl2(this.handle, str);
+});
+Env.prototype.getStringChars = proxy2(165, "pointer", ["pointer", "pointer", "pointer"], function(impl2, str) {
+  return impl2(this.handle, str, NULL);
+});
+Env.prototype.releaseStringChars = proxy2(166, "void", ["pointer", "pointer", "pointer"], function(impl2, str, utf) {
+  impl2(this.handle, str, utf);
+});
+Env.prototype.newStringUtf = proxy2(167, "pointer", ["pointer", "pointer"], function(impl2, str) {
+  const utf = Memory.allocUtf8String(str);
+  return impl2(this.handle, utf);
+});
+Env.prototype.getStringUtfChars = proxy2(169, "pointer", ["pointer", "pointer", "pointer"], function(impl2, str) {
+  return impl2(this.handle, str, NULL);
+});
+Env.prototype.releaseStringUtfChars = proxy2(170, "void", ["pointer", "pointer", "pointer"], function(impl2, str, utf) {
+  impl2(this.handle, str, utf);
+});
+Env.prototype.getArrayLength = proxy2(171, "int32", ["pointer", "pointer"], function(impl2, array) {
+  return impl2(this.handle, array);
+});
+Env.prototype.newObjectArray = proxy2(172, "pointer", ["pointer", "int32", "pointer", "pointer"], function(impl2, length, elementClass, initialElement) {
+  return impl2(this.handle, length, elementClass, initialElement);
+});
+Env.prototype.getObjectArrayElement = proxy2(173, "pointer", ["pointer", "pointer", "int32"], function(impl2, array, index) {
+  return impl2(this.handle, array, index);
+});
+Env.prototype.setObjectArrayElement = proxy2(174, "void", ["pointer", "pointer", "int32", "pointer"], function(impl2, array, index, value) {
+  impl2(this.handle, array, index, value);
+});
+Env.prototype.newBooleanArray = proxy2(175, "pointer", ["pointer", "int32"], function(impl2, length) {
+  return impl2(this.handle, length);
+});
+Env.prototype.newByteArray = proxy2(176, "pointer", ["pointer", "int32"], function(impl2, length) {
+  return impl2(this.handle, length);
+});
+Env.prototype.newCharArray = proxy2(177, "pointer", ["pointer", "int32"], function(impl2, length) {
+  return impl2(this.handle, length);
+});
+Env.prototype.newShortArray = proxy2(178, "pointer", ["pointer", "int32"], function(impl2, length) {
+  return impl2(this.handle, length);
+});
+Env.prototype.newIntArray = proxy2(179, "pointer", ["pointer", "int32"], function(impl2, length) {
+  return impl2(this.handle, length);
+});
+Env.prototype.newLongArray = proxy2(180, "pointer", ["pointer", "int32"], function(impl2, length) {
+  return impl2(this.handle, length);
+});
+Env.prototype.newFloatArray = proxy2(181, "pointer", ["pointer", "int32"], function(impl2, length) {
+  return impl2(this.handle, length);
+});
+Env.prototype.newDoubleArray = proxy2(182, "pointer", ["pointer", "int32"], function(impl2, length) {
+  return impl2(this.handle, length);
+});
+Env.prototype.getBooleanArrayElements = proxy2(183, "pointer", ["pointer", "pointer", "pointer"], function(impl2, array) {
+  return impl2(this.handle, array, NULL);
+});
+Env.prototype.getByteArrayElements = proxy2(184, "pointer", ["pointer", "pointer", "pointer"], function(impl2, array) {
+  return impl2(this.handle, array, NULL);
+});
+Env.prototype.getCharArrayElements = proxy2(185, "pointer", ["pointer", "pointer", "pointer"], function(impl2, array) {
+  return impl2(this.handle, array, NULL);
+});
+Env.prototype.getShortArrayElements = proxy2(186, "pointer", ["pointer", "pointer", "pointer"], function(impl2, array) {
+  return impl2(this.handle, array, NULL);
+});
+Env.prototype.getIntArrayElements = proxy2(187, "pointer", ["pointer", "pointer", "pointer"], function(impl2, array) {
+  return impl2(this.handle, array, NULL);
+});
+Env.prototype.getLongArrayElements = proxy2(188, "pointer", ["pointer", "pointer", "pointer"], function(impl2, array) {
+  return impl2(this.handle, array, NULL);
+});
+Env.prototype.getFloatArrayElements = proxy2(189, "pointer", ["pointer", "pointer", "pointer"], function(impl2, array) {
+  return impl2(this.handle, array, NULL);
+});
+Env.prototype.getDoubleArrayElements = proxy2(190, "pointer", ["pointer", "pointer", "pointer"], function(impl2, array) {
+  return impl2(this.handle, array, NULL);
+});
+Env.prototype.releaseBooleanArrayElements = proxy2(191, "pointer", ["pointer", "pointer", "pointer", "int32"], function(impl2, array, cArray) {
+  impl2(this.handle, array, cArray, JNI_ABORT);
+});
+Env.prototype.releaseByteArrayElements = proxy2(192, "pointer", ["pointer", "pointer", "pointer", "int32"], function(impl2, array, cArray) {
+  impl2(this.handle, array, cArray, JNI_ABORT);
+});
+Env.prototype.releaseCharArrayElements = proxy2(193, "pointer", ["pointer", "pointer", "pointer", "int32"], function(impl2, array, cArray) {
+  impl2(this.handle, array, cArray, JNI_ABORT);
+});
+Env.prototype.releaseShortArrayElements = proxy2(194, "pointer", ["pointer", "pointer", "pointer", "int32"], function(impl2, array, cArray) {
+  impl2(this.handle, array, cArray, JNI_ABORT);
+});
+Env.prototype.releaseIntArrayElements = proxy2(195, "pointer", ["pointer", "pointer", "pointer", "int32"], function(impl2, array, cArray) {
+  impl2(this.handle, array, cArray, JNI_ABORT);
+});
+Env.prototype.releaseLongArrayElements = proxy2(196, "pointer", ["pointer", "pointer", "pointer", "int32"], function(impl2, array, cArray) {
+  impl2(this.handle, array, cArray, JNI_ABORT);
+});
+Env.prototype.releaseFloatArrayElements = proxy2(197, "pointer", ["pointer", "pointer", "pointer", "int32"], function(impl2, array, cArray) {
+  impl2(this.handle, array, cArray, JNI_ABORT);
+});
+Env.prototype.releaseDoubleArrayElements = proxy2(198, "pointer", ["pointer", "pointer", "pointer", "int32"], function(impl2, array, cArray) {
+  impl2(this.handle, array, cArray, JNI_ABORT);
+});
+Env.prototype.getByteArrayRegion = proxy2(200, "void", ["pointer", "pointer", "int", "int", "pointer"], function(impl2, array, start, length, cArray) {
+  impl2(this.handle, array, start, length, cArray);
+});
+Env.prototype.setBooleanArrayRegion = proxy2(207, "void", ["pointer", "pointer", "int32", "int32", "pointer"], function(impl2, array, start, length, cArray) {
+  impl2(this.handle, array, start, length, cArray);
+});
+Env.prototype.setByteArrayRegion = proxy2(208, "void", ["pointer", "pointer", "int32", "int32", "pointer"], function(impl2, array, start, length, cArray) {
+  impl2(this.handle, array, start, length, cArray);
+});
+Env.prototype.setCharArrayRegion = proxy2(209, "void", ["pointer", "pointer", "int32", "int32", "pointer"], function(impl2, array, start, length, cArray) {
+  impl2(this.handle, array, start, length, cArray);
+});
+Env.prototype.setShortArrayRegion = proxy2(210, "void", ["pointer", "pointer", "int32", "int32", "pointer"], function(impl2, array, start, length, cArray) {
+  impl2(this.handle, array, start, length, cArray);
+});
+Env.prototype.setIntArrayRegion = proxy2(211, "void", ["pointer", "pointer", "int32", "int32", "pointer"], function(impl2, array, start, length, cArray) {
+  impl2(this.handle, array, start, length, cArray);
+});
+Env.prototype.setLongArrayRegion = proxy2(212, "void", ["pointer", "pointer", "int32", "int32", "pointer"], function(impl2, array, start, length, cArray) {
+  impl2(this.handle, array, start, length, cArray);
+});
+Env.prototype.setFloatArrayRegion = proxy2(213, "void", ["pointer", "pointer", "int32", "int32", "pointer"], function(impl2, array, start, length, cArray) {
+  impl2(this.handle, array, start, length, cArray);
+});
+Env.prototype.setDoubleArrayRegion = proxy2(214, "void", ["pointer", "pointer", "int32", "int32", "pointer"], function(impl2, array, start, length, cArray) {
+  impl2(this.handle, array, start, length, cArray);
+});
+Env.prototype.registerNatives = proxy2(215, "int32", ["pointer", "pointer", "pointer", "int32"], function(impl2, klass, methods, numMethods) {
+  return impl2(this.handle, klass, methods, numMethods);
+});
+Env.prototype.monitorEnter = proxy2(217, "int32", ["pointer", "pointer"], function(impl2, obj) {
+  return impl2(this.handle, obj);
+});
+Env.prototype.monitorExit = proxy2(218, "int32", ["pointer", "pointer"], function(impl2, obj) {
+  return impl2(this.handle, obj);
+});
+Env.prototype.getDirectBufferAddress = proxy2(230, "pointer", ["pointer", "pointer"], function(impl2, obj) {
+  return impl2(this.handle, obj);
+});
+Env.prototype.getObjectRefType = proxy2(232, "int32", ["pointer", "pointer"], function(impl2, ref) {
+  return impl2(this.handle, ref);
+});
+var cachedMethods = /* @__PURE__ */ new Map();
+function plainMethod(offset, retType2, argTypes2, options) {
+  return getOrMakeMethod(this, "p", makePlainMethod, offset, retType2, argTypes2, options);
+}
+function vaMethod(offset, retType2, argTypes2, options) {
+  return getOrMakeMethod(this, "v", makeVaMethod, offset, retType2, argTypes2, options);
+}
+function nonvirtualVaMethod(offset, retType2, argTypes2, options) {
+  return getOrMakeMethod(this, "n", makeNonvirtualVaMethod, offset, retType2, argTypes2, options);
+}
+function getOrMakeMethod(env2, flavor, construct2, offset, retType2, argTypes2, options) {
+  if (options !== void 0) {
+    return construct2(env2, offset, retType2, argTypes2, options);
+  }
+  const key = [offset, flavor, retType2].concat(argTypes2).join("|");
+  let m2 = cachedMethods.get(key);
+  if (m2 === void 0) {
+    m2 = construct2(env2, offset, retType2, argTypes2, nativeFunctionOptions2);
+    cachedMethods.set(key, m2);
+  }
+  return m2;
+}
+function makePlainMethod(env2, offset, retType2, argTypes2, options) {
+  return new NativeFunction(
+    vtable(env2).add(offset * pointerSize4).readPointer(),
+    retType2,
+    ["pointer", "pointer", "pointer"].concat(argTypes2),
+    options
+  );
+}
+function makeVaMethod(env2, offset, retType2, argTypes2, options) {
+  return new NativeFunction(
+    vtable(env2).add(offset * pointerSize4).readPointer(),
+    retType2,
+    ["pointer", "pointer", "pointer", "..."].concat(argTypes2),
+    options
+  );
+}
+function makeNonvirtualVaMethod(env2, offset, retType2, argTypes2, options) {
+  return new NativeFunction(
+    vtable(env2).add(offset * pointerSize4).readPointer(),
+    retType2,
+    ["pointer", "pointer", "pointer", "pointer", "..."].concat(argTypes2),
+    options
+  );
+}
+Env.prototype.constructor = function(argTypes2, options) {
+  return vaMethod.call(this, CALL_CONSTRUCTOR_METHOD_OFFSET, "pointer", argTypes2, options);
+};
+Env.prototype.vaMethod = function(retType2, argTypes2, options) {
+  const offset = callMethodOffset[retType2];
+  if (offset === void 0) {
+    throw new Error("Unsupported type: " + retType2);
+  }
+  return vaMethod.call(this, offset, retType2, argTypes2, options);
+};
+Env.prototype.nonvirtualVaMethod = function(retType2, argTypes2, options) {
+  const offset = callNonvirtualMethodOffset[retType2];
+  if (offset === void 0) {
+    throw new Error("Unsupported type: " + retType2);
+  }
+  return nonvirtualVaMethod.call(this, offset, retType2, argTypes2, options);
+};
+Env.prototype.staticVaMethod = function(retType2, argTypes2, options) {
+  const offset = callStaticMethodOffset[retType2];
+  if (offset === void 0) {
+    throw new Error("Unsupported type: " + retType2);
+  }
+  return vaMethod.call(this, offset, retType2, argTypes2, options);
+};
+Env.prototype.getField = function(fieldType) {
+  const offset = getFieldOffset[fieldType];
+  if (offset === void 0) {
+    throw new Error("Unsupported type: " + fieldType);
+  }
+  return plainMethod.call(this, offset, fieldType, []);
+};
+Env.prototype.getStaticField = function(fieldType) {
+  const offset = getStaticFieldOffset[fieldType];
+  if (offset === void 0) {
+    throw new Error("Unsupported type: " + fieldType);
+  }
+  return plainMethod.call(this, offset, fieldType, []);
+};
+Env.prototype.setField = function(fieldType) {
+  const offset = setFieldOffset[fieldType];
+  if (offset === void 0) {
+    throw new Error("Unsupported type: " + fieldType);
+  }
+  return plainMethod.call(this, offset, "void", [fieldType]);
+};
+Env.prototype.setStaticField = function(fieldType) {
+  const offset = setStaticFieldOffset[fieldType];
+  if (offset === void 0) {
+    throw new Error("Unsupported type: " + fieldType);
+  }
+  return plainMethod.call(this, offset, "void", [fieldType]);
+};
+var javaLangClass = null;
+Env.prototype.javaLangClass = function() {
+  if (javaLangClass === null) {
+    const handle2 = this.findClass("java/lang/Class");
+    try {
+      const get2 = this.getMethodId.bind(this, handle2);
+      javaLangClass = {
+        handle: register(this.newGlobalRef(handle2)),
+        getName: get2("getName", "()Ljava/lang/String;"),
+        getSimpleName: get2("getSimpleName", "()Ljava/lang/String;"),
+        getGenericSuperclass: get2("getGenericSuperclass", "()Ljava/lang/reflect/Type;"),
+        getDeclaredConstructors: get2("getDeclaredConstructors", "()[Ljava/lang/reflect/Constructor;"),
+        getDeclaredMethods: get2("getDeclaredMethods", "()[Ljava/lang/reflect/Method;"),
+        getDeclaredFields: get2("getDeclaredFields", "()[Ljava/lang/reflect/Field;"),
+        isArray: get2("isArray", "()Z"),
+        isPrimitive: get2("isPrimitive", "()Z"),
+        isInterface: get2("isInterface", "()Z"),
+        getComponentType: get2("getComponentType", "()Ljava/lang/Class;")
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangClass;
+};
+var javaLangObject = null;
+Env.prototype.javaLangObject = function() {
+  if (javaLangObject === null) {
+    const handle2 = this.findClass("java/lang/Object");
+    try {
+      const get2 = this.getMethodId.bind(this, handle2);
+      javaLangObject = {
+        handle: register(this.newGlobalRef(handle2)),
+        toString: get2("toString", "()Ljava/lang/String;"),
+        getClass: get2("getClass", "()Ljava/lang/Class;")
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangObject;
+};
+var javaLangReflectConstructor = null;
+Env.prototype.javaLangReflectConstructor = function() {
+  if (javaLangReflectConstructor === null) {
+    const handle2 = this.findClass("java/lang/reflect/Constructor");
+    try {
+      javaLangReflectConstructor = {
+        getGenericParameterTypes: this.getMethodId(handle2, "getGenericParameterTypes", "()[Ljava/lang/reflect/Type;")
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangReflectConstructor;
+};
+var javaLangReflectMethod = null;
+Env.prototype.javaLangReflectMethod = function() {
+  if (javaLangReflectMethod === null) {
+    const handle2 = this.findClass("java/lang/reflect/Method");
+    try {
+      const get2 = this.getMethodId.bind(this, handle2);
+      javaLangReflectMethod = {
+        getName: get2("getName", "()Ljava/lang/String;"),
+        getGenericParameterTypes: get2("getGenericParameterTypes", "()[Ljava/lang/reflect/Type;"),
+        getParameterTypes: get2("getParameterTypes", "()[Ljava/lang/Class;"),
+        getGenericReturnType: get2("getGenericReturnType", "()Ljava/lang/reflect/Type;"),
+        getGenericExceptionTypes: get2("getGenericExceptionTypes", "()[Ljava/lang/reflect/Type;"),
+        getModifiers: get2("getModifiers", "()I"),
+        isVarArgs: get2("isVarArgs", "()Z")
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangReflectMethod;
+};
+var javaLangReflectField = null;
+Env.prototype.javaLangReflectField = function() {
+  if (javaLangReflectField === null) {
+    const handle2 = this.findClass("java/lang/reflect/Field");
+    try {
+      const get2 = this.getMethodId.bind(this, handle2);
+      javaLangReflectField = {
+        getName: get2("getName", "()Ljava/lang/String;"),
+        getType: get2("getType", "()Ljava/lang/Class;"),
+        getGenericType: get2("getGenericType", "()Ljava/lang/reflect/Type;"),
+        getModifiers: get2("getModifiers", "()I"),
+        toString: get2("toString", "()Ljava/lang/String;")
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangReflectField;
+};
+var javaLangReflectTypeVariable = null;
+Env.prototype.javaLangReflectTypeVariable = function() {
+  if (javaLangReflectTypeVariable === null) {
+    const handle2 = this.findClass("java/lang/reflect/TypeVariable");
+    try {
+      const get2 = this.getMethodId.bind(this, handle2);
+      javaLangReflectTypeVariable = {
+        handle: register(this.newGlobalRef(handle2)),
+        getName: get2("getName", "()Ljava/lang/String;"),
+        getBounds: get2("getBounds", "()[Ljava/lang/reflect/Type;"),
+        getGenericDeclaration: get2("getGenericDeclaration", "()Ljava/lang/reflect/GenericDeclaration;")
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangReflectTypeVariable;
+};
+var javaLangReflectWildcardType = null;
+Env.prototype.javaLangReflectWildcardType = function() {
+  if (javaLangReflectWildcardType === null) {
+    const handle2 = this.findClass("java/lang/reflect/WildcardType");
+    try {
+      const get2 = this.getMethodId.bind(this, handle2);
+      javaLangReflectWildcardType = {
+        handle: register(this.newGlobalRef(handle2)),
+        getLowerBounds: get2("getLowerBounds", "()[Ljava/lang/reflect/Type;"),
+        getUpperBounds: get2("getUpperBounds", "()[Ljava/lang/reflect/Type;")
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangReflectWildcardType;
+};
+var javaLangReflectGenericArrayType = null;
+Env.prototype.javaLangReflectGenericArrayType = function() {
+  if (javaLangReflectGenericArrayType === null) {
+    const handle2 = this.findClass("java/lang/reflect/GenericArrayType");
+    try {
+      javaLangReflectGenericArrayType = {
+        handle: register(this.newGlobalRef(handle2)),
+        getGenericComponentType: this.getMethodId(handle2, "getGenericComponentType", "()Ljava/lang/reflect/Type;")
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangReflectGenericArrayType;
+};
+var javaLangReflectParameterizedType = null;
+Env.prototype.javaLangReflectParameterizedType = function() {
+  if (javaLangReflectParameterizedType === null) {
+    const handle2 = this.findClass("java/lang/reflect/ParameterizedType");
+    try {
+      const get2 = this.getMethodId.bind(this, handle2);
+      javaLangReflectParameterizedType = {
+        handle: register(this.newGlobalRef(handle2)),
+        getActualTypeArguments: get2("getActualTypeArguments", "()[Ljava/lang/reflect/Type;"),
+        getRawType: get2("getRawType", "()Ljava/lang/reflect/Type;"),
+        getOwnerType: get2("getOwnerType", "()Ljava/lang/reflect/Type;")
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangReflectParameterizedType;
+};
+var javaLangString = null;
+Env.prototype.javaLangString = function() {
+  if (javaLangString === null) {
+    const handle2 = this.findClass("java/lang/String");
+    try {
+      javaLangString = {
+        handle: register(this.newGlobalRef(handle2))
+      };
+    } finally {
+      this.deleteLocalRef(handle2);
+    }
+  }
+  return javaLangString;
+};
+Env.prototype.getClassName = function(classHandle) {
+  const name = this.vaMethod("pointer", [])(this.handle, classHandle, this.javaLangClass().getName);
+  try {
+    return this.stringFromJni(name);
+  } finally {
+    this.deleteLocalRef(name);
+  }
+};
+Env.prototype.getObjectClassName = function(objHandle) {
+  const jklass = this.getObjectClass(objHandle);
+  try {
+    return this.getClassName(jklass);
+  } finally {
+    this.deleteLocalRef(jklass);
+  }
+};
+Env.prototype.getActualTypeArgument = function(type) {
+  const actualTypeArguments = this.vaMethod("pointer", [])(this.handle, type, this.javaLangReflectParameterizedType().getActualTypeArguments);
+  this.throwIfExceptionPending();
+  if (!actualTypeArguments.isNull()) {
+    try {
+      return this.getTypeNameFromFirstTypeElement(actualTypeArguments);
+    } finally {
+      this.deleteLocalRef(actualTypeArguments);
+    }
+  }
+};
+Env.prototype.getTypeNameFromFirstTypeElement = function(typeArray) {
+  const length = this.getArrayLength(typeArray);
+  if (length > 0) {
+    const typeArgument0 = this.getObjectArrayElement(typeArray, 0);
+    try {
+      return this.getTypeName(typeArgument0);
+    } finally {
+      this.deleteLocalRef(typeArgument0);
+    }
+  } else {
+    return "java.lang.Object";
+  }
+};
+Env.prototype.getTypeName = function(type, getGenericsInformation) {
+  const invokeObjectMethodNoArgs = this.vaMethod("pointer", []);
+  if (this.isInstanceOf(type, this.javaLangClass().handle)) {
+    return this.getClassName(type);
+  } else if (this.isInstanceOf(type, this.javaLangReflectGenericArrayType().handle)) {
+    return this.getArrayTypeName(type);
+  } else if (this.isInstanceOf(type, this.javaLangReflectParameterizedType().handle)) {
+    const rawType = invokeObjectMethodNoArgs(this.handle, type, this.javaLangReflectParameterizedType().getRawType);
+    this.throwIfExceptionPending();
+    let result;
+    try {
+      result = this.getTypeName(rawType);
+    } finally {
+      this.deleteLocalRef(rawType);
+    }
+    if (getGenericsInformation) {
+      result += "<" + this.getActualTypeArgument(type) + ">";
+    }
+    return result;
+  } else if (this.isInstanceOf(type, this.javaLangReflectTypeVariable().handle)) {
+    return "java.lang.Object";
+  } else if (this.isInstanceOf(type, this.javaLangReflectWildcardType().handle)) {
+    return "java.lang.Object";
+  } else {
+    return "java.lang.Object";
+  }
+};
+Env.prototype.getArrayTypeName = function(type) {
+  const invokeObjectMethodNoArgs = this.vaMethod("pointer", []);
+  if (this.isInstanceOf(type, this.javaLangClass().handle)) {
+    return this.getClassName(type);
+  } else if (this.isInstanceOf(type, this.javaLangReflectGenericArrayType().handle)) {
+    const componentType = invokeObjectMethodNoArgs(this.handle, type, this.javaLangReflectGenericArrayType().getGenericComponentType);
+    this.throwIfExceptionPending();
+    try {
+      return "[L" + this.getTypeName(componentType) + ";";
+    } finally {
+      this.deleteLocalRef(componentType);
+    }
+  } else {
+    return "[Ljava.lang.Object;";
+  }
+};
+Env.prototype.stringFromJni = function(str) {
+  const utf = this.getStringChars(str);
+  if (utf.isNull()) {
+    throw new Error("Unable to access string");
+  }
+  try {
+    const length = this.getStringLength(str);
+    return utf.readUtf16String(length);
+  } finally {
+    this.releaseStringChars(str, utf);
+  }
+};
+
+// node_modules/frida-java-bridge/lib/vm.js
+var JNI_VERSION_1_6 = 65542;
+var pointerSize5 = Process.pointerSize;
+var jsThreadID = Process.getCurrentThreadId();
+var attachedThreads = /* @__PURE__ */ new Map();
+var activeEnvs = /* @__PURE__ */ new Map();
+function VM(api3) {
+  const handle2 = api3.vm;
+  let attachCurrentThread = null;
+  let detachCurrentThread = null;
+  let getEnv = null;
+  function initialize2() {
+    const vtable2 = handle2.readPointer();
+    const options = {
+      exceptions: "propagate"
+    };
+    attachCurrentThread = new NativeFunction(vtable2.add(4 * pointerSize5).readPointer(), "int32", ["pointer", "pointer", "pointer"], options);
+    detachCurrentThread = new NativeFunction(vtable2.add(5 * pointerSize5).readPointer(), "int32", ["pointer"], options);
+    getEnv = new NativeFunction(vtable2.add(6 * pointerSize5).readPointer(), "int32", ["pointer", "pointer", "int32"], options);
+  }
+  this.handle = handle2;
+  this.perform = function(fn) {
+    const threadId = Process.getCurrentThreadId();
+    const cachedEnv = tryGetCachedEnv(threadId);
+    if (cachedEnv !== null) {
+      return fn(cachedEnv);
+    }
+    let env2 = this._tryGetEnv();
+    const alreadyAttached = env2 !== null;
+    if (!alreadyAttached) {
+      env2 = this.attachCurrentThread();
+      attachedThreads.set(threadId, true);
+    }
+    this.link(threadId, env2);
+    try {
+      return fn(env2);
+    } finally {
+      const isJsThread = threadId === jsThreadID;
+      if (!isJsThread) {
+        this.unlink(threadId);
+      }
+      if (!alreadyAttached && !isJsThread) {
+        const allowedToDetach = attachedThreads.get(threadId);
+        attachedThreads.delete(threadId);
+        if (allowedToDetach) {
+          this.detachCurrentThread();
+        }
+      }
+    }
+  };
+  this.attachCurrentThread = function() {
+    const envBuf = Memory.alloc(pointerSize5);
+    checkJniResult("VM::AttachCurrentThread", attachCurrentThread(handle2, envBuf, NULL));
+    return new Env(envBuf.readPointer(), this);
+  };
+  this.detachCurrentThread = function() {
+    checkJniResult("VM::DetachCurrentThread", detachCurrentThread(handle2));
+  };
+  this.preventDetachDueToClassLoader = function() {
+    const threadId = Process.getCurrentThreadId();
+    if (attachedThreads.has(threadId)) {
+      attachedThreads.set(threadId, false);
+    }
+  };
+  this.getEnv = function() {
+    const cachedEnv = tryGetCachedEnv(Process.getCurrentThreadId());
+    if (cachedEnv !== null) {
+      return cachedEnv;
+    }
+    const envBuf = Memory.alloc(pointerSize5);
+    const result = getEnv(handle2, envBuf, JNI_VERSION_1_6);
+    if (result === -2) {
+      throw new Error("Current thread is not attached to the Java VM; please move this code inside a Java.perform() callback");
+    }
+    checkJniResult("VM::GetEnv", result);
+    return new Env(envBuf.readPointer(), this);
+  };
+  this.tryGetEnv = function() {
+    const cachedEnv = tryGetCachedEnv(Process.getCurrentThreadId());
+    if (cachedEnv !== null) {
+      return cachedEnv;
+    }
+    return this._tryGetEnv();
+  };
+  this._tryGetEnv = function() {
+    const h = this.tryGetEnvHandle(JNI_VERSION_1_6);
+    if (h === null) {
+      return null;
+    }
+    return new Env(h, this);
+  };
+  this.tryGetEnvHandle = function(version2) {
+    const envBuf = Memory.alloc(pointerSize5);
+    const result = getEnv(handle2, envBuf, version2);
+    if (result !== JNI_OK) {
+      return null;
+    }
+    return envBuf.readPointer();
+  };
+  this.makeHandleDestructor = function(handle3) {
+    return () => {
+      this.perform((env2) => {
+        env2.deleteGlobalRef(handle3);
+      });
+    };
+  };
+  this.link = function(tid, env2) {
+    const entry = activeEnvs.get(tid);
+    if (entry === void 0) {
+      activeEnvs.set(tid, [env2, 1]);
+    } else {
+      entry[1]++;
+    }
+  };
+  this.unlink = function(tid) {
+    const entry = activeEnvs.get(tid);
+    if (entry[1] === 1) {
+      activeEnvs.delete(tid);
+    } else {
+      entry[1]--;
+    }
+  };
+  function tryGetCachedEnv(threadId) {
+    const entry = activeEnvs.get(threadId);
+    if (entry === void 0) {
+      return null;
+    }
+    return entry[0];
+  }
+  initialize2.call(this);
+}
+VM.dispose = function(vm3) {
+  if (attachedThreads.get(jsThreadID) === true) {
+    attachedThreads.delete(jsThreadID);
+    vm3.detachCurrentThread();
+  }
+};
+
+// node_modules/frida-java-bridge/lib/android.js
+var jsizeSize = 4;
+var pointerSize6 = Process.pointerSize;
+var {
+  readU32,
+  readPointer,
+  writeU32,
+  writePointer
+} = NativePointer.prototype;
+var kAccPublic = 1;
+var kAccStatic = 8;
+var kAccFinal = 16;
+var kAccNative = 256;
+var kAccFastNative = 524288;
+var kAccCriticalNative = 2097152;
+var kAccFastInterpreterToInterpreterInvoke = 1073741824;
+var kAccSkipAccessChecks = 524288;
+var kAccSingleImplementation = 134217728;
+var kAccNterpEntryPointFastPathFlag = 1048576;
+var kAccNterpInvokeFastPathFlag = 2097152;
+var kAccPublicApi = 268435456;
+var kAccXposedHookedMethod = 268435456;
+var kPointer = 0;
+var kFullDeoptimization = 3;
+var kSelectiveDeoptimization = 5;
+var THUMB_BIT_REMOVAL_MASK = ptr(1).not();
+var X86_JMP_MAX_DISTANCE = 2147467263;
+var ARM64_ADRP_MAX_DISTANCE = 4294963200;
+var ENV_VTABLE_OFFSET_EXCEPTION_CLEAR = 17 * pointerSize6;
+var ENV_VTABLE_OFFSET_FATAL_ERROR = 18 * pointerSize6;
+var DVM_JNI_ENV_OFFSET_SELF = 12;
+var DVM_CLASS_OBJECT_OFFSET_VTABLE_COUNT = 112;
+var DVM_CLASS_OBJECT_OFFSET_VTABLE = 116;
+var DVM_OBJECT_OFFSET_CLAZZ = 0;
+var DVM_METHOD_SIZE = 56;
+var DVM_METHOD_OFFSET_ACCESS_FLAGS = 4;
+var DVM_METHOD_OFFSET_METHOD_INDEX = 8;
+var DVM_METHOD_OFFSET_REGISTERS_SIZE = 10;
+var DVM_METHOD_OFFSET_OUTS_SIZE = 12;
+var DVM_METHOD_OFFSET_INS_SIZE = 14;
+var DVM_METHOD_OFFSET_SHORTY = 28;
+var DVM_METHOD_OFFSET_JNI_ARG_INFO = 36;
+var DALVIK_JNI_RETURN_VOID = 0;
+var DALVIK_JNI_RETURN_FLOAT = 1;
+var DALVIK_JNI_RETURN_DOUBLE = 2;
+var DALVIK_JNI_RETURN_S8 = 3;
+var DALVIK_JNI_RETURN_S4 = 4;
+var DALVIK_JNI_RETURN_S2 = 5;
+var DALVIK_JNI_RETURN_U2 = 6;
+var DALVIK_JNI_RETURN_S1 = 7;
+var DALVIK_JNI_NO_ARG_INFO = 2147483648;
+var DALVIK_JNI_RETURN_SHIFT = 28;
+var STD_STRING_SIZE = 3 * pointerSize6;
+var STD_VECTOR_SIZE = 3 * pointerSize6;
+var AF_UNIX = 1;
+var SOCK_STREAM = 1;
+var getArtRuntimeSpec = memoize(_getArtRuntimeSpec);
+var getArtInstrumentationSpec = memoize(_getArtInstrumentationSpec);
+var getArtMethodSpec = memoize(_getArtMethodSpec);
+var getArtThreadSpec = memoize(_getArtThreadSpec);
+var getArtManagedStackSpec = memoize(_getArtManagedStackSpec);
+var getArtThreadStateTransitionImpl = memoize(_getArtThreadStateTransitionImpl);
+var getAndroidVersion = memoize(_getAndroidVersion);
+var getAndroidCodename = memoize(_getAndroidCodename);
+var getAndroidApiLevel = memoize(_getAndroidApiLevel);
+var getArtQuickFrameInfoGetterThunk = memoize(_getArtQuickFrameInfoGetterThunk);
+var makeCxxMethodWrapperReturningPointerByValue = Process.arch === "ia32" ? makeCxxMethodWrapperReturningPointerByValueInFirstArg : makeCxxMethodWrapperReturningPointerByValueGeneric;
+var nativeFunctionOptions3 = {
+  exceptions: "propagate"
+};
+var artThreadStateTransitions = {};
+var cachedApi = null;
+var cachedArtClassLinkerSpec = null;
+var MethodMangler = null;
+var artController = null;
+var inlineHooks = [];
+var patchedClasses = /* @__PURE__ */ new Map();
+var artQuickInterceptors = [];
+var thunkPage = null;
+var thunkOffset = 0;
+var taughtArtAboutReplacementMethods = false;
+var taughtArtAboutMethodInstrumentation = false;
+var backtraceModule = null;
+var jdwpSessions = [];
+var socketpair = null;
+var trampolineAllocator = null;
+function getApi() {
+  if (cachedApi === null) {
+    cachedApi = _getApi();
+  }
+  return cachedApi;
+}
+function _getApi() {
+  const vmModules = Process.enumerateModules().filter((m2) => /^lib(art|dvm).so$/.test(m2.name)).filter((m2) => !/\/system\/fake-libs/.test(m2.path));
+  if (vmModules.length === 0) {
+    return null;
+  }
+  const vmModule = vmModules[0];
+  const flavor = vmModule.name.indexOf("art") !== -1 ? "art" : "dalvik";
+  const isArt = flavor === "art";
+  const temporaryApi = {
+    module: vmModule,
+    find(name) {
+      const { module: module2 } = this;
+      let address = module2.findExportByName(name);
+      if (address === null) {
+        address = module2.findSymbolByName(name);
+      }
+      return address;
+    },
+    flavor,
+    addLocalReference: null
+  };
+  temporaryApi.isApiLevel34OrApexEquivalent = isArt && (temporaryApi.find("_ZN3art7AppInfo29GetPrimaryApkReferenceProfileEv") !== null || temporaryApi.find("_ZN3art6Thread15RunFlipFunctionEPS0_") !== null);
+  const pending = isArt ? {
+    functions: {
+      JNI_GetCreatedJavaVMs: ["JNI_GetCreatedJavaVMs", "int", ["pointer", "int", "pointer"]],
+      // Android < 7
+      artInterpreterToCompiledCodeBridge: function(address) {
+        this.artInterpreterToCompiledCodeBridge = address;
+      },
+      // Android >= 8
+      _ZN3art9JavaVMExt12AddGlobalRefEPNS_6ThreadENS_6ObjPtrINS_6mirror6ObjectEEE: ["art::JavaVMExt::AddGlobalRef", "pointer", ["pointer", "pointer", "pointer"]],
+      // Android >= 6
+      _ZN3art9JavaVMExt12AddGlobalRefEPNS_6ThreadEPNS_6mirror6ObjectE: ["art::JavaVMExt::AddGlobalRef", "pointer", ["pointer", "pointer", "pointer"]],
+      // Android < 6: makeAddGlobalRefFallbackForAndroid5() needs these:
+      _ZN3art17ReaderWriterMutex13ExclusiveLockEPNS_6ThreadE: ["art::ReaderWriterMutex::ExclusiveLock", "void", ["pointer", "pointer"]],
+      _ZN3art17ReaderWriterMutex15ExclusiveUnlockEPNS_6ThreadE: ["art::ReaderWriterMutex::ExclusiveUnlock", "void", ["pointer", "pointer"]],
+      // Android <= 7
+      _ZN3art22IndirectReferenceTable3AddEjPNS_6mirror6ObjectE: function(address) {
+        this["art::IndirectReferenceTable::Add"] = new NativeFunction(address, "pointer", ["pointer", "uint", "pointer"], nativeFunctionOptions3);
+      },
+      // Android > 7
+      _ZN3art22IndirectReferenceTable3AddENS_15IRTSegmentStateENS_6ObjPtrINS_6mirror6ObjectEEE: function(address) {
+        this["art::IndirectReferenceTable::Add"] = new NativeFunction(address, "pointer", ["pointer", "uint", "pointer"], nativeFunctionOptions3);
+      },
+      // Android >= 7
+      _ZN3art9JavaVMExt12DecodeGlobalEPv: function(address) {
+        let decodeGlobal;
+        if (getAndroidApiLevel() >= 26) {
+          decodeGlobal = makeCxxMethodWrapperReturningPointerByValue(address, ["pointer", "pointer"]);
+        } else {
+          decodeGlobal = new NativeFunction(address, "pointer", ["pointer", "pointer"], nativeFunctionOptions3);
+        }
+        this["art::JavaVMExt::DecodeGlobal"] = function(vm3, thread, ref) {
+          return decodeGlobal(vm3, ref);
+        };
+      },
+      // Android >= 6
+      _ZN3art9JavaVMExt12DecodeGlobalEPNS_6ThreadEPv: ["art::JavaVMExt::DecodeGlobal", "pointer", ["pointer", "pointer", "pointer"]],
+      // makeDecodeGlobalFallback() uses:
+      // Android >= 15
+      _ZNK3art6Thread19DecodeGlobalJObjectEP8_jobject: ["art::Thread::DecodeJObject", "pointer", ["pointer", "pointer"]],
+      // Android < 6
+      _ZNK3art6Thread13DecodeJObjectEP8_jobject: ["art::Thread::DecodeJObject", "pointer", ["pointer", "pointer"]],
+      // Android >= 6
+      _ZN3art10ThreadList10SuspendAllEPKcb: ["art::ThreadList::SuspendAll", "void", ["pointer", "pointer", "bool"]],
+      // or fallback:
+      _ZN3art10ThreadList10SuspendAllEv: function(address) {
+        const suspendAll = new NativeFunction(address, "void", ["pointer"], nativeFunctionOptions3);
+        this["art::ThreadList::SuspendAll"] = function(threadList, cause, longSuspend) {
+          return suspendAll(threadList);
+        };
+      },
+      _ZN3art10ThreadList9ResumeAllEv: ["art::ThreadList::ResumeAll", "void", ["pointer"]],
+      // Android >= 7
+      _ZN3art11ClassLinker12VisitClassesEPNS_12ClassVisitorE: ["art::ClassLinker::VisitClasses", "void", ["pointer", "pointer"]],
+      // Android < 7
+      _ZN3art11ClassLinker12VisitClassesEPFbPNS_6mirror5ClassEPvES4_: function(address) {
+        const visitClasses = new NativeFunction(address, "void", ["pointer", "pointer", "pointer"], nativeFunctionOptions3);
+        this["art::ClassLinker::VisitClasses"] = function(classLinker, visitor) {
+          visitClasses(classLinker, visitor, NULL);
+        };
+      },
+      _ZNK3art11ClassLinker17VisitClassLoadersEPNS_18ClassLoaderVisitorE: ["art::ClassLinker::VisitClassLoaders", "void", ["pointer", "pointer"]],
+      _ZN3art2gc4Heap12VisitObjectsEPFvPNS_6mirror6ObjectEPvES5_: ["art::gc::Heap::VisitObjects", "void", ["pointer", "pointer", "pointer"]],
+      _ZN3art2gc4Heap12GetInstancesERNS_24VariableSizedHandleScopeENS_6HandleINS_6mirror5ClassEEEiRNSt3__16vectorINS4_INS5_6ObjectEEENS8_9allocatorISB_EEEE: ["art::gc::Heap::GetInstances", "void", ["pointer", "pointer", "pointer", "int", "pointer"]],
+      // Android >= 9
+      _ZN3art2gc4Heap12GetInstancesERNS_24VariableSizedHandleScopeENS_6HandleINS_6mirror5ClassEEEbiRNSt3__16vectorINS4_INS5_6ObjectEEENS8_9allocatorISB_EEEE: function(address) {
+        const getInstances = new NativeFunction(address, "void", ["pointer", "pointer", "pointer", "bool", "int", "pointer"], nativeFunctionOptions3);
+        this["art::gc::Heap::GetInstances"] = function(instance, scope, hClass, maxCount, instances) {
+          const useIsAssignableFrom = 0;
+          getInstances(instance, scope, hClass, useIsAssignableFrom, maxCount, instances);
+        };
+      },
+      _ZN3art12StackVisitorC2EPNS_6ThreadEPNS_7ContextENS0_13StackWalkKindEjb: ["art::StackVisitor::StackVisitor", "void", ["pointer", "pointer", "pointer", "uint", "uint", "bool"]],
+      _ZN3art12StackVisitorC2EPNS_6ThreadEPNS_7ContextENS0_13StackWalkKindEmb: ["art::StackVisitor::StackVisitor", "void", ["pointer", "pointer", "pointer", "uint", "size_t", "bool"]],
+      _ZN3art12StackVisitor9WalkStackILNS0_16CountTransitionsE0EEEvb: ["art::StackVisitor::WalkStack", "void", ["pointer", "bool"]],
+      _ZNK3art12StackVisitor9GetMethodEv: ["art::StackVisitor::GetMethod", "pointer", ["pointer"]],
+      _ZNK3art12StackVisitor16DescribeLocationEv: function(address) {
+        this["art::StackVisitor::DescribeLocation"] = makeCxxMethodWrapperReturningStdStringByValue(address, ["pointer"]);
+      },
+      _ZNK3art12StackVisitor24GetCurrentQuickFrameInfoEv: function(address) {
+        this["art::StackVisitor::GetCurrentQuickFrameInfo"] = makeArtQuickFrameInfoGetter(address);
+      },
+      _ZN3art6Thread18GetLongJumpContextEv: ["art::Thread::GetLongJumpContext", "pointer", ["pointer"]],
+      _ZN3art6mirror5Class13GetDescriptorEPNSt3__112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE: function(address) {
+        this["art::mirror::Class::GetDescriptor"] = address;
+      },
+      _ZN3art6mirror5Class11GetLocationEv: function(address) {
+        this["art::mirror::Class::GetLocation"] = makeCxxMethodWrapperReturningStdStringByValue(address, ["pointer"]);
+      },
+      _ZN3art9ArtMethod12PrettyMethodEb: function(address) {
+        this["art::ArtMethod::PrettyMethod"] = makeCxxMethodWrapperReturningStdStringByValue(address, ["pointer", "bool"]);
+      },
+      _ZN3art12PrettyMethodEPNS_9ArtMethodEb: function(address) {
+        this["art::ArtMethod::PrettyMethodNullSafe"] = makeCxxMethodWrapperReturningStdStringByValue(address, ["pointer", "bool"]);
+      },
+      // Android < 6 for cloneArtMethod()
+      _ZN3art6Thread14CurrentFromGdbEv: ["art::Thread::CurrentFromGdb", "pointer", []],
+      _ZN3art6mirror6Object5CloneEPNS_6ThreadE: function(address) {
+        this["art::mirror::Object::Clone"] = new NativeFunction(address, "pointer", ["pointer", "pointer"], nativeFunctionOptions3);
+      },
+      _ZN3art6mirror6Object5CloneEPNS_6ThreadEm: function(address) {
+        const clone = new NativeFunction(address, "pointer", ["pointer", "pointer", "pointer"], nativeFunctionOptions3);
+        this["art::mirror::Object::Clone"] = function(thisPtr, threadPtr) {
+          const numTargetBytes = NULL;
+          return clone(thisPtr, threadPtr, numTargetBytes);
+        };
+      },
+      _ZN3art6mirror6Object5CloneEPNS_6ThreadEj: function(address) {
+        const clone = new NativeFunction(address, "pointer", ["pointer", "pointer", "uint"], nativeFunctionOptions3);
+        this["art::mirror::Object::Clone"] = function(thisPtr, threadPtr) {
+          const numTargetBytes = 0;
+          return clone(thisPtr, threadPtr, numTargetBytes);
+        };
+      },
+      _ZN3art3Dbg14SetJdwpAllowedEb: ["art::Dbg::SetJdwpAllowed", "void", ["bool"]],
+      _ZN3art3Dbg13ConfigureJdwpERKNS_4JDWP11JdwpOptionsE: ["art::Dbg::ConfigureJdwp", "void", ["pointer"]],
+      _ZN3art31InternalDebuggerControlCallback13StartDebuggerEv: ["art::InternalDebuggerControlCallback::StartDebugger", "void", ["pointer"]],
+      _ZN3art3Dbg9StartJdwpEv: ["art::Dbg::StartJdwp", "void", []],
+      _ZN3art3Dbg8GoActiveEv: ["art::Dbg::GoActive", "void", []],
+      _ZN3art3Dbg21RequestDeoptimizationERKNS_21DeoptimizationRequestE: ["art::Dbg::RequestDeoptimization", "void", ["pointer"]],
+      _ZN3art3Dbg20ManageDeoptimizationEv: ["art::Dbg::ManageDeoptimization", "void", []],
+      _ZN3art15instrumentation15Instrumentation20EnableDeoptimizationEv: ["art::Instrumentation::EnableDeoptimization", "void", ["pointer"]],
+      // Android >= 6
+      _ZN3art15instrumentation15Instrumentation20DeoptimizeEverythingEPKc: ["art::Instrumentation::DeoptimizeEverything", "void", ["pointer", "pointer"]],
+      // Android < 6
+      _ZN3art15instrumentation15Instrumentation20DeoptimizeEverythingEv: function(address) {
+        const deoptimize = new NativeFunction(address, "void", ["pointer"], nativeFunctionOptions3);
+        this["art::Instrumentation::DeoptimizeEverything"] = function(instrumentation, key) {
+          deoptimize(instrumentation);
+        };
+      },
+      _ZN3art7Runtime19DeoptimizeBootImageEv: ["art::Runtime::DeoptimizeBootImage", "void", ["pointer"]],
+      _ZN3art15instrumentation15Instrumentation10DeoptimizeEPNS_9ArtMethodE: ["art::Instrumentation::Deoptimize", "void", ["pointer", "pointer"]],
+      // Android >= 11
+      _ZN3art3jni12JniIdManager14DecodeMethodIdEP10_jmethodID: ["art::jni::JniIdManager::DecodeMethodId", "pointer", ["pointer", "pointer"]],
+      _ZN3art11interpreter18GetNterpEntryPointEv: ["art::interpreter::GetNterpEntryPoint", "pointer", []],
+      _ZN3art7Monitor17TranslateLocationEPNS_9ArtMethodEjPPKcPi: ["art::Monitor::TranslateLocation", "void", ["pointer", "uint32", "pointer", "pointer"]]
+    },
+    variables: {
+      _ZN3art3Dbg9gRegistryE: function(address) {
+        this.isJdwpStarted = () => !address.readPointer().isNull();
+      },
+      _ZN3art3Dbg15gDebuggerActiveE: function(address) {
+        this.isDebuggerActive = () => !!address.readU8();
+      }
+    },
+    optionals: /* @__PURE__ */ new Set([
+      "artInterpreterToCompiledCodeBridge",
+      "_ZN3art9JavaVMExt12AddGlobalRefEPNS_6ThreadENS_6ObjPtrINS_6mirror6ObjectEEE",
+      "_ZN3art9JavaVMExt12AddGlobalRefEPNS_6ThreadEPNS_6mirror6ObjectE",
+      "_ZN3art9JavaVMExt12DecodeGlobalEPv",
+      "_ZN3art9JavaVMExt12DecodeGlobalEPNS_6ThreadEPv",
+      "_ZNK3art6Thread19DecodeGlobalJObjectEP8_jobject",
+      "_ZNK3art6Thread13DecodeJObjectEP8_jobject",
+      "_ZN3art10ThreadList10SuspendAllEPKcb",
+      "_ZN3art10ThreadList10SuspendAllEv",
+      "_ZN3art11ClassLinker12VisitClassesEPNS_12ClassVisitorE",
+      "_ZN3art11ClassLinker12VisitClassesEPFbPNS_6mirror5ClassEPvES4_",
+      "_ZNK3art11ClassLinker17VisitClassLoadersEPNS_18ClassLoaderVisitorE",
+      "_ZN3art6mirror6Object5CloneEPNS_6ThreadE",
+      "_ZN3art6mirror6Object5CloneEPNS_6ThreadEm",
+      "_ZN3art6mirror6Object5CloneEPNS_6ThreadEj",
+      "_ZN3art22IndirectReferenceTable3AddEjPNS_6mirror6ObjectE",
+      "_ZN3art22IndirectReferenceTable3AddENS_15IRTSegmentStateENS_6ObjPtrINS_6mirror6ObjectEEE",
+      "_ZN3art2gc4Heap12VisitObjectsEPFvPNS_6mirror6ObjectEPvES5_",
+      "_ZN3art2gc4Heap12GetInstancesERNS_24VariableSizedHandleScopeENS_6HandleINS_6mirror5ClassEEEiRNSt3__16vectorINS4_INS5_6ObjectEEENS8_9allocatorISB_EEEE",
+      "_ZN3art2gc4Heap12GetInstancesERNS_24VariableSizedHandleScopeENS_6HandleINS_6mirror5ClassEEEbiRNSt3__16vectorINS4_INS5_6ObjectEEENS8_9allocatorISB_EEEE",
+      "_ZN3art12StackVisitorC2EPNS_6ThreadEPNS_7ContextENS0_13StackWalkKindEjb",
+      "_ZN3art12StackVisitorC2EPNS_6ThreadEPNS_7ContextENS0_13StackWalkKindEmb",
+      "_ZN3art12StackVisitor9WalkStackILNS0_16CountTransitionsE0EEEvb",
+      "_ZNK3art12StackVisitor9GetMethodEv",
+      "_ZNK3art12StackVisitor16DescribeLocationEv",
+      "_ZNK3art12StackVisitor24GetCurrentQuickFrameInfoEv",
+      "_ZN3art6Thread18GetLongJumpContextEv",
+      "_ZN3art6mirror5Class13GetDescriptorEPNSt3__112basic_stringIcNS2_11char_traitsIcEENS2_9allocatorIcEEEE",
+      "_ZN3art6mirror5Class11GetLocationEv",
+      "_ZN3art9ArtMethod12PrettyMethodEb",
+      "_ZN3art12PrettyMethodEPNS_9ArtMethodEb",
+      "_ZN3art3Dbg13ConfigureJdwpERKNS_4JDWP11JdwpOptionsE",
+      "_ZN3art31InternalDebuggerControlCallback13StartDebuggerEv",
+      "_ZN3art3Dbg15gDebuggerActiveE",
+      "_ZN3art15instrumentation15Instrumentation20EnableDeoptimizationEv",
+      "_ZN3art15instrumentation15Instrumentation20DeoptimizeEverythingEPKc",
+      "_ZN3art15instrumentation15Instrumentation20DeoptimizeEverythingEv",
+      "_ZN3art7Runtime19DeoptimizeBootImageEv",
+      "_ZN3art15instrumentation15Instrumentation10DeoptimizeEPNS_9ArtMethodE",
+      "_ZN3art3Dbg9StartJdwpEv",
+      "_ZN3art3Dbg8GoActiveEv",
+      "_ZN3art3Dbg21RequestDeoptimizationERKNS_21DeoptimizationRequestE",
+      "_ZN3art3Dbg20ManageDeoptimizationEv",
+      "_ZN3art3Dbg9gRegistryE",
+      "_ZN3art3jni12JniIdManager14DecodeMethodIdEP10_jmethodID",
+      "_ZN3art11interpreter18GetNterpEntryPointEv",
+      "_ZN3art7Monitor17TranslateLocationEPNS_9ArtMethodEjPPKcPi"
+    ])
+  } : {
+    functions: {
+      _Z20dvmDecodeIndirectRefP6ThreadP8_jobject: ["dvmDecodeIndirectRef", "pointer", ["pointer", "pointer"]],
+      _Z15dvmUseJNIBridgeP6MethodPv: ["dvmUseJNIBridge", "void", ["pointer", "pointer"]],
+      _Z20dvmHeapSourceGetBasev: ["dvmHeapSourceGetBase", "pointer", []],
+      _Z21dvmHeapSourceGetLimitv: ["dvmHeapSourceGetLimit", "pointer", []],
+      _Z16dvmIsValidObjectPK6Object: ["dvmIsValidObject", "uint8", ["pointer"]],
+      JNI_GetCreatedJavaVMs: ["JNI_GetCreatedJavaVMs", "int", ["pointer", "int", "pointer"]]
+    },
+    variables: {
+      gDvmJni: function(address) {
+        this.gDvmJni = address;
+      },
+      gDvm: function(address) {
+        this.gDvm = address;
+      }
+    }
+  };
+  const {
+    functions = {},
+    variables = {},
+    optionals = /* @__PURE__ */ new Set()
+  } = pending;
+  const missing = [];
+  for (const [name, signature2] of Object.entries(functions)) {
+    const address = temporaryApi.find(name);
+    if (address !== null) {
+      if (typeof signature2 === "function") {
+        signature2.call(temporaryApi, address);
+      } else {
+        temporaryApi[signature2[0]] = new NativeFunction(address, signature2[1], signature2[2], nativeFunctionOptions3);
+      }
+    } else {
+      if (!optionals.has(name)) {
+        missing.push(name);
+      }
+    }
+  }
+  for (const [name, handler] of Object.entries(variables)) {
+    const address = temporaryApi.find(name);
+    if (address !== null) {
+      handler.call(temporaryApi, address);
+    } else {
+      if (!optionals.has(name)) {
+        missing.push(name);
+      }
+    }
+  }
+  if (missing.length > 0) {
+    throw new Error("Java API only partially available; please file a bug. Missing: " + missing.join(", "));
+  }
+  const vms = Memory.alloc(pointerSize6);
+  const vmCount = Memory.alloc(jsizeSize);
+  checkJniResult("JNI_GetCreatedJavaVMs", temporaryApi.JNI_GetCreatedJavaVMs(vms, 1, vmCount));
+  if (vmCount.readInt() === 0) {
+    return null;
+  }
+  temporaryApi.vm = vms.readPointer();
+  if (isArt) {
+    const apiLevel = getAndroidApiLevel();
+    let kAccCompileDontBother;
+    if (apiLevel >= 27) {
+      kAccCompileDontBother = 33554432;
+    } else if (apiLevel >= 24) {
+      kAccCompileDontBother = 16777216;
+    } else {
+      kAccCompileDontBother = 0;
+    }
+    temporaryApi.kAccCompileDontBother = kAccCompileDontBother;
+    const artRuntime = temporaryApi.vm.add(pointerSize6).readPointer();
+    temporaryApi.artRuntime = artRuntime;
+    const runtimeSpec = getArtRuntimeSpec(temporaryApi);
+    const runtimeOffset = runtimeSpec.offset;
+    const instrumentationOffset = runtimeOffset.instrumentation;
+    temporaryApi.artInstrumentation = instrumentationOffset !== null ? artRuntime.add(instrumentationOffset) : null;
+    temporaryApi.artHeap = artRuntime.add(runtimeOffset.heap).readPointer();
+    temporaryApi.artThreadList = artRuntime.add(runtimeOffset.threadList).readPointer();
+    const classLinker = artRuntime.add(runtimeOffset.classLinker).readPointer();
+    const classLinkerOffsets = getArtClassLinkerSpec(artRuntime, runtimeSpec).offset;
+    const quickResolutionTrampoline = classLinker.add(classLinkerOffsets.quickResolutionTrampoline).readPointer();
+    const quickImtConflictTrampoline = classLinker.add(classLinkerOffsets.quickImtConflictTrampoline).readPointer();
+    const quickGenericJniTrampoline = classLinker.add(classLinkerOffsets.quickGenericJniTrampoline).readPointer();
+    const quickToInterpreterBridgeTrampoline = classLinker.add(classLinkerOffsets.quickToInterpreterBridgeTrampoline).readPointer();
+    temporaryApi.artClassLinker = {
+      address: classLinker,
+      quickResolutionTrampoline,
+      quickImtConflictTrampoline,
+      quickGenericJniTrampoline,
+      quickToInterpreterBridgeTrampoline
+    };
+    const vm3 = new VM(temporaryApi);
+    temporaryApi.artQuickGenericJniTrampoline = getArtQuickEntrypointFromTrampoline(quickGenericJniTrampoline, vm3);
+    temporaryApi.artQuickToInterpreterBridge = getArtQuickEntrypointFromTrampoline(quickToInterpreterBridgeTrampoline, vm3);
+    temporaryApi.artQuickResolutionTrampoline = getArtQuickEntrypointFromTrampoline(quickResolutionTrampoline, vm3);
+    if (temporaryApi["art::JavaVMExt::AddGlobalRef"] === void 0) {
+      temporaryApi["art::JavaVMExt::AddGlobalRef"] = makeAddGlobalRefFallbackForAndroid5(temporaryApi);
+    }
+    if (temporaryApi["art::JavaVMExt::DecodeGlobal"] === void 0) {
+      temporaryApi["art::JavaVMExt::DecodeGlobal"] = makeDecodeGlobalFallback(temporaryApi);
+    }
+    if (temporaryApi["art::ArtMethod::PrettyMethod"] === void 0) {
+      temporaryApi["art::ArtMethod::PrettyMethod"] = temporaryApi["art::ArtMethod::PrettyMethodNullSafe"];
+    }
+    if (temporaryApi["art::interpreter::GetNterpEntryPoint"] !== void 0) {
+      temporaryApi.artNterpEntryPoint = temporaryApi["art::interpreter::GetNterpEntryPoint"]();
+    } else {
+      temporaryApi.artNterpEntryPoint = temporaryApi.find("ExecuteNterpImpl");
+    }
+    artController = makeArtController(temporaryApi, vm3);
+    fixupArtQuickDeliverExceptionBug(temporaryApi);
+    let cachedJvmti = null;
+    Object.defineProperty(temporaryApi, "jvmti", {
+      get() {
+        if (cachedJvmti === null) {
+          cachedJvmti = [tryGetEnvJvmti(vm3, this.artRuntime)];
+        }
+        return cachedJvmti[0];
+      }
+    });
+  }
+  const cxxImports = vmModule.enumerateImports().filter((imp) => imp.name.indexOf("_Z") === 0).reduce((result, imp) => {
+    result[imp.name] = imp.address;
+    return result;
+  }, {});
+  temporaryApi.$new = new NativeFunction(cxxImports._Znwm || cxxImports._Znwj, "pointer", ["ulong"], nativeFunctionOptions3);
+  temporaryApi.$delete = new NativeFunction(cxxImports._ZdlPv, "void", ["pointer"], nativeFunctionOptions3);
+  MethodMangler = isArt ? ArtMethodMangler : DalvikMethodMangler;
+  return temporaryApi;
+}
+function tryGetEnvJvmti(vm3, runtime3) {
+  let env2 = null;
+  vm3.perform(() => {
+    const ensurePluginLoadedAddr = getApi().find("_ZN3art7Runtime18EnsurePluginLoadedEPKcPNSt3__112basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEE");
+    if (ensurePluginLoadedAddr === null) {
+      return;
+    }
+    const ensurePluginLoaded = new NativeFunction(
+      ensurePluginLoadedAddr,
+      "bool",
+      ["pointer", "pointer", "pointer"]
+    );
+    const errorPtr = Memory.alloc(pointerSize6);
+    const success = ensurePluginLoaded(runtime3, Memory.allocUtf8String("libopenjdkjvmti.so"), errorPtr);
+    if (!success) {
+      return;
+    }
+    const kArtTiVersion = jvmtiVersion.v1_2 | 1073741824;
+    const handle2 = vm3.tryGetEnvHandle(kArtTiVersion);
+    if (handle2 === null) {
+      return;
+    }
+    env2 = new EnvJvmti(handle2, vm3);
+    const capaBuf = Memory.alloc(8);
+    capaBuf.writeU64(jvmtiCapabilities.canTagObjects);
+    const result = env2.addCapabilities(capaBuf);
+    if (result !== JNI_OK) {
+      env2 = null;
+    }
+  });
+  return env2;
+}
+function ensureClassInitialized(env2, classRef) {
+  const api3 = getApi();
+  if (api3.flavor !== "art") {
+    return;
+  }
+  env2.getFieldId(classRef, "x", "Z");
+  env2.exceptionClear();
+}
+function getArtVMSpec(api3) {
+  return {
+    offset: pointerSize6 === 4 ? {
+      globalsLock: 32,
+      globals: 72
+    } : {
+      globalsLock: 64,
+      globals: 112
+    }
+  };
+}
+function _getArtRuntimeSpec(api3) {
+  const vm3 = api3.vm;
+  const runtime3 = api3.artRuntime;
+  const startOffset = pointerSize6 === 4 ? 200 : 384;
+  const endOffset = startOffset + 100 * pointerSize6;
+  const apiLevel = getAndroidApiLevel();
+  const codename = getAndroidCodename();
+  const { isApiLevel34OrApexEquivalent } = api3;
+  let spec = null;
+  for (let offset = startOffset; offset !== endOffset; offset += pointerSize6) {
+    const value = runtime3.add(offset).readPointer();
+    if (value.equals(vm3)) {
+      let classLinkerOffsets;
+      let jniIdManagerOffset = null;
+      if (apiLevel >= 33 || codename === "Tiramisu" || isApiLevel34OrApexEquivalent) {
+        classLinkerOffsets = [offset - 4 * pointerSize6];
+        jniIdManagerOffset = offset - pointerSize6;
+      } else if (apiLevel >= 30 || codename === "R") {
+        classLinkerOffsets = [offset - 3 * pointerSize6, offset - 4 * pointerSize6];
+        jniIdManagerOffset = offset - pointerSize6;
+      } else if (apiLevel >= 29) {
+        classLinkerOffsets = [offset - 2 * pointerSize6];
+      } else if (apiLevel >= 27) {
+        classLinkerOffsets = [offset - STD_STRING_SIZE - 3 * pointerSize6];
+      } else {
+        classLinkerOffsets = [offset - STD_STRING_SIZE - 2 * pointerSize6];
+      }
+      for (const classLinkerOffset of classLinkerOffsets) {
+        const internTableOffset = classLinkerOffset - pointerSize6;
+        const threadListOffset = internTableOffset - pointerSize6;
+        let heapOffset;
+        if (isApiLevel34OrApexEquivalent) {
+          heapOffset = threadListOffset - 9 * pointerSize6;
+        } else if (apiLevel >= 24) {
+          heapOffset = threadListOffset - 8 * pointerSize6;
+        } else if (apiLevel >= 23) {
+          heapOffset = threadListOffset - 7 * pointerSize6;
+        } else {
+          heapOffset = threadListOffset - 4 * pointerSize6;
+        }
+        const candidate = {
+          offset: {
+            heap: heapOffset,
+            threadList: threadListOffset,
+            internTable: internTableOffset,
+            classLinker: classLinkerOffset,
+            jniIdManager: jniIdManagerOffset
+          }
+        };
+        if (tryGetArtClassLinkerSpec(runtime3, candidate) !== null) {
+          spec = candidate;
+          break;
+        }
+      }
+      break;
+    }
+  }
+  if (spec === null) {
+    throw new Error("Unable to determine Runtime field offsets");
+  }
+  spec.offset.instrumentation = tryDetectInstrumentationOffset(api3);
+  spec.offset.jniIdsIndirection = tryDetectJniIdsIndirectionOffset(api3);
+  return spec;
+}
+var instrumentationOffsetParsers = {
+  ia32: parsex86InstrumentationOffset,
+  x64: parsex86InstrumentationOffset,
+  arm: parseArmInstrumentationOffset,
+  arm64: parseArm64InstrumentationOffset
+};
+function tryDetectInstrumentationOffset(api3) {
+  const impl2 = api3["art::Runtime::DeoptimizeBootImage"];
+  if (impl2 === void 0) {
+    return null;
+  }
+  return parseInstructionsAt(impl2, instrumentationOffsetParsers[Process.arch], { limit: 30 });
+}
+function parsex86InstrumentationOffset(insn) {
+  if (insn.mnemonic !== "lea") {
+    return null;
+  }
+  const offset = insn.operands[1].value.disp;
+  if (offset < 256 || offset > 1024) {
+    return null;
+  }
+  return offset;
+}
+function parseArmInstrumentationOffset(insn) {
+  if (insn.mnemonic !== "add.w") {
+    return null;
+  }
+  const ops = insn.operands;
+  if (ops.length !== 3) {
+    return null;
+  }
+  const op2 = ops[2];
+  if (op2.type !== "imm") {
+    return null;
+  }
+  return op2.value;
+}
+function parseArm64InstrumentationOffset(insn) {
+  if (insn.mnemonic !== "add") {
+    return null;
+  }
+  const ops = insn.operands;
+  if (ops.length !== 3) {
+    return null;
+  }
+  if (ops[0].value === "sp" || ops[1].value === "sp") {
+    return null;
+  }
+  const op2 = ops[2];
+  if (op2.type !== "imm") {
+    return null;
+  }
+  const offset = op2.value.valueOf();
+  if (offset < 256 || offset > 1024) {
+    return null;
+  }
+  return offset;
+}
+var jniIdsIndirectionOffsetParsers = {
+  ia32: parsex86JniIdsIndirectionOffset,
+  x64: parsex86JniIdsIndirectionOffset,
+  arm: parseArmJniIdsIndirectionOffset,
+  arm64: parseArm64JniIdsIndirectionOffset
+};
+function tryDetectJniIdsIndirectionOffset(api3) {
+  const impl2 = api3.find("_ZN3art7Runtime12SetJniIdTypeENS_9JniIdTypeE");
+  if (impl2 === null) {
+    return null;
+  }
+  const offset = parseInstructionsAt(impl2, jniIdsIndirectionOffsetParsers[Process.arch], { limit: 20 });
+  if (offset === null) {
+    throw new Error("Unable to determine Runtime.jni_ids_indirection_ offset");
+  }
+  return offset;
+}
+function parsex86JniIdsIndirectionOffset(insn) {
+  if (insn.mnemonic === "cmp") {
+    return insn.operands[0].value.disp;
+  }
+  return null;
+}
+function parseArmJniIdsIndirectionOffset(insn) {
+  if (insn.mnemonic === "ldr.w") {
+    return insn.operands[1].value.disp;
+  }
+  return null;
+}
+function parseArm64JniIdsIndirectionOffset(insn, prevInsn) {
+  if (prevInsn === null) {
+    return null;
+  }
+  const { mnemonic } = insn;
+  const { mnemonic: prevMnemonic } = prevInsn;
+  if (mnemonic === "cmp" && prevMnemonic === "ldr" || mnemonic === "bl" && prevMnemonic === "str") {
+    return prevInsn.operands[1].value.disp;
+  }
+  return null;
+}
+function _getArtInstrumentationSpec() {
+  const deoptimizationEnabledOffsets = {
+    "4-21": 136,
+    "4-22": 136,
+    "4-23": 172,
+    "4-24": 196,
+    "4-25": 196,
+    "4-26": 196,
+    "4-27": 196,
+    "4-28": 212,
+    "4-29": 172,
+    "4-30": 180,
+    "4-31": 180,
+    "8-21": 224,
+    "8-22": 224,
+    "8-23": 296,
+    "8-24": 344,
+    "8-25": 344,
+    "8-26": 352,
+    "8-27": 352,
+    "8-28": 392,
+    "8-29": 328,
+    "8-30": 336,
+    "8-31": 336
+  };
+  const deoptEnabledOffset = deoptimizationEnabledOffsets[`${pointerSize6}-${getAndroidApiLevel()}`];
+  if (deoptEnabledOffset === void 0) {
+    throw new Error("Unable to determine Instrumentation field offsets");
+  }
+  return {
+    offset: {
+      forcedInterpretOnly: 4,
+      deoptimizationEnabled: deoptEnabledOffset
+    }
+  };
+}
+function getArtClassLinkerSpec(runtime3, runtimeSpec) {
+  const spec = tryGetArtClassLinkerSpec(runtime3, runtimeSpec);
+  if (spec === null) {
+    throw new Error("Unable to determine ClassLinker field offsets");
+  }
+  return spec;
+}
+function tryGetArtClassLinkerSpec(runtime3, runtimeSpec) {
+  if (cachedArtClassLinkerSpec !== null) {
+    return cachedArtClassLinkerSpec;
+  }
+  const { classLinker: classLinkerOffset, internTable: internTableOffset } = runtimeSpec.offset;
+  const classLinker = runtime3.add(classLinkerOffset).readPointer();
+  const internTable = runtime3.add(internTableOffset).readPointer();
+  const startOffset = pointerSize6 === 4 ? 100 : 200;
+  const endOffset = startOffset + 100 * pointerSize6;
+  const apiLevel = getAndroidApiLevel();
+  let spec = null;
+  for (let offset = startOffset; offset !== endOffset; offset += pointerSize6) {
+    const value = classLinker.add(offset).readPointer();
+    if (value.equals(internTable)) {
+      let delta;
+      if (apiLevel >= 30 || getAndroidCodename() === "R") {
+        delta = 6;
+      } else if (apiLevel >= 29) {
+        delta = 4;
+      } else if (apiLevel >= 23) {
+        delta = 3;
+      } else {
+        delta = 5;
+      }
+      const quickGenericJniTrampolineOffset = offset + delta * pointerSize6;
+      let quickResolutionTrampolineOffset;
+      if (apiLevel >= 23) {
+        quickResolutionTrampolineOffset = quickGenericJniTrampolineOffset - 2 * pointerSize6;
+      } else {
+        quickResolutionTrampolineOffset = quickGenericJniTrampolineOffset - 3 * pointerSize6;
+      }
+      spec = {
+        offset: {
+          quickResolutionTrampoline: quickResolutionTrampolineOffset,
+          quickImtConflictTrampoline: quickGenericJniTrampolineOffset - pointerSize6,
+          quickGenericJniTrampoline: quickGenericJniTrampolineOffset,
+          quickToInterpreterBridgeTrampoline: quickGenericJniTrampolineOffset + pointerSize6
+        }
+      };
+      break;
+    }
+  }
+  if (spec !== null) {
+    cachedArtClassLinkerSpec = spec;
+  } else {
+    throw new Error("Unable to determine ClassLinker field offsets");
+  }
+  return spec;
+}
+function getArtClassSpec(vm3) {
+  let apiLevel;
+  try {
+    apiLevel = getAndroidApiLevel();
+  } catch (e) {
+    return null;
+  }
+  if (apiLevel < 24) {
+    return null;
+  }
+  let base, cmo;
+  if (apiLevel >= 26) {
+    base = 40;
+    cmo = 116;
+  } else {
+    base = 56;
+    cmo = 124;
+  }
+  return {
+    offset: {
+      ifields: base,
+      methods: base + 8,
+      sfields: base + 16,
+      copiedMethodsOffset: cmo
+    }
+  };
+}
+function _getArtMethodSpec(vm3) {
+  const api3 = getApi();
+  let spec;
+  vm3.perform((env2) => {
+    const process = env2.findClass("android/os/Process");
+    const getElapsedCpuTime = unwrapMethodId(env2.getStaticMethodId(process, "getElapsedCpuTime", "()J"));
+    env2.deleteLocalRef(process);
+    const runtimeModule = Process.getModuleByName("libandroid_runtime.so");
+    const runtimeStart = runtimeModule.base;
+    const runtimeEnd = runtimeStart.add(runtimeModule.size);
+    const apiLevel = getAndroidApiLevel();
+    const entrypointFieldSize = apiLevel <= 21 ? 8 : pointerSize6;
+    const expectedAccessFlags = kAccPublic | kAccStatic | kAccFinal | kAccNative;
+    const relevantAccessFlagsMask = ~(kAccFastInterpreterToInterpreterInvoke | kAccPublicApi | kAccNterpInvokeFastPathFlag) >>> 0;
+    let jniCodeOffset = null;
+    let accessFlagsOffset = null;
+    let remaining = 2;
+    for (let offset = 0; offset !== 64 && remaining !== 0; offset += 4) {
+      const field = getElapsedCpuTime.add(offset);
+      if (jniCodeOffset === null) {
+        const address = field.readPointer();
+        if (address.compare(runtimeStart) >= 0 && address.compare(runtimeEnd) < 0) {
+          jniCodeOffset = offset;
+          remaining--;
+        }
+      }
+      if (accessFlagsOffset === null) {
+        const flags = field.readU32();
+        if ((flags & relevantAccessFlagsMask) === expectedAccessFlags) {
+          accessFlagsOffset = offset;
+          remaining--;
+        }
+      }
+    }
+    if (remaining !== 0) {
+      throw new Error("Unable to determine ArtMethod field offsets");
+    }
+    const quickCodeOffset = jniCodeOffset + entrypointFieldSize;
+    const size = apiLevel <= 21 ? quickCodeOffset + 32 : quickCodeOffset + pointerSize6;
+    spec = {
+      size,
+      offset: {
+        jniCode: jniCodeOffset,
+        quickCode: quickCodeOffset,
+        accessFlags: accessFlagsOffset
+      }
+    };
+    if ("artInterpreterToCompiledCodeBridge" in api3) {
+      spec.offset.interpreterCode = jniCodeOffset - entrypointFieldSize;
+    }
+  });
+  return spec;
+}
+function getArtFieldSpec(vm3) {
+  const apiLevel = getAndroidApiLevel();
+  if (apiLevel >= 23) {
+    return {
+      size: 16,
+      offset: {
+        accessFlags: 4
+      }
+    };
+  }
+  if (apiLevel >= 21) {
+    return {
+      size: 24,
+      offset: {
+        accessFlags: 12
+      }
+    };
+  }
+  return null;
+}
+function _getArtThreadSpec(vm3) {
+  const apiLevel = getAndroidApiLevel();
+  let spec;
+  vm3.perform((env2) => {
+    const threadHandle = getArtThreadFromEnv(env2);
+    const envHandle = env2.handle;
+    let isExceptionReportedOffset = null;
+    let exceptionOffset = null;
+    let throwLocationOffset = null;
+    let topHandleScopeOffset = null;
+    let managedStackOffset = null;
+    let selfOffset = null;
+    for (let offset = 144; offset !== 256; offset += pointerSize6) {
+      const field = threadHandle.add(offset);
+      const value = field.readPointer();
+      if (value.equals(envHandle)) {
+        exceptionOffset = offset - 6 * pointerSize6;
+        managedStackOffset = offset - 4 * pointerSize6;
+        selfOffset = offset + 2 * pointerSize6;
+        if (apiLevel <= 22) {
+          exceptionOffset -= pointerSize6;
+          isExceptionReportedOffset = exceptionOffset - pointerSize6 - 9 * 8 - 3 * 4;
+          throwLocationOffset = offset + 6 * pointerSize6;
+          managedStackOffset -= pointerSize6;
+          selfOffset -= pointerSize6;
+        }
+        topHandleScopeOffset = offset + 9 * pointerSize6;
+        if (apiLevel <= 22) {
+          topHandleScopeOffset += 2 * pointerSize6 + 4;
+          if (pointerSize6 === 8) {
+            topHandleScopeOffset += 4;
+          }
+        }
+        if (apiLevel >= 23) {
+          topHandleScopeOffset += pointerSize6;
+        }
+        break;
+      }
+    }
+    if (topHandleScopeOffset === null) {
+      throw new Error("Unable to determine ArtThread field offsets");
+    }
+    spec = {
+      offset: {
+        isExceptionReportedToInstrumentation: isExceptionReportedOffset,
+        exception: exceptionOffset,
+        throwLocation: throwLocationOffset,
+        topHandleScope: topHandleScopeOffset,
+        managedStack: managedStackOffset,
+        self: selfOffset
+      }
+    };
+  });
+  return spec;
+}
+function _getArtManagedStackSpec() {
+  const apiLevel = getAndroidApiLevel();
+  if (apiLevel >= 23) {
+    return {
+      offset: {
+        topQuickFrame: 0,
+        link: pointerSize6
+      }
+    };
+  } else {
+    return {
+      offset: {
+        topQuickFrame: 2 * pointerSize6,
+        link: 0
+      }
+    };
+  }
+}
+var artQuickTrampolineParsers = {
+  ia32: parseArtQuickTrampolineX86,
+  x64: parseArtQuickTrampolineX86,
+  arm: parseArtQuickTrampolineArm,
+  arm64: parseArtQuickTrampolineArm64
+};
+function getArtQuickEntrypointFromTrampoline(trampoline, vm3) {
+  let address;
+  vm3.perform((env2) => {
+    const thread = getArtThreadFromEnv(env2);
+    const tryParse = artQuickTrampolineParsers[Process.arch];
+    const insn = Instruction.parse(trampoline);
+    const offset = tryParse(insn);
+    if (offset !== null) {
+      address = thread.add(offset).readPointer();
+    } else {
+      address = trampoline;
+    }
+  });
+  return address;
+}
+function parseArtQuickTrampolineX86(insn) {
+  if (insn.mnemonic === "jmp") {
+    return insn.operands[0].value.disp;
+  }
+  return null;
+}
+function parseArtQuickTrampolineArm(insn) {
+  if (insn.mnemonic === "ldr.w") {
+    return insn.operands[1].value.disp;
+  }
+  return null;
+}
+function parseArtQuickTrampolineArm64(insn) {
+  if (insn.mnemonic === "ldr") {
+    return insn.operands[1].value.disp;
+  }
+  return null;
+}
+function getArtThreadFromEnv(env2) {
+  return env2.handle.add(pointerSize6).readPointer();
+}
+function _getAndroidVersion() {
+  return getAndroidSystemProperty("ro.build.version.release");
+}
+function _getAndroidCodename() {
+  return getAndroidSystemProperty("ro.build.version.codename");
+}
+function _getAndroidApiLevel() {
+  return parseInt(getAndroidSystemProperty("ro.build.version.sdk"), 10);
+}
+var systemPropertyGet = null;
+var PROP_VALUE_MAX = 92;
+function getAndroidSystemProperty(name) {
+  if (systemPropertyGet === null) {
+    systemPropertyGet = new NativeFunction(
+      Process.getModuleByName("libc.so").getExportByName("__system_property_get"),
+      "int",
+      ["pointer", "pointer"],
+      nativeFunctionOptions3
+    );
+  }
+  const buf = Memory.alloc(PROP_VALUE_MAX);
+  systemPropertyGet(Memory.allocUtf8String(name), buf);
+  return buf.readUtf8String();
+}
+function withRunnableArtThread(vm3, env2, fn) {
+  const perform = getArtThreadStateTransitionImpl(vm3, env2);
+  const id = getArtThreadFromEnv(env2).toString();
+  artThreadStateTransitions[id] = fn;
+  perform(env2.handle);
+  if (artThreadStateTransitions[id] !== void 0) {
+    delete artThreadStateTransitions[id];
+    throw new Error("Unable to perform state transition; please file a bug");
+  }
+}
+function _getArtThreadStateTransitionImpl(vm3, env2) {
+  const callback = new NativeCallback(onThreadStateTransitionComplete, "void", ["pointer"]);
+  return makeArtThreadStateTransitionImpl(vm3, env2, callback);
+}
+function onThreadStateTransitionComplete(thread) {
+  const id = thread.toString();
+  const fn = artThreadStateTransitions[id];
+  delete artThreadStateTransitions[id];
+  fn(thread);
+}
+function withAllArtThreadsSuspended(fn) {
+  const api3 = getApi();
+  const threadList = api3.artThreadList;
+  const longSuspend = false;
+  api3["art::ThreadList::SuspendAll"](threadList, Memory.allocUtf8String("frida"), longSuspend ? 1 : 0);
+  try {
+    fn();
+  } finally {
+    api3["art::ThreadList::ResumeAll"](threadList);
+  }
+}
+var ArtClassVisitor = class {
+  constructor(visit) {
+    const visitor = Memory.alloc(4 * pointerSize6);
+    const vtable2 = visitor.add(pointerSize6);
+    visitor.writePointer(vtable2);
+    const onVisit = new NativeCallback((self, klass) => {
+      return visit(klass) === true ? 1 : 0;
+    }, "bool", ["pointer", "pointer"]);
+    vtable2.add(2 * pointerSize6).writePointer(onVisit);
+    this.handle = visitor;
+    this._onVisit = onVisit;
+  }
+};
+function makeArtClassVisitor(visit) {
+  const api3 = getApi();
+  if (api3["art::ClassLinker::VisitClasses"] instanceof NativeFunction) {
+    return new ArtClassVisitor(visit);
+  }
+  return new NativeCallback((klass) => {
+    return visit(klass) === true ? 1 : 0;
+  }, "bool", ["pointer", "pointer"]);
+}
+var ArtClassLoaderVisitor = class {
+  constructor(visit) {
+    const visitor = Memory.alloc(4 * pointerSize6);
+    const vtable2 = visitor.add(pointerSize6);
+    visitor.writePointer(vtable2);
+    const onVisit = new NativeCallback((self, klass) => {
+      visit(klass);
+    }, "void", ["pointer", "pointer"]);
+    vtable2.add(2 * pointerSize6).writePointer(onVisit);
+    this.handle = visitor;
+    this._onVisit = onVisit;
+  }
+};
+function makeArtClassLoaderVisitor(visit) {
+  return new ArtClassLoaderVisitor(visit);
+}
+var WalkKind = {
+  "include-inlined-frames": 0,
+  "skip-inlined-frames": 1
+};
+var ArtStackVisitor = class {
+  constructor(thread, context, walkKind, numFrames = 0, checkSuspended = true) {
+    const api3 = getApi();
+    const baseSize = 512;
+    const vtableSize = 3 * pointerSize6;
+    const visitor = Memory.alloc(baseSize + vtableSize);
+    api3["art::StackVisitor::StackVisitor"](
+      visitor,
+      thread,
+      context,
+      WalkKind[walkKind],
+      numFrames,
+      checkSuspended ? 1 : 0
+    );
+    const vtable2 = visitor.add(baseSize);
+    visitor.writePointer(vtable2);
+    const onVisitFrame = new NativeCallback(this._visitFrame.bind(this), "bool", ["pointer"]);
+    vtable2.add(2 * pointerSize6).writePointer(onVisitFrame);
+    this.handle = visitor;
+    this._onVisitFrame = onVisitFrame;
+    const curShadowFrame = visitor.add(pointerSize6 === 4 ? 12 : 24);
+    this._curShadowFrame = curShadowFrame;
+    this._curQuickFrame = curShadowFrame.add(pointerSize6);
+    this._curQuickFramePc = curShadowFrame.add(2 * pointerSize6);
+    this._curOatQuickMethodHeader = curShadowFrame.add(3 * pointerSize6);
+    this._getMethodImpl = api3["art::StackVisitor::GetMethod"];
+    this._descLocImpl = api3["art::StackVisitor::DescribeLocation"];
+    this._getCQFIImpl = api3["art::StackVisitor::GetCurrentQuickFrameInfo"];
+  }
+  walkStack(includeTransitions = false) {
+    getApi()["art::StackVisitor::WalkStack"](this.handle, includeTransitions ? 1 : 0);
+  }
+  _visitFrame() {
+    return this.visitFrame() ? 1 : 0;
+  }
+  visitFrame() {
+    throw new Error("Subclass must implement visitFrame");
+  }
+  getMethod() {
+    const methodHandle = this._getMethodImpl(this.handle);
+    if (methodHandle.isNull()) {
+      return null;
+    }
+    return new ArtMethod(methodHandle);
+  }
+  getCurrentQuickFramePc() {
+    return this._curQuickFramePc.readPointer();
+  }
+  getCurrentQuickFrame() {
+    return this._curQuickFrame.readPointer();
+  }
+  getCurrentShadowFrame() {
+    return this._curShadowFrame.readPointer();
+  }
+  describeLocation() {
+    const result = new StdString();
+    this._descLocImpl(result, this.handle);
+    return result.disposeToString();
+  }
+  getCurrentOatQuickMethodHeader() {
+    return this._curOatQuickMethodHeader.readPointer();
+  }
+  getCurrentQuickFrameInfo() {
+    return this._getCQFIImpl(this.handle);
+  }
+};
+var ArtMethod = class {
+  constructor(handle2) {
+    this.handle = handle2;
+  }
+  prettyMethod(withSignature = true) {
+    const result = new StdString();
+    getApi()["art::ArtMethod::PrettyMethod"](result, this.handle, withSignature ? 1 : 0);
+    return result.disposeToString();
+  }
+  toString() {
+    return `ArtMethod(handle=${this.handle})`;
+  }
+};
+function makeArtQuickFrameInfoGetter(impl2) {
+  return function(self) {
+    const result = Memory.alloc(12);
+    getArtQuickFrameInfoGetterThunk(impl2)(result, self);
+    return {
+      frameSizeInBytes: result.readU32(),
+      coreSpillMask: result.add(4).readU32(),
+      fpSpillMask: result.add(8).readU32()
+    };
+  };
+}
+function _getArtQuickFrameInfoGetterThunk(impl2) {
+  let thunk = NULL;
+  switch (Process.arch) {
+    case "ia32":
+      thunk = makeThunk(32, (writer) => {
+        writer.putMovRegRegOffsetPtr("ecx", "esp", 4);
+        writer.putMovRegRegOffsetPtr("edx", "esp", 8);
+        writer.putCallAddressWithArguments(impl2, ["ecx", "edx"]);
+        writer.putMovRegReg("esp", "ebp");
+        writer.putPopReg("ebp");
+        writer.putRet();
+      });
+      break;
+    case "x64":
+      thunk = makeThunk(32, (writer) => {
+        writer.putPushReg("rdi");
+        writer.putCallAddressWithArguments(impl2, ["rsi"]);
+        writer.putPopReg("rdi");
+        writer.putMovRegPtrReg("rdi", "rax");
+        writer.putMovRegOffsetPtrReg("rdi", 8, "edx");
+        writer.putRet();
+      });
+      break;
+    case "arm":
+      thunk = makeThunk(16, (writer) => {
+        writer.putCallAddressWithArguments(impl2, ["r0", "r1"]);
+        writer.putPopRegs(["r0", "lr"]);
+        writer.putMovRegReg("pc", "lr");
+      });
+      break;
+    case "arm64":
+      thunk = makeThunk(64, (writer) => {
+        writer.putPushRegReg("x0", "lr");
+        writer.putCallAddressWithArguments(impl2, ["x1"]);
+        writer.putPopRegReg("x2", "lr");
+        writer.putStrRegRegOffset("x0", "x2", 0);
+        writer.putStrRegRegOffset("w1", "x2", 8);
+        writer.putRet();
+      });
+      break;
+  }
+  return new NativeFunction(thunk, "void", ["pointer", "pointer"], nativeFunctionOptions3);
+}
+var thunkRelocators = {
+  ia32: globalThis.X86Relocator,
+  x64: globalThis.X86Relocator,
+  arm: globalThis.ThumbRelocator,
+  arm64: globalThis.Arm64Relocator
+};
+var thunkWriters = {
+  ia32: globalThis.X86Writer,
+  x64: globalThis.X86Writer,
+  arm: globalThis.ThumbWriter,
+  arm64: globalThis.Arm64Writer
+};
+function makeThunk(size, write3) {
+  if (thunkPage === null) {
+    thunkPage = Memory.alloc(Process.pageSize);
+  }
+  const thunk = thunkPage.add(thunkOffset);
+  const arch = Process.arch;
+  const Writer = thunkWriters[arch];
+  Memory.patchCode(thunk, size, (code4) => {
+    const writer = new Writer(code4, { pc: thunk });
+    write3(writer);
+    writer.flush();
+    if (writer.offset > size) {
+      throw new Error(`Wrote ${writer.offset}, exceeding maximum of ${size}`);
+    }
+  });
+  thunkOffset += size;
+  return arch === "arm" ? thunk.or(1) : thunk;
+}
+function notifyArtMethodHooked(method2, vm3) {
+  ensureArtKnowsHowToHandleMethodInstrumentation(vm3);
+  ensureArtKnowsHowToHandleReplacementMethods(vm3);
+}
+function makeArtController(api3, vm3) {
+  const threadOffsets = getArtThreadSpec(vm3).offset;
+  const managedStackOffsets = getArtManagedStackSpec().offset;
+  const code4 = `
+#include <gum/guminterceptor.h>
+
+extern GMutex lock;
+extern GHashTable * methods;
+extern GHashTable * replacements;
+extern gpointer last_seen_art_method;
+
+extern gpointer get_oat_quick_method_header_impl (gpointer method, gpointer pc);
+
+void
+init (void)
+{
+  g_mutex_init (&lock);
+  methods = g_hash_table_new_full (NULL, NULL, NULL, NULL);
+  replacements = g_hash_table_new_full (NULL, NULL, NULL, NULL);
+}
+
+void
+finalize (void)
+{
+  g_hash_table_unref (replacements);
+  g_hash_table_unref (methods);
+  g_mutex_clear (&lock);
+}
+
+gboolean
+is_replacement_method (gpointer method)
+{
+  gboolean is_replacement;
+
+  g_mutex_lock (&lock);
+
+  is_replacement = g_hash_table_contains (replacements, method);
+
+  g_mutex_unlock (&lock);
+
+  return is_replacement;
+}
+
+gpointer
+get_replacement_method (gpointer original_method)
+{
+  gpointer replacement_method;
+
+  g_mutex_lock (&lock);
+
+  replacement_method = g_hash_table_lookup (methods, original_method);
+
+  g_mutex_unlock (&lock);
+
+  return replacement_method;
+}
+
+void
+set_replacement_method (gpointer original_method,
+                        gpointer replacement_method)
+{
+  g_mutex_lock (&lock);
+
+  g_hash_table_insert (methods, original_method, replacement_method);
+  g_hash_table_insert (replacements, replacement_method, original_method);
+
+  g_mutex_unlock (&lock);
+}
+
+void
+delete_replacement_method (gpointer original_method)
+{
+  gpointer replacement_method;
+
+  g_mutex_lock (&lock);
+
+  replacement_method = g_hash_table_lookup (methods, original_method);
+  if (replacement_method != NULL)
+  {
+    g_hash_table_remove (methods, original_method);
+    g_hash_table_remove (replacements, replacement_method);
+  }
+
+  g_mutex_unlock (&lock);
+}
+
+gpointer
+translate_method (gpointer method)
+{
+  gpointer translated_method;
+
+  g_mutex_lock (&lock);
+
+  translated_method = g_hash_table_lookup (replacements, method);
+
+  g_mutex_unlock (&lock);
+
+  return (translated_method != NULL) ? translated_method : method;
+}
+
+gpointer
+find_replacement_method_from_quick_code (gpointer method,
+                                         gpointer thread)
+{
+  gpointer replacement_method;
+  gpointer managed_stack;
+  gpointer top_quick_frame;
+  gpointer link_managed_stack;
+  gpointer * link_top_quick_frame;
+
+  replacement_method = get_replacement_method (method);
+  if (replacement_method == NULL)
+    return NULL;
+
+  /*
+   * Stack check.
+   *
+   * Return NULL to indicate that the original method should be invoked, otherwise
+   * return a pointer to the replacement ArtMethod.
+   *
+   * If the caller is our own JNI replacement stub, then a stack transition must
+   * have been pushed onto the current thread's linked list.
+   *
+   * Therefore, we invoke the original method if the following conditions are met:
+   *   1- The current managed stack is empty.
+   *   2- The ArtMethod * inside the linked managed stack's top quick frame is the
+   *      same as our replacement.
+   */
+  managed_stack = thread + ${threadOffsets.managedStack};
+  top_quick_frame = *((gpointer *) (managed_stack + ${managedStackOffsets.topQuickFrame}));
+  if (top_quick_frame != NULL)
+    return replacement_method;
+
+  link_managed_stack = *((gpointer *) (managed_stack + ${managedStackOffsets.link}));
+  if (link_managed_stack == NULL)
+    return replacement_method;
+
+  link_top_quick_frame = GSIZE_TO_POINTER (*((gsize *) (link_managed_stack + ${managedStackOffsets.topQuickFrame})) & ~((gsize) 1));
+  if (link_top_quick_frame == NULL || *link_top_quick_frame != replacement_method)
+    return replacement_method;
+
+  return NULL;
+}
+
+void
+on_interpreter_do_call (GumInvocationContext * ic)
+{
+  gpointer method, replacement_method;
+
+  method = gum_invocation_context_get_nth_argument (ic, 0);
+
+  replacement_method = get_replacement_method (method);
+  if (replacement_method != NULL)
+    gum_invocation_context_replace_nth_argument (ic, 0, replacement_method);
+}
+
+gpointer
+on_art_method_get_oat_quick_method_header (gpointer method,
+                                           gpointer pc)
+{
+  if (is_replacement_method (method))
+    return NULL;
+
+  return get_oat_quick_method_header_impl (method, pc);
+}
+
+void
+on_art_method_pretty_method (GumInvocationContext * ic)
+{
+  const guint this_arg_index = ${Process.arch === "arm64" ? 0 : 1};
+  gpointer method;
+
+  method = gum_invocation_context_get_nth_argument (ic, this_arg_index);
+  if (method == NULL)
+    gum_invocation_context_replace_nth_argument (ic, this_arg_index, last_seen_art_method);
+  else
+    last_seen_art_method = method;
+}
+
+void
+on_leave_gc_concurrent_copying_copying_phase (GumInvocationContext * ic)
+{
+  GHashTableIter iter;
+  gpointer hooked_method, replacement_method;
+
+  g_mutex_lock (&lock);
+
+  g_hash_table_iter_init (&iter, methods);
+  while (g_hash_table_iter_next (&iter, &hooked_method, &replacement_method))
+    *((uint32_t *) replacement_method) = *((uint32_t *) hooked_method);
+
+  g_mutex_unlock (&lock);
+}
+`;
+  const lockSize = 8;
+  const methodsSize = pointerSize6;
+  const replacementsSize = pointerSize6;
+  const lastSeenArtMethodSize = pointerSize6;
+  const data = Memory.alloc(lockSize + methodsSize + replacementsSize + lastSeenArtMethodSize);
+  const lock = data;
+  const methods = lock.add(lockSize);
+  const replacements = methods.add(methodsSize);
+  const lastSeenArtMethod = replacements.add(replacementsSize);
+  const getOatQuickMethodHeaderImpl = api3.find(pointerSize6 === 4 ? "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEj" : "_ZN3art9ArtMethod23GetOatQuickMethodHeaderEm");
+  const cm2 = new CModule(code4, {
+    lock,
+    methods,
+    replacements,
+    last_seen_art_method: lastSeenArtMethod,
+    get_oat_quick_method_header_impl: getOatQuickMethodHeaderImpl ?? ptr("0xdeadbeef")
+  });
+  const fastOptions = { exceptions: "propagate", scheduling: "exclusive" };
+  return {
+    handle: cm2,
+    replacedMethods: {
+      isReplacement: new NativeFunction(cm2.is_replacement_method, "bool", ["pointer"], fastOptions),
+      get: new NativeFunction(cm2.get_replacement_method, "pointer", ["pointer"], fastOptions),
+      set: new NativeFunction(cm2.set_replacement_method, "void", ["pointer", "pointer"], fastOptions),
+      delete: new NativeFunction(cm2.delete_replacement_method, "void", ["pointer"], fastOptions),
+      translate: new NativeFunction(cm2.translate_method, "pointer", ["pointer"], fastOptions),
+      findReplacementFromQuickCode: cm2.find_replacement_method_from_quick_code
+    },
+    getOatQuickMethodHeaderImpl,
+    hooks: {
+      Interpreter: {
+        doCall: cm2.on_interpreter_do_call
+      },
+      ArtMethod: {
+        getOatQuickMethodHeader: cm2.on_art_method_get_oat_quick_method_header,
+        prettyMethod: cm2.on_art_method_pretty_method
+      },
+      Gc: {
+        copyingPhase: {
+          onLeave: cm2.on_leave_gc_concurrent_copying_copying_phase
+        },
+        runFlip: {
+          onEnter: cm2.on_leave_gc_concurrent_copying_copying_phase
+        }
+      }
+    }
+  };
+}
+function ensureArtKnowsHowToHandleMethodInstrumentation(vm3) {
+  if (taughtArtAboutMethodInstrumentation) {
+    return;
+  }
+  taughtArtAboutMethodInstrumentation = true;
+  instrumentArtQuickEntrypoints(vm3);
+  instrumentArtMethodInvocationFromInterpreter();
+}
+function instrumentArtQuickEntrypoints(vm3) {
+  const api3 = getApi();
+  const quickEntrypoints = [
+    api3.artQuickGenericJniTrampoline,
+    api3.artQuickToInterpreterBridge,
+    api3.artQuickResolutionTrampoline
+  ];
+  quickEntrypoints.forEach((entrypoint) => {
+    Memory.protect(entrypoint, 32, "rwx");
+    const interceptor = new ArtQuickCodeInterceptor(entrypoint);
+    interceptor.activate(vm3);
+    artQuickInterceptors.push(interceptor);
+  });
+}
+function instrumentArtMethodInvocationFromInterpreter() {
+  const api3 = getApi();
+  const apiLevel = getAndroidApiLevel();
+  const { isApiLevel34OrApexEquivalent } = api3;
+  let artInterpreterDoCallExportRegex;
+  if (apiLevel <= 22) {
+    artInterpreterDoCallExportRegex = /^_ZN3art11interpreter6DoCallILb[0-1]ELb[0-1]EEEbPNS_6mirror9ArtMethodEPNS_6ThreadERNS_11ShadowFrameEPKNS_11InstructionEtPNS_6JValueE$/;
+  } else if (apiLevel <= 33 && !isApiLevel34OrApexEquivalent) {
+    artInterpreterDoCallExportRegex = /^_ZN3art11interpreter6DoCallILb[0-1]ELb[0-1]EEEbPNS_9ArtMethodEPNS_6ThreadERNS_11ShadowFrameEPKNS_11InstructionEtPNS_6JValueE$/;
+  } else if (isApiLevel34OrApexEquivalent) {
+    artInterpreterDoCallExportRegex = /^_ZN3art11interpreter6DoCallILb[0-1]EEEbPNS_9ArtMethodEPNS_6ThreadERNS_11ShadowFrameEPKNS_11InstructionEtbPNS_6JValueE$/;
+  } else {
+    throw new Error("Unable to find method invocation in ART; please file a bug");
+  }
+  const art = api3.module;
+  const entries = [...art.enumerateExports(), ...art.enumerateSymbols()].filter((entry) => artInterpreterDoCallExportRegex.test(entry.name));
+  if (entries.length === 0) {
+    throw new Error("Unable to find method invocation in ART; please file a bug");
+  }
+  for (const entry of entries) {
+    Interceptor.attach(entry.address, artController.hooks.Interpreter.doCall);
+  }
+}
+function ensureArtKnowsHowToHandleReplacementMethods(vm3) {
+  if (taughtArtAboutReplacementMethods) {
+    return;
+  }
+  taughtArtAboutReplacementMethods = true;
+  if (!maybeInstrumentGetOatQuickMethodHeaderInlineCopies()) {
+    const { getOatQuickMethodHeaderImpl } = artController;
+    if (getOatQuickMethodHeaderImpl === null) {
+      return;
+    }
+    try {
+      Interceptor.replace(getOatQuickMethodHeaderImpl, artController.hooks.ArtMethod.getOatQuickMethodHeader);
+    } catch (e) {
+    }
+  }
+  const apiLevel = getAndroidApiLevel();
+  let copyingPhase = null;
+  const api3 = getApi();
+  if (apiLevel > 28) {
+    copyingPhase = api3.find("_ZN3art2gc9collector17ConcurrentCopying12CopyingPhaseEv");
+  } else if (apiLevel > 22) {
+    copyingPhase = api3.find("_ZN3art2gc9collector17ConcurrentCopying12MarkingPhaseEv");
+  }
+  if (copyingPhase !== null) {
+    Interceptor.attach(copyingPhase, artController.hooks.Gc.copyingPhase);
+  }
+  let runFlip = null;
+  runFlip = api3.find("_ZN3art6Thread15RunFlipFunctionEPS0_");
+  if (runFlip === null) {
+    runFlip = api3.find("_ZN3art6Thread15RunFlipFunctionEPS0_b");
+  }
+  if (runFlip !== null) {
+    Interceptor.attach(runFlip, artController.hooks.Gc.runFlip);
+  }
+}
+var artGetOatQuickMethodHeaderInlinedCopyHandler = {
+  arm: {
+    signatures: [
+      {
+        pattern: [
+          "b0 68",
+          // ldr r0, [r6, #8]
+          "01 30",
+          // adds r0, #1
+          "0c d0",
+          // beq #0x16fcd4
+          "1b 98",
+          // ldr r0, [sp, #0x6c]
+          ":",
+          "c0 ff",
+          "c0 ff",
+          "00 ff",
+          "00 2f"
+        ],
+        validateMatch: validateGetOatQuickMethodHeaderInlinedMatchArm
+      },
+      {
+        pattern: [
+          "d8 f8 08 00",
+          // ldr r0, [r8, #8]
+          "01 30",
+          // adds r0, #1
+          "0c d0",
+          // beq #0x16fcd4
+          "1b 98",
+          // ldr r0, [sp, #0x6c]
+          ":",
+          "f0 ff ff 0f",
+          "ff ff",
+          "00 ff",
+          "00 2f"
+        ],
+        validateMatch: validateGetOatQuickMethodHeaderInlinedMatchArm
+      },
+      {
+        pattern: [
+          "b0 68",
+          // ldr r0, [r6, #8]
+          "01 30",
+          // adds r0, #1
+          "40 f0 c3 80",
+          // bne #0x203bf0
+          "00 25",
+          // movs r5, #0
+          ":",
+          "c0 ff",
+          "c0 ff",
+          "c0 fb 00 d0",
+          "ff f8"
+        ],
+        validateMatch: validateGetOatQuickMethodHeaderInlinedMatchArm
+      }
+    ],
+    instrument: instrumentGetOatQuickMethodHeaderInlinedCopyArm
+  },
+  arm64: {
+    signatures: [
+      {
+        pattern: [
+          /* e8 */
+          "0a 40 b9",
+          // ldr w8, [x23, #0x8]
+          "1f 05 00 31",
+          // cmn w8, #0x1
+          "40 01 00 54",
+          // b.eq 0x2e4204
+          "88 39 00 f0",
+          // adrp x8, 0xa17000
+          ":",
+          /* 00 */
+          "fc ff ff",
+          "1f fc ff ff",
+          "1f 00 00 ff",
+          "00 00 00 9f"
+        ],
+        offset: 1,
+        validateMatch: validateGetOatQuickMethodHeaderInlinedMatchArm64
+      },
+      {
+        pattern: [
+          /* e8 */
+          "0a 40 b9",
+          // ldr w8, [x23, #0x8]
+          "1f 05 00 31",
+          // cmn w8, #0x1
+          "01 34 00 54",
+          // b.ne 0x3d8e50
+          "e0 03 1f aa",
+          // mov x0, xzr
+          ":",
+          /* 00 */
+          "fc ff ff",
+          "1f fc ff ff",
+          "1f 00 00 ff",
+          "e0 ff ff ff"
+        ],
+        offset: 1,
+        validateMatch: validateGetOatQuickMethodHeaderInlinedMatchArm64
+      }
+    ],
+    instrument: instrumentGetOatQuickMethodHeaderInlinedCopyArm64
+  }
+};
+function validateGetOatQuickMethodHeaderInlinedMatchArm({ address, size }) {
+  const ldr = Instruction.parse(address.or(1));
+  const [ldrDst, ldrSrc] = ldr.operands;
+  const methodReg = ldrSrc.value.base;
+  const scratchReg = ldrDst.value;
+  const branch = Instruction.parse(ldr.next.add(2));
+  const targetWhenTrue = ptr(branch.operands[0].value);
+  const targetWhenFalse = branch.address.add(branch.size);
+  let targetWhenRegularMethod, targetWhenRuntimeMethod;
+  if (branch.mnemonic === "beq") {
+    targetWhenRegularMethod = targetWhenFalse;
+    targetWhenRuntimeMethod = targetWhenTrue;
+  } else {
+    targetWhenRegularMethod = targetWhenTrue;
+    targetWhenRuntimeMethod = targetWhenFalse;
+  }
+  return parseInstructionsAt(targetWhenRegularMethod.or(1), tryParse, { limit: 3 });
+  function tryParse(insn) {
+    const { mnemonic } = insn;
+    if (!(mnemonic === "ldr" || mnemonic === "ldr.w")) {
+      return null;
+    }
+    const { base, disp } = insn.operands[1].value;
+    if (!(base === methodReg && disp === 20)) {
+      return null;
+    }
+    return {
+      methodReg,
+      scratchReg,
+      target: {
+        whenTrue: targetWhenTrue,
+        whenRegularMethod: targetWhenRegularMethod,
+        whenRuntimeMethod: targetWhenRuntimeMethod
+      }
+    };
+  }
+}
+function validateGetOatQuickMethodHeaderInlinedMatchArm64({ address, size }) {
+  const [ldrDst, ldrSrc] = Instruction.parse(address).operands;
+  const methodReg = ldrSrc.value.base;
+  const scratchReg = "x" + ldrDst.value.substring(1);
+  const branch = Instruction.parse(address.add(8));
+  const targetWhenTrue = ptr(branch.operands[0].value);
+  const targetWhenFalse = address.add(12);
+  let targetWhenRegularMethod, targetWhenRuntimeMethod;
+  if (branch.mnemonic === "b.eq") {
+    targetWhenRegularMethod = targetWhenFalse;
+    targetWhenRuntimeMethod = targetWhenTrue;
+  } else {
+    targetWhenRegularMethod = targetWhenTrue;
+    targetWhenRuntimeMethod = targetWhenFalse;
+  }
+  return parseInstructionsAt(targetWhenRegularMethod, tryParse, { limit: 3 });
+  function tryParse(insn) {
+    if (insn.mnemonic !== "ldr") {
+      return null;
+    }
+    const { base, disp } = insn.operands[1].value;
+    if (!(base === methodReg && disp === 24)) {
+      return null;
+    }
+    return {
+      methodReg,
+      scratchReg,
+      target: {
+        whenTrue: targetWhenTrue,
+        whenRegularMethod: targetWhenRegularMethod,
+        whenRuntimeMethod: targetWhenRuntimeMethod
+      }
+    };
+  }
+}
+function maybeInstrumentGetOatQuickMethodHeaderInlineCopies() {
+  if (getAndroidApiLevel() < 31) {
+    return false;
+  }
+  const handler = artGetOatQuickMethodHeaderInlinedCopyHandler[Process.arch];
+  if (handler === void 0) {
+    return false;
+  }
+  const signatures = handler.signatures.map(({ pattern, offset = 0, validateMatch = returnEmptyObject }) => {
+    return {
+      pattern: new MatchPattern(pattern.join("")),
+      offset,
+      validateMatch
+    };
+  });
+  const impls = [];
+  for (const { base, size } of getApi().module.enumerateRanges("--x")) {
+    for (const { pattern, offset, validateMatch } of signatures) {
+      const matches = Memory.scanSync(base, size, pattern).map(({ address, size: size2 }) => {
+        return { address: address.sub(offset), size: size2 + offset };
+      }).filter((match) => {
+        const validationResult = validateMatch(match);
+        if (validationResult === null) {
+          return false;
+        }
+        match.validationResult = validationResult;
+        return true;
+      });
+      impls.push(...matches);
+    }
+  }
+  if (impls.length === 0) {
+    return false;
+  }
+  impls.forEach(handler.instrument);
+  return true;
+}
+function returnEmptyObject() {
+  return {};
+}
+var InlineHook = class {
+  constructor(address, size, trampoline) {
+    this.address = address;
+    this.size = size;
+    this.originalCode = address.readByteArray(size);
+    this.trampoline = trampoline;
+  }
+  revert() {
+    Memory.patchCode(this.address, this.size, (code4) => {
+      code4.writeByteArray(this.originalCode);
+    });
+  }
+};
+function instrumentGetOatQuickMethodHeaderInlinedCopyArm({ address, size, validationResult }) {
+  const { methodReg, target } = validationResult;
+  const trampoline = Memory.alloc(Process.pageSize);
+  let redirectCapacity = size;
+  Memory.patchCode(trampoline, 256, (code4) => {
+    const writer = new ThumbWriter(code4, { pc: trampoline });
+    const relocator = new ThumbRelocator(address, writer);
+    for (let i = 0; i !== 2; i++) {
+      relocator.readOne();
+    }
+    relocator.writeAll();
+    relocator.readOne();
+    relocator.skipOne();
+    writer.putBCondLabel("eq", "runtime_or_replacement_method");
+    const vpushFpRegs = [45, 237, 16, 10];
+    writer.putBytes(vpushFpRegs);
+    const savedRegs = ["r0", "r1", "r2", "r3"];
+    writer.putPushRegs(savedRegs);
+    writer.putCallAddressWithArguments(artController.replacedMethods.isReplacement, [methodReg]);
+    writer.putCmpRegImm("r0", 0);
+    writer.putPopRegs(savedRegs);
+    const vpopFpRegs = [189, 236, 16, 10];
+    writer.putBytes(vpopFpRegs);
+    writer.putBCondLabel("ne", "runtime_or_replacement_method");
+    writer.putBLabel("regular_method");
+    relocator.readOne();
+    const tailIsRegular = relocator.input.address.equals(target.whenRegularMethod);
+    writer.putLabel(tailIsRegular ? "regular_method" : "runtime_or_replacement_method");
+    relocator.writeOne();
+    while (redirectCapacity < 10) {
+      const offset = relocator.readOne();
+      if (offset === 0) {
+        redirectCapacity = 10;
+        break;
+      }
+      redirectCapacity = offset;
+    }
+    relocator.writeAll();
+    writer.putBranchAddress(address.add(redirectCapacity + 1));
+    writer.putLabel(tailIsRegular ? "runtime_or_replacement_method" : "regular_method");
+    writer.putBranchAddress(target.whenTrue);
+    writer.flush();
+  });
+  inlineHooks.push(new InlineHook(address, redirectCapacity, trampoline));
+  Memory.patchCode(address, redirectCapacity, (code4) => {
+    const writer = new ThumbWriter(code4, { pc: address });
+    writer.putLdrRegAddress("pc", trampoline.or(1));
+    writer.flush();
+  });
+}
+function instrumentGetOatQuickMethodHeaderInlinedCopyArm64({ address, size, validationResult }) {
+  const { methodReg, scratchReg, target } = validationResult;
+  const trampoline = Memory.alloc(Process.pageSize);
+  Memory.patchCode(trampoline, 256, (code4) => {
+    const writer = new Arm64Writer(code4, { pc: trampoline });
+    const relocator = new Arm64Relocator(address, writer);
+    for (let i = 0; i !== 2; i++) {
+      relocator.readOne();
+    }
+    relocator.writeAll();
+    relocator.readOne();
+    relocator.skipOne();
+    writer.putBCondLabel("eq", "runtime_or_replacement_method");
+    const savedRegs = [
+      "d0",
+      "d1",
+      "d2",
+      "d3",
+      "d4",
+      "d5",
+      "d6",
+      "d7",
+      "x0",
+      "x1",
+      "x2",
+      "x3",
+      "x4",
+      "x5",
+      "x6",
+      "x7",
+      "x8",
+      "x9",
+      "x10",
+      "x11",
+      "x12",
+      "x13",
+      "x14",
+      "x15",
+      "x16",
+      "x17"
+    ];
+    const numSavedRegs = savedRegs.length;
+    for (let i = 0; i !== numSavedRegs; i += 2) {
+      writer.putPushRegReg(savedRegs[i], savedRegs[i + 1]);
+    }
+    writer.putCallAddressWithArguments(artController.replacedMethods.isReplacement, [methodReg]);
+    writer.putCmpRegReg("x0", "xzr");
+    for (let i = numSavedRegs - 2; i >= 0; i -= 2) {
+      writer.putPopRegReg(savedRegs[i], savedRegs[i + 1]);
+    }
+    writer.putBCondLabel("ne", "runtime_or_replacement_method");
+    writer.putBLabel("regular_method");
+    relocator.readOne();
+    const tailInstruction = relocator.input;
+    const tailIsRegular = tailInstruction.address.equals(target.whenRegularMethod);
+    writer.putLabel(tailIsRegular ? "regular_method" : "runtime_or_replacement_method");
+    relocator.writeOne();
+    writer.putBranchAddress(tailInstruction.next);
+    writer.putLabel(tailIsRegular ? "runtime_or_replacement_method" : "regular_method");
+    writer.putBranchAddress(target.whenTrue);
+    writer.flush();
+  });
+  inlineHooks.push(new InlineHook(address, size, trampoline));
+  Memory.patchCode(address, size, (code4) => {
+    const writer = new Arm64Writer(code4, { pc: address });
+    writer.putLdrRegAddress(scratchReg, trampoline);
+    writer.putBrReg(scratchReg);
+    writer.flush();
+  });
+}
+function makeMethodMangler(methodId) {
+  return new MethodMangler(methodId);
+}
+function translateMethod(methodId) {
+  return artController.replacedMethods.translate(methodId);
+}
+function backtrace(vm3, options = {}) {
+  const { limit = 16 } = options;
+  const env2 = vm3.getEnv();
+  if (backtraceModule === null) {
+    backtraceModule = makeBacktraceModule(vm3, env2);
+  }
+  return backtraceModule.backtrace(env2, limit);
+}
+function makeBacktraceModule(vm3, env2) {
+  const api3 = getApi();
+  const performImpl = Memory.alloc(Process.pointerSize);
+  const cm2 = new CModule(`
+#include <glib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <gum/gumtls.h>
+#include <json-glib/json-glib.h>
+
+typedef struct _ArtBacktrace ArtBacktrace;
+typedef struct _ArtStackFrame ArtStackFrame;
+
+typedef struct _ArtStackVisitor ArtStackVisitor;
+typedef struct _ArtStackVisitorVTable ArtStackVisitorVTable;
+
+typedef struct _ArtClass ArtClass;
+typedef struct _ArtMethod ArtMethod;
+typedef struct _ArtThread ArtThread;
+typedef struct _ArtContext ArtContext;
+
+typedef struct _JNIEnv JNIEnv;
+
+typedef struct _StdString StdString;
+typedef struct _StdTinyString StdTinyString;
+typedef struct _StdLargeString StdLargeString;
+
+typedef enum {
+  STACK_WALK_INCLUDE_INLINED_FRAMES,
+  STACK_WALK_SKIP_INLINED_FRAMES,
+} StackWalkKind;
+
+struct _StdTinyString
+{
+  guint8 unused;
+  gchar data[(3 * sizeof (gpointer)) - 1];
+};
+
+struct _StdLargeString
+{
+  gsize capacity;
+  gsize size;
+  gchar * data;
+};
+
+struct _StdString
+{
+  union
+  {
+    guint8 flags;
+    StdTinyString tiny;
+    StdLargeString large;
+  };
+};
+
+struct _ArtBacktrace
+{
+  GChecksum * id;
+  GArray * frames;
+  gchar * frames_json;
+};
+
+struct _ArtStackFrame
+{
+  ArtMethod * method;
+  gsize dexpc;
+  StdString description;
+};
+
+struct _ArtStackVisitorVTable
+{
+  void (* unused1) (void);
+  void (* unused2) (void);
+  bool (* visit) (ArtStackVisitor * visitor);
+};
+
+struct _ArtStackVisitor
+{
+  ArtStackVisitorVTable * vtable;
+
+  guint8 padding[512];
+
+  ArtStackVisitorVTable vtable_storage;
+
+  ArtBacktrace * backtrace;
+};
+
+struct _ArtMethod
+{
+  guint32 declaring_class;
+  guint32 access_flags;
+};
+
+extern GumTlsKey current_backtrace;
+
+extern void (* perform_art_thread_state_transition) (JNIEnv * env);
+
+extern ArtContext * art_thread_get_long_jump_context (ArtThread * thread);
+
+extern void art_stack_visitor_init (ArtStackVisitor * visitor, ArtThread * thread, void * context, StackWalkKind walk_kind,
+    size_t num_frames, bool check_suspended);
+extern void art_stack_visitor_walk_stack (ArtStackVisitor * visitor, bool include_transitions);
+extern ArtMethod * art_stack_visitor_get_method (ArtStackVisitor * visitor);
+extern void art_stack_visitor_describe_location (StdString * description, ArtStackVisitor * visitor);
+extern ArtMethod * translate_method (ArtMethod * method);
+extern void translate_location (ArtMethod * method, guint32 pc, const gchar ** source_file, gint32 * line_number);
+extern void get_class_location (StdString * result, ArtClass * klass);
+extern void cxx_delete (void * mem);
+extern unsigned long strtoul (const char * str, char ** endptr, int base);
+
+static bool visit_frame (ArtStackVisitor * visitor);
+static void art_stack_frame_destroy (ArtStackFrame * frame);
+
+static void append_jni_type_name (GString * s, const gchar * name, gsize length);
+
+static void std_string_destroy (StdString * str);
+static gchar * std_string_get_data (StdString * str);
+
+void
+init (void)
+{
+  current_backtrace = gum_tls_key_new ();
+}
+
+void
+finalize (void)
+{
+  gum_tls_key_free (current_backtrace);
+}
+
+ArtBacktrace *
+_create (JNIEnv * env,
+         guint limit)
+{
+  ArtBacktrace * bt;
+
+  bt = g_new (ArtBacktrace, 1);
+  bt->id = g_checksum_new (G_CHECKSUM_SHA1);
+  bt->frames = (limit != 0)
+      ? g_array_sized_new (FALSE, FALSE, sizeof (ArtStackFrame), limit)
+      : g_array_new (FALSE, FALSE, sizeof (ArtStackFrame));
+  g_array_set_clear_func (bt->frames, (GDestroyNotify) art_stack_frame_destroy);
+  bt->frames_json = NULL;
+
+  gum_tls_key_set_value (current_backtrace, bt);
+
+  perform_art_thread_state_transition (env);
+
+  gum_tls_key_set_value (current_backtrace, NULL);
+
+  return bt;
+}
+
+void
+_on_thread_state_transition_complete (ArtThread * thread)
+{
+  ArtContext * context;
+  ArtStackVisitor visitor = {
+    .vtable_storage = {
+      .visit = visit_frame,
+    },
+  };
+
+  context = art_thread_get_long_jump_context (thread);
+
+  art_stack_visitor_init (&visitor, thread, context, STACK_WALK_SKIP_INLINED_FRAMES, 0, true);
+  visitor.vtable = &visitor.vtable_storage;
+  visitor.backtrace = gum_tls_key_get_value (current_backtrace);
+
+  art_stack_visitor_walk_stack (&visitor, false);
+
+  cxx_delete (context);
+}
+
+static bool
+visit_frame (ArtStackVisitor * visitor)
+{
+  ArtBacktrace * bt = visitor->backtrace;
+  ArtStackFrame frame;
+  const gchar * description, * dexpc_part;
+
+  frame.method = art_stack_visitor_get_method (visitor);
+
+  art_stack_visitor_describe_location (&frame.description, visitor);
+
+  description = std_string_get_data (&frame.description);
+  if (strstr (description, " '<") != NULL)
+    goto skip;
+
+  dexpc_part = strstr (description, " at dex PC 0x");
+  if (dexpc_part == NULL)
+    goto skip;
+  frame.dexpc = strtoul (dexpc_part + 13, NULL, 16);
+
+  g_array_append_val (bt->frames, frame);
+
+  g_checksum_update (bt->id, (guchar *) &frame.method, sizeof (frame.method));
+  g_checksum_update (bt->id, (guchar *) &frame.dexpc, sizeof (frame.dexpc));
+
+  return true;
+
+skip:
+  std_string_destroy (&frame.description);
+  return true;
+}
+
+static void
+art_stack_frame_destroy (ArtStackFrame * frame)
+{
+  std_string_destroy (&frame->description);
+}
+
+void
+_destroy (ArtBacktrace * backtrace)
+{
+  g_free (backtrace->frames_json);
+  g_array_free (backtrace->frames, TRUE);
+  g_checksum_free (backtrace->id);
+  g_free (backtrace);
+}
+
+const gchar *
+_get_id (ArtBacktrace * backtrace)
+{
+  return g_checksum_get_string (backtrace->id);
+}
+
+const gchar *
+_get_frames (ArtBacktrace * backtrace)
+{
+  GArray * frames = backtrace->frames;
+  JsonBuilder * b;
+  guint i;
+  JsonNode * root;
+
+  if (backtrace->frames_json != NULL)
+    return backtrace->frames_json;
+
+  b = json_builder_new_immutable ();
+
+  json_builder_begin_array (b);
+
+  for (i = 0; i != frames->len; i++)
+  {
+    ArtStackFrame * frame = &g_array_index (frames, ArtStackFrame, i);
+    gchar * description, * ret_type, * paren_open, * paren_close, * arg_types, * token, * method_name, * class_name;
+    GString * signature;
+    gchar * cursor;
+    ArtMethod * translated_method;
+    StdString location;
+    gsize dexpc;
+    const gchar * source_file;
+    gint32 line_number;
+
+    description = std_string_get_data (&frame->description);
+
+    ret_type = strchr (description, '\\'') + 1;
+
+    paren_open = strchr (ret_type, '(');
+    paren_close = strchr (paren_open, ')');
+    *paren_open = '\\0';
+    *paren_close = '\\0';
+
+    arg_types = paren_open + 1;
+
+    token = strrchr (ret_type, '.');
+    *token = '\\0';
+
+    method_name = token + 1;
+
+    token = strrchr (ret_type, ' ');
+    *token = '\\0';
+
+    class_name = token + 1;
+
+    signature = g_string_sized_new (128);
+
+    append_jni_type_name (signature, class_name, method_name - class_name - 1);
+    g_string_append_c (signature, ',');
+    g_string_append (signature, method_name);
+    g_string_append (signature, ",(");
+
+    if (arg_types != paren_close)
+    {
+      for (cursor = arg_types; cursor != NULL;)
+      {
+        gsize length;
+        gchar * next;
+
+        token = strstr (cursor, ", ");
+        if (token != NULL)
+        {
+          length = token - cursor;
+          next = token + 2;
+        }
+        else
+        {
+          length = paren_close - cursor;
+          next = NULL;
+        }
+
+        append_jni_type_name (signature, cursor, length);
+
+        cursor = next;
+      }
+    }
+
+    g_string_append_c (signature, ')');
+
+    append_jni_type_name (signature, ret_type, class_name - ret_type - 1);
+
+    translated_method = translate_method (frame->method);
+    dexpc = (translated_method == frame->method) ? frame->dexpc : 0;
+
+    get_class_location (&location, GSIZE_TO_POINTER (translated_method->declaring_class));
+
+    translate_location (translated_method, dexpc, &source_file, &line_number);
+
+    json_builder_begin_object (b);
+
+    json_builder_set_member_name (b, "signature");
+    json_builder_add_string_value (b, signature->str);
+
+    json_builder_set_member_name (b, "origin");
+    json_builder_add_string_value (b, std_string_get_data (&location));
+
+    json_builder_set_member_name (b, "className");
+    json_builder_add_string_value (b, class_name);
+
+    json_builder_set_member_name (b, "methodName");
+    json_builder_add_string_value (b, method_name);
+
+    json_builder_set_member_name (b, "methodFlags");
+    json_builder_add_int_value (b, translated_method->access_flags);
+
+    json_builder_set_member_name (b, "fileName");
+    json_builder_add_string_value (b, source_file);
+
+    json_builder_set_member_name (b, "lineNumber");
+    json_builder_add_int_value (b, line_number);
+
+    json_builder_end_object (b);
+
+    std_string_destroy (&location);
+    g_string_free (signature, TRUE);
+  }
+
+  json_builder_end_array (b);
+
+  root = json_builder_get_root (b);
+  backtrace->frames_json = json_to_string (root, FALSE);
+  json_node_unref (root);
+
+  return backtrace->frames_json;
+}
+
+static void
+append_jni_type_name (GString * s,
+                      const gchar * name,
+                      gsize length)
+{
+  gchar shorty = '\\0';
+  gsize i;
+
+  switch (name[0])
+  {
+    case 'b':
+      if (strncmp (name, "boolean", length) == 0)
+        shorty = 'Z';
+      else if (strncmp (name, "byte", length) == 0)
+        shorty = 'B';
+      break;
+    case 'c':
+      if (strncmp (name, "char", length) == 0)
+        shorty = 'C';
+      break;
+    case 'd':
+      if (strncmp (name, "double", length) == 0)
+        shorty = 'D';
+      break;
+    case 'f':
+      if (strncmp (name, "float", length) == 0)
+        shorty = 'F';
+      break;
+    case 'i':
+      if (strncmp (name, "int", length) == 0)
+        shorty = 'I';
+      break;
+    case 'l':
+      if (strncmp (name, "long", length) == 0)
+        shorty = 'J';
+      break;
+    case 's':
+      if (strncmp (name, "short", length) == 0)
+        shorty = 'S';
+      break;
+    case 'v':
+      if (strncmp (name, "void", length) == 0)
+        shorty = 'V';
+      break;
+  }
+
+  if (shorty != '\\0')
+  {
+    g_string_append_c (s, shorty);
+
+    return;
+  }
+
+  if (length > 2 && name[length - 2] == '[' && name[length - 1] == ']')
+  {
+    g_string_append_c (s, '[');
+    append_jni_type_name (s, name, length - 2);
+
+    return;
+  }
+
+  g_string_append_c (s, 'L');
+
+  for (i = 0; i != length; i++)
+  {
+    gchar ch = name[i];
+    if (ch != '.')
+      g_string_append_c (s, ch);
+    else
+      g_string_append_c (s, '/');
+  }
+
+  g_string_append_c (s, ';');
+}
+
+static void
+std_string_destroy (StdString * str)
+{
+  bool is_large = (str->flags & 1) != 0;
+  if (is_large)
+    cxx_delete (str->large.data);
+}
+
+static gchar *
+std_string_get_data (StdString * str)
+{
+  bool is_large = (str->flags & 1) != 0;
+  return is_large ? str->large.data : str->tiny.data;
+}
+`, {
+    current_backtrace: Memory.alloc(Process.pointerSize),
+    perform_art_thread_state_transition: performImpl,
+    art_thread_get_long_jump_context: api3["art::Thread::GetLongJumpContext"],
+    art_stack_visitor_init: api3["art::StackVisitor::StackVisitor"],
+    art_stack_visitor_walk_stack: api3["art::StackVisitor::WalkStack"],
+    art_stack_visitor_get_method: api3["art::StackVisitor::GetMethod"],
+    art_stack_visitor_describe_location: api3["art::StackVisitor::DescribeLocation"],
+    translate_method: artController.replacedMethods.translate,
+    translate_location: api3["art::Monitor::TranslateLocation"],
+    get_class_location: api3["art::mirror::Class::GetLocation"],
+    cxx_delete: api3.$delete,
+    strtoul: Process.getModuleByName("libc.so").getExportByName("strtoul")
+  });
+  const _create = new NativeFunction(cm2._create, "pointer", ["pointer", "uint"], nativeFunctionOptions3);
+  const _destroy2 = new NativeFunction(cm2._destroy, "void", ["pointer"], nativeFunctionOptions3);
+  const fastOptions = { exceptions: "propagate", scheduling: "exclusive" };
+  const _getId = new NativeFunction(cm2._get_id, "pointer", ["pointer"], fastOptions);
+  const _getFrames = new NativeFunction(cm2._get_frames, "pointer", ["pointer"], fastOptions);
+  const performThreadStateTransition = makeArtThreadStateTransitionImpl(vm3, env2, cm2._on_thread_state_transition_complete);
+  cm2._performData = performThreadStateTransition;
+  performImpl.writePointer(performThreadStateTransition);
+  cm2.backtrace = (env3, limit) => {
+    const handle2 = _create(env3, limit);
+    const bt = new Backtrace(handle2);
+    Script.bindWeak(bt, destroy3.bind(null, handle2));
+    return bt;
+  };
+  function destroy3(handle2) {
+    _destroy2(handle2);
+  }
+  cm2.getId = (handle2) => {
+    return _getId(handle2).readUtf8String();
+  };
+  cm2.getFrames = (handle2) => {
+    return JSON.parse(_getFrames(handle2).readUtf8String());
+  };
+  return cm2;
+}
+var Backtrace = class {
+  constructor(handle2) {
+    this.handle = handle2;
+  }
+  get id() {
+    return backtraceModule.getId(this.handle);
+  }
+  get frames() {
+    return backtraceModule.getFrames(this.handle);
+  }
+};
+function revertGlobalPatches() {
+  patchedClasses.forEach((entry) => {
+    entry.vtablePtr.writePointer(entry.vtable);
+    entry.vtableCountPtr.writeS32(entry.vtableCount);
+  });
+  patchedClasses.clear();
+  for (const interceptor of artQuickInterceptors.splice(0)) {
+    interceptor.deactivate();
+  }
+  for (const hook of inlineHooks.splice(0)) {
+    hook.revert();
+  }
+}
+function unwrapMethodId(methodId) {
+  const api3 = getApi();
+  const runtimeOffset = getArtRuntimeSpec(api3).offset;
+  const jniIdManagerOffset = runtimeOffset.jniIdManager;
+  const jniIdsIndirectionOffset = runtimeOffset.jniIdsIndirection;
+  if (jniIdManagerOffset !== null && jniIdsIndirectionOffset !== null) {
+    const runtime3 = api3.artRuntime;
+    const jniIdsIndirection = runtime3.add(jniIdsIndirectionOffset).readInt();
+    if (jniIdsIndirection !== kPointer) {
+      const jniIdManager = runtime3.add(jniIdManagerOffset).readPointer();
+      return api3["art::jni::JniIdManager::DecodeMethodId"](jniIdManager, methodId);
+    }
+  }
+  return methodId;
+}
+var artQuickCodeReplacementTrampolineWriters = {
+  ia32: writeArtQuickCodeReplacementTrampolineIA32,
+  x64: writeArtQuickCodeReplacementTrampolineX64,
+  arm: writeArtQuickCodeReplacementTrampolineArm,
+  arm64: writeArtQuickCodeReplacementTrampolineArm64
+};
+function writeArtQuickCodeReplacementTrampolineIA32(trampoline, target, redirectSize, constraints, vm3) {
+  const threadOffsets = getArtThreadSpec(vm3).offset;
+  const artMethodOffsets = getArtMethodSpec(vm3).offset;
+  let offset;
+  Memory.patchCode(trampoline, 128, (code4) => {
+    const writer = new X86Writer(code4, { pc: trampoline });
+    const relocator = new X86Relocator(target, writer);
+    const fxsave = [15, 174, 4, 36];
+    const fxrstor = [15, 174, 12, 36];
+    writer.putPushax();
+    writer.putMovRegReg("ebp", "esp");
+    writer.putAndRegU32("esp", 4294967280);
+    writer.putSubRegImm("esp", 512);
+    writer.putBytes(fxsave);
+    writer.putMovRegFsU32Ptr("ebx", threadOffsets.self);
+    writer.putCallAddressWithAlignedArguments(artController.replacedMethods.findReplacementFromQuickCode, ["eax", "ebx"]);
+    writer.putTestRegReg("eax", "eax");
+    writer.putJccShortLabel("je", "restore_registers", "no-hint");
+    writer.putMovRegOffsetPtrReg("ebp", 7 * 4, "eax");
+    writer.putLabel("restore_registers");
+    writer.putBytes(fxrstor);
+    writer.putMovRegReg("esp", "ebp");
+    writer.putPopax();
+    writer.putJccShortLabel("jne", "invoke_replacement", "no-hint");
+    do {
+      offset = relocator.readOne();
+    } while (offset < redirectSize && !relocator.eoi);
+    relocator.writeAll();
+    if (!relocator.eoi) {
+      writer.putJmpAddress(target.add(offset));
+    }
+    writer.putLabel("invoke_replacement");
+    writer.putJmpRegOffsetPtr("eax", artMethodOffsets.quickCode);
+    writer.flush();
+  });
+  return offset;
+}
+function writeArtQuickCodeReplacementTrampolineX64(trampoline, target, redirectSize, constraints, vm3) {
+  const threadOffsets = getArtThreadSpec(vm3).offset;
+  const artMethodOffsets = getArtMethodSpec(vm3).offset;
+  let offset;
+  Memory.patchCode(trampoline, 256, (code4) => {
+    const writer = new X86Writer(code4, { pc: trampoline });
+    const relocator = new X86Relocator(target, writer);
+    const fxsave = [15, 174, 4, 36];
+    const fxrstor = [15, 174, 12, 36];
+    writer.putPushax();
+    writer.putMovRegReg("rbp", "rsp");
+    writer.putAndRegU32("rsp", 4294967280);
+    writer.putSubRegImm("rsp", 512);
+    writer.putBytes(fxsave);
+    writer.putMovRegGsU32Ptr("rbx", threadOffsets.self);
+    writer.putCallAddressWithAlignedArguments(artController.replacedMethods.findReplacementFromQuickCode, ["rdi", "rbx"]);
+    writer.putTestRegReg("rax", "rax");
+    writer.putJccShortLabel("je", "restore_registers", "no-hint");
+    writer.putMovRegOffsetPtrReg("rbp", 8 * 8, "rax");
+    writer.putLabel("restore_registers");
+    writer.putBytes(fxrstor);
+    writer.putMovRegReg("rsp", "rbp");
+    writer.putPopax();
+    writer.putJccShortLabel("jne", "invoke_replacement", "no-hint");
+    do {
+      offset = relocator.readOne();
+    } while (offset < redirectSize && !relocator.eoi);
+    relocator.writeAll();
+    if (!relocator.eoi) {
+      writer.putJmpAddress(target.add(offset));
+    }
+    writer.putLabel("invoke_replacement");
+    writer.putJmpRegOffsetPtr("rdi", artMethodOffsets.quickCode);
+    writer.flush();
+  });
+  return offset;
+}
+function writeArtQuickCodeReplacementTrampolineArm(trampoline, target, redirectSize, constraints, vm3) {
+  const artMethodOffsets = getArtMethodSpec(vm3).offset;
+  const targetAddress = target.and(THUMB_BIT_REMOVAL_MASK);
+  let offset;
+  Memory.patchCode(trampoline, 128, (code4) => {
+    const writer = new ThumbWriter(code4, { pc: trampoline });
+    const relocator = new ThumbRelocator(targetAddress, writer);
+    const vpushFpRegs = [45, 237, 16, 10];
+    const vpopFpRegs = [189, 236, 16, 10];
+    writer.putPushRegs([
+      "r1",
+      "r2",
+      "r3",
+      "r5",
+      "r6",
+      "r7",
+      "r8",
+      "r10",
+      "r11",
+      "lr"
+    ]);
+    writer.putBytes(vpushFpRegs);
+    writer.putSubRegRegImm("sp", "sp", 8);
+    writer.putStrRegRegOffset("r0", "sp", 0);
+    writer.putCallAddressWithArguments(artController.replacedMethods.findReplacementFromQuickCode, ["r0", "r9"]);
+    writer.putCmpRegImm("r0", 0);
+    writer.putBCondLabel("eq", "restore_registers");
+    writer.putStrRegRegOffset("r0", "sp", 0);
+    writer.putLabel("restore_registers");
+    writer.putLdrRegRegOffset("r0", "sp", 0);
+    writer.putAddRegRegImm("sp", "sp", 8);
+    writer.putBytes(vpopFpRegs);
+    writer.putPopRegs([
+      "lr",
+      "r11",
+      "r10",
+      "r8",
+      "r7",
+      "r6",
+      "r5",
+      "r3",
+      "r2",
+      "r1"
+    ]);
+    writer.putBCondLabel("ne", "invoke_replacement");
+    do {
+      offset = relocator.readOne();
+    } while (offset < redirectSize && !relocator.eoi);
+    relocator.writeAll();
+    if (!relocator.eoi) {
+      writer.putLdrRegAddress("pc", target.add(offset));
+    }
+    writer.putLabel("invoke_replacement");
+    writer.putLdrRegRegOffset("pc", "r0", artMethodOffsets.quickCode);
+    writer.flush();
+  });
+  return offset;
+}
+function writeArtQuickCodeReplacementTrampolineArm64(trampoline, target, redirectSize, { availableScratchRegs }, vm3) {
+  const artMethodOffsets = getArtMethodSpec(vm3).offset;
+  let offset;
+  Memory.patchCode(trampoline, 256, (code4) => {
+    const writer = new Arm64Writer(code4, { pc: trampoline });
+    const relocator = new Arm64Relocator(target, writer);
+    writer.putPushRegReg("d0", "d1");
+    writer.putPushRegReg("d2", "d3");
+    writer.putPushRegReg("d4", "d5");
+    writer.putPushRegReg("d6", "d7");
+    writer.putPushRegReg("x1", "x2");
+    writer.putPushRegReg("x3", "x4");
+    writer.putPushRegReg("x5", "x6");
+    writer.putPushRegReg("x7", "x20");
+    writer.putPushRegReg("x21", "x22");
+    writer.putPushRegReg("x23", "x24");
+    writer.putPushRegReg("x25", "x26");
+    writer.putPushRegReg("x27", "x28");
+    writer.putPushRegReg("x29", "lr");
+    writer.putSubRegRegImm("sp", "sp", 16);
+    writer.putStrRegRegOffset("x0", "sp", 0);
+    writer.putCallAddressWithArguments(artController.replacedMethods.findReplacementFromQuickCode, ["x0", "x19"]);
+    writer.putCmpRegReg("x0", "xzr");
+    writer.putBCondLabel("eq", "restore_registers");
+    writer.putStrRegRegOffset("x0", "sp", 0);
+    writer.putLabel("restore_registers");
+    writer.putLdrRegRegOffset("x0", "sp", 0);
+    writer.putAddRegRegImm("sp", "sp", 16);
+    writer.putPopRegReg("x29", "lr");
+    writer.putPopRegReg("x27", "x28");
+    writer.putPopRegReg("x25", "x26");
+    writer.putPopRegReg("x23", "x24");
+    writer.putPopRegReg("x21", "x22");
+    writer.putPopRegReg("x7", "x20");
+    writer.putPopRegReg("x5", "x6");
+    writer.putPopRegReg("x3", "x4");
+    writer.putPopRegReg("x1", "x2");
+    writer.putPopRegReg("d6", "d7");
+    writer.putPopRegReg("d4", "d5");
+    writer.putPopRegReg("d2", "d3");
+    writer.putPopRegReg("d0", "d1");
+    writer.putBCondLabel("ne", "invoke_replacement");
+    do {
+      offset = relocator.readOne();
+    } while (offset < redirectSize && !relocator.eoi);
+    relocator.writeAll();
+    if (!relocator.eoi) {
+      const scratchReg = Array.from(availableScratchRegs)[0];
+      writer.putLdrRegAddress(scratchReg, target.add(offset));
+      writer.putBrReg(scratchReg);
+    }
+    writer.putLabel("invoke_replacement");
+    writer.putLdrRegRegOffset("x16", "x0", artMethodOffsets.quickCode);
+    writer.putBrReg("x16");
+    writer.flush();
+  });
+  return offset;
+}
+var artQuickCodePrologueWriters = {
+  ia32: writeArtQuickCodePrologueX86,
+  x64: writeArtQuickCodePrologueX86,
+  arm: writeArtQuickCodePrologueArm,
+  arm64: writeArtQuickCodePrologueArm64
+};
+function writeArtQuickCodePrologueX86(target, trampoline, redirectSize) {
+  Memory.patchCode(target, 16, (code4) => {
+    const writer = new X86Writer(code4, { pc: target });
+    writer.putJmpAddress(trampoline);
+    writer.flush();
+  });
+}
+function writeArtQuickCodePrologueArm(target, trampoline, redirectSize) {
+  const targetAddress = target.and(THUMB_BIT_REMOVAL_MASK);
+  Memory.patchCode(targetAddress, 16, (code4) => {
+    const writer = new ThumbWriter(code4, { pc: targetAddress });
+    writer.putLdrRegAddress("pc", trampoline.or(1));
+    writer.flush();
+  });
+}
+function writeArtQuickCodePrologueArm64(target, trampoline, redirectSize) {
+  Memory.patchCode(target, 16, (code4) => {
+    const writer = new Arm64Writer(code4, { pc: target });
+    if (redirectSize === 16) {
+      writer.putLdrRegAddress("x16", trampoline);
+    } else {
+      writer.putAdrpRegAddress("x16", trampoline);
+    }
+    writer.putBrReg("x16");
+    writer.flush();
+  });
+}
+var artQuickCodeHookRedirectSize = {
+  ia32: 5,
+  x64: 16,
+  arm: 8,
+  arm64: 16
+};
+var ArtQuickCodeInterceptor = class {
+  constructor(quickCode) {
+    this.quickCode = quickCode;
+    this.quickCodeAddress = Process.arch === "arm" ? quickCode.and(THUMB_BIT_REMOVAL_MASK) : quickCode;
+    this.redirectSize = 0;
+    this.trampoline = null;
+    this.overwrittenPrologue = null;
+    this.overwrittenPrologueLength = 0;
+  }
+  _canRelocateCode(relocationSize, constraints) {
+    const Writer = thunkWriters[Process.arch];
+    const Relocator = thunkRelocators[Process.arch];
+    const { quickCodeAddress } = this;
+    const writer = new Writer(quickCodeAddress);
+    const relocator = new Relocator(quickCodeAddress, writer);
+    let offset;
+    if (Process.arch === "arm64") {
+      let availableScratchRegs = /* @__PURE__ */ new Set(["x16", "x17"]);
+      do {
+        const nextOffset = relocator.readOne();
+        const nextScratchRegs = new Set(availableScratchRegs);
+        const { read: read2, written } = relocator.input.regsAccessed;
+        for (const regs of [read2, written]) {
+          for (const reg of regs) {
+            let name;
+            if (reg.startsWith("w")) {
+              name = "x" + reg.substring(1);
+            } else {
+              name = reg;
+            }
+            nextScratchRegs.delete(name);
+          }
+        }
+        if (nextScratchRegs.size === 0) {
+          break;
+        }
+        offset = nextOffset;
+        availableScratchRegs = nextScratchRegs;
+      } while (offset < relocationSize && !relocator.eoi);
+      constraints.availableScratchRegs = availableScratchRegs;
+    } else {
+      do {
+        offset = relocator.readOne();
+      } while (offset < relocationSize && !relocator.eoi);
+    }
+    return offset >= relocationSize;
+  }
+  _allocateTrampoline() {
+    if (trampolineAllocator === null) {
+      const trampolineSize = pointerSize6 === 4 ? 128 : 256;
+      trampolineAllocator = makeAllocator(trampolineSize);
+    }
+    const maxRedirectSize = artQuickCodeHookRedirectSize[Process.arch];
+    let redirectSize, spec;
+    let alignment = 1;
+    const constraints = {};
+    if (pointerSize6 === 4 || this._canRelocateCode(maxRedirectSize, constraints)) {
+      redirectSize = maxRedirectSize;
+      spec = {};
+    } else {
+      let maxDistance;
+      if (Process.arch === "x64") {
+        redirectSize = 5;
+        maxDistance = X86_JMP_MAX_DISTANCE;
+      } else if (Process.arch === "arm64") {
+        redirectSize = 8;
+        maxDistance = ARM64_ADRP_MAX_DISTANCE;
+        alignment = 4096;
+      }
+      spec = { near: this.quickCodeAddress, maxDistance };
+    }
+    this.redirectSize = redirectSize;
+    this.trampoline = trampolineAllocator.allocateSlice(spec, alignment);
+    return constraints;
+  }
+  _destroyTrampoline() {
+    trampolineAllocator.freeSlice(this.trampoline);
+  }
+  activate(vm3) {
+    const constraints = this._allocateTrampoline();
+    const { trampoline, quickCode, redirectSize } = this;
+    const writeTrampoline = artQuickCodeReplacementTrampolineWriters[Process.arch];
+    const prologueLength = writeTrampoline(trampoline, quickCode, redirectSize, constraints, vm3);
+    this.overwrittenPrologueLength = prologueLength;
+    this.overwrittenPrologue = Memory.dup(this.quickCodeAddress, prologueLength);
+    const writePrologue = artQuickCodePrologueWriters[Process.arch];
+    writePrologue(quickCode, trampoline, redirectSize);
+  }
+  deactivate() {
+    const { quickCodeAddress, overwrittenPrologueLength: prologueLength } = this;
+    const Writer = thunkWriters[Process.arch];
+    Memory.patchCode(quickCodeAddress, prologueLength, (code4) => {
+      const writer = new Writer(code4, { pc: quickCodeAddress });
+      const { overwrittenPrologue } = this;
+      writer.putBytes(overwrittenPrologue.readByteArray(prologueLength));
+      writer.flush();
+    });
+    this._destroyTrampoline();
+  }
+};
+function isArtQuickEntrypoint(address) {
+  const api3 = getApi();
+  const { module: m2, artClassLinker } = api3;
+  return address.equals(artClassLinker.quickGenericJniTrampoline) || address.equals(artClassLinker.quickToInterpreterBridgeTrampoline) || address.equals(artClassLinker.quickResolutionTrampoline) || address.equals(artClassLinker.quickImtConflictTrampoline) || address.compare(m2.base) >= 0 && address.compare(m2.base.add(m2.size)) < 0;
+}
+var ArtMethodMangler = class {
+  constructor(opaqueMethodId) {
+    const methodId = unwrapMethodId(opaqueMethodId);
+    this.methodId = methodId;
+    this.originalMethod = null;
+    this.hookedMethodId = methodId;
+    this.replacementMethodId = null;
+    this.interceptor = null;
+  }
+  replace(impl2, isInstanceMethod, argTypes2, vm3, api3) {
+    const { kAccCompileDontBother, artNterpEntryPoint } = api3;
+    this.originalMethod = fetchArtMethod(this.methodId, vm3);
+    const originalFlags = this.originalMethod.accessFlags;
+    if ((originalFlags & kAccXposedHookedMethod) !== 0 && xposedIsSupported()) {
+      const hookInfo = this.originalMethod.jniCode;
+      this.hookedMethodId = hookInfo.add(2 * pointerSize6).readPointer();
+      this.originalMethod = fetchArtMethod(this.hookedMethodId, vm3);
+    }
+    const { hookedMethodId } = this;
+    const replacementMethodId = cloneArtMethod(hookedMethodId, vm3);
+    this.replacementMethodId = replacementMethodId;
+    patchArtMethod(replacementMethodId, {
+      jniCode: impl2,
+      accessFlags: (originalFlags & ~(kAccCriticalNative | kAccFastNative | kAccNterpEntryPointFastPathFlag) | kAccNative | kAccCompileDontBother) >>> 0,
+      quickCode: api3.artClassLinker.quickGenericJniTrampoline,
+      interpreterCode: api3.artInterpreterToCompiledCodeBridge
+    }, vm3);
+    let hookedMethodRemovedFlags = kAccFastInterpreterToInterpreterInvoke | kAccSingleImplementation | kAccNterpEntryPointFastPathFlag;
+    if ((originalFlags & kAccNative) === 0) {
+      hookedMethodRemovedFlags |= kAccSkipAccessChecks;
+    }
+    patchArtMethod(hookedMethodId, {
+      accessFlags: (originalFlags & ~hookedMethodRemovedFlags | kAccCompileDontBother) >>> 0
+    }, vm3);
+    const quickCode = this.originalMethod.quickCode;
+    if (artNterpEntryPoint !== null && quickCode.equals(artNterpEntryPoint)) {
+      patchArtMethod(hookedMethodId, {
+        quickCode: api3.artQuickToInterpreterBridge
+      }, vm3);
+    }
+    if (!isArtQuickEntrypoint(quickCode)) {
+      const interceptor = new ArtQuickCodeInterceptor(quickCode);
+      interceptor.activate(vm3);
+      this.interceptor = interceptor;
+    }
+    artController.replacedMethods.set(hookedMethodId, replacementMethodId);
+    notifyArtMethodHooked(hookedMethodId, vm3);
+  }
+  revert(vm3) {
+    const { hookedMethodId, interceptor } = this;
+    patchArtMethod(hookedMethodId, this.originalMethod, vm3);
+    artController.replacedMethods.delete(hookedMethodId);
+    if (interceptor !== null) {
+      interceptor.deactivate();
+      this.interceptor = null;
+    }
+  }
+  resolveTarget(wrapper, isInstanceMethod, env2, api3) {
+    return this.hookedMethodId;
+  }
+};
+function xposedIsSupported() {
+  return getAndroidApiLevel() < 28;
+}
+function fetchArtMethod(methodId, vm3) {
+  const artMethodSpec = getArtMethodSpec(vm3);
+  const artMethodOffset = artMethodSpec.offset;
+  return ["jniCode", "accessFlags", "quickCode", "interpreterCode"].reduce((original, name) => {
+    const offset = artMethodOffset[name];
+    if (offset === void 0) {
+      return original;
+    }
+    const address = methodId.add(offset);
+    const read2 = name === "accessFlags" ? readU32 : readPointer;
+    original[name] = read2.call(address);
+    return original;
+  }, {});
+}
+function patchArtMethod(methodId, patches, vm3) {
+  const artMethodSpec = getArtMethodSpec(vm3);
+  const artMethodOffset = artMethodSpec.offset;
+  Object.keys(patches).forEach((name) => {
+    const offset = artMethodOffset[name];
+    if (offset === void 0) {
+      return;
+    }
+    const address = methodId.add(offset);
+    const write3 = name === "accessFlags" ? writeU32 : writePointer;
+    write3.call(address, patches[name]);
+  });
+}
+var DalvikMethodMangler = class {
+  constructor(methodId) {
+    this.methodId = methodId;
+    this.originalMethod = null;
+  }
+  replace(impl2, isInstanceMethod, argTypes2, vm3, api3) {
+    const { methodId } = this;
+    this.originalMethod = Memory.dup(methodId, DVM_METHOD_SIZE);
+    let argsSize = argTypes2.reduce((acc, t) => acc + t.size, 0);
+    if (isInstanceMethod) {
+      argsSize++;
+    }
+    const accessFlags = (methodId.add(DVM_METHOD_OFFSET_ACCESS_FLAGS).readU32() | kAccNative) >>> 0;
+    const registersSize = argsSize;
+    const outsSize = 0;
+    const insSize = argsSize;
+    methodId.add(DVM_METHOD_OFFSET_ACCESS_FLAGS).writeU32(accessFlags);
+    methodId.add(DVM_METHOD_OFFSET_REGISTERS_SIZE).writeU16(registersSize);
+    methodId.add(DVM_METHOD_OFFSET_OUTS_SIZE).writeU16(outsSize);
+    methodId.add(DVM_METHOD_OFFSET_INS_SIZE).writeU16(insSize);
+    methodId.add(DVM_METHOD_OFFSET_JNI_ARG_INFO).writeU32(computeDalvikJniArgInfo(methodId));
+    api3.dvmUseJNIBridge(methodId, impl2);
+  }
+  revert(vm3) {
+    Memory.copy(this.methodId, this.originalMethod, DVM_METHOD_SIZE);
+  }
+  resolveTarget(wrapper, isInstanceMethod, env2, api3) {
+    const thread = env2.handle.add(DVM_JNI_ENV_OFFSET_SELF).readPointer();
+    let objectPtr;
+    if (isInstanceMethod) {
+      objectPtr = api3.dvmDecodeIndirectRef(thread, wrapper.$h);
+    } else {
+      const h = wrapper.$borrowClassHandle(env2);
+      objectPtr = api3.dvmDecodeIndirectRef(thread, h.value);
+      h.unref(env2);
+    }
+    let classObject;
+    if (isInstanceMethod) {
+      classObject = objectPtr.add(DVM_OBJECT_OFFSET_CLAZZ).readPointer();
+    } else {
+      classObject = objectPtr;
+    }
+    const classKey = classObject.toString(16);
+    let entry = patchedClasses.get(classKey);
+    if (entry === void 0) {
+      const vtablePtr = classObject.add(DVM_CLASS_OBJECT_OFFSET_VTABLE);
+      const vtableCountPtr = classObject.add(DVM_CLASS_OBJECT_OFFSET_VTABLE_COUNT);
+      const vtable2 = vtablePtr.readPointer();
+      const vtableCount = vtableCountPtr.readS32();
+      const vtableSize = vtableCount * pointerSize6;
+      const shadowVtable = Memory.alloc(2 * vtableSize);
+      Memory.copy(shadowVtable, vtable2, vtableSize);
+      vtablePtr.writePointer(shadowVtable);
+      entry = {
+        classObject,
+        vtablePtr,
+        vtableCountPtr,
+        vtable: vtable2,
+        vtableCount,
+        shadowVtable,
+        shadowVtableCount: vtableCount,
+        targetMethods: /* @__PURE__ */ new Map()
+      };
+      patchedClasses.set(classKey, entry);
+    }
+    const methodKey = this.methodId.toString(16);
+    let targetMethod = entry.targetMethods.get(methodKey);
+    if (targetMethod === void 0) {
+      targetMethod = Memory.dup(this.originalMethod, DVM_METHOD_SIZE);
+      const methodIndex = entry.shadowVtableCount++;
+      entry.shadowVtable.add(methodIndex * pointerSize6).writePointer(targetMethod);
+      targetMethod.add(DVM_METHOD_OFFSET_METHOD_INDEX).writeU16(methodIndex);
+      entry.vtableCountPtr.writeS32(entry.shadowVtableCount);
+      entry.targetMethods.set(methodKey, targetMethod);
+    }
+    return targetMethod;
+  }
+};
+function computeDalvikJniArgInfo(methodId) {
+  if (Process.arch !== "ia32") {
+    return DALVIK_JNI_NO_ARG_INFO;
+  }
+  const shorty = methodId.add(DVM_METHOD_OFFSET_SHORTY).readPointer().readCString();
+  if (shorty === null || shorty.length === 0 || shorty.length > 65535) {
+    return DALVIK_JNI_NO_ARG_INFO;
+  }
+  let returnType;
+  switch (shorty[0]) {
+    case "V":
+      returnType = DALVIK_JNI_RETURN_VOID;
+      break;
+    case "F":
+      returnType = DALVIK_JNI_RETURN_FLOAT;
+      break;
+    case "D":
+      returnType = DALVIK_JNI_RETURN_DOUBLE;
+      break;
+    case "J":
+      returnType = DALVIK_JNI_RETURN_S8;
+      break;
+    case "Z":
+    case "B":
+      returnType = DALVIK_JNI_RETURN_S1;
+      break;
+    case "C":
+      returnType = DALVIK_JNI_RETURN_U2;
+      break;
+    case "S":
+      returnType = DALVIK_JNI_RETURN_S2;
+      break;
+    default:
+      returnType = DALVIK_JNI_RETURN_S4;
+      break;
+  }
+  let hints = 0;
+  for (let i = shorty.length - 1; i > 0; i--) {
+    const ch = shorty[i];
+    hints += ch === "D" || ch === "J" ? 2 : 1;
+  }
+  return returnType << DALVIK_JNI_RETURN_SHIFT | hints;
+}
+function cloneArtMethod(method2, vm3) {
+  const api3 = getApi();
+  if (getAndroidApiLevel() < 23) {
+    const thread = api3["art::Thread::CurrentFromGdb"]();
+    return api3["art::mirror::Object::Clone"](method2, thread);
+  }
+  return Memory.dup(method2, getArtMethodSpec(vm3).size);
+}
+function deoptimizeMethod(vm3, env2, method2) {
+  requestDeoptimization(vm3, env2, kSelectiveDeoptimization, method2);
+}
+function deoptimizeEverything(vm3, env2) {
+  requestDeoptimization(vm3, env2, kFullDeoptimization);
+}
+function deoptimizeBootImage(vm3, env2) {
+  const api3 = getApi();
+  if (getAndroidApiLevel() < 26) {
+    throw new Error("This API is only available on Android >= 8.0");
+  }
+  withRunnableArtThread(vm3, env2, (thread) => {
+    api3["art::Runtime::DeoptimizeBootImage"](api3.artRuntime);
+  });
+}
+function requestDeoptimization(vm3, env2, kind, method2) {
+  const api3 = getApi();
+  if (getAndroidApiLevel() < 24) {
+    throw new Error("This API is only available on Android >= 7.0");
+  }
+  withRunnableArtThread(vm3, env2, (thread) => {
+    if (getAndroidApiLevel() < 30) {
+      if (!api3.isJdwpStarted()) {
+        const session = startJdwp(api3);
+        jdwpSessions.push(session);
+      }
+      if (!api3.isDebuggerActive()) {
+        api3["art::Dbg::GoActive"]();
+      }
+      const request = Memory.alloc(8 + pointerSize6);
+      request.writeU32(kind);
+      switch (kind) {
+        case kFullDeoptimization:
+          break;
+        case kSelectiveDeoptimization:
+          request.add(8).writePointer(method2);
+          break;
+        default:
+          throw new Error("Unsupported deoptimization kind");
+      }
+      api3["art::Dbg::RequestDeoptimization"](request);
+      api3["art::Dbg::ManageDeoptimization"]();
+    } else {
+      const instrumentation = api3.artInstrumentation;
+      if (instrumentation === null) {
+        throw new Error("Unable to find Instrumentation class in ART; please file a bug");
+      }
+      const enableDeopt = api3["art::Instrumentation::EnableDeoptimization"];
+      if (enableDeopt !== void 0) {
+        const deoptimizationEnabled = !!instrumentation.add(getArtInstrumentationSpec().offset.deoptimizationEnabled).readU8();
+        if (!deoptimizationEnabled) {
+          enableDeopt(instrumentation);
+        }
+      }
+      switch (kind) {
+        case kFullDeoptimization:
+          api3["art::Instrumentation::DeoptimizeEverything"](instrumentation, Memory.allocUtf8String("frida"));
+          break;
+        case kSelectiveDeoptimization:
+          api3["art::Instrumentation::Deoptimize"](instrumentation, method2);
+          break;
+        default:
+          throw new Error("Unsupported deoptimization kind");
+      }
+    }
+  });
+}
+var JdwpSession = class {
+  constructor() {
+    const libart = Process.getModuleByName("libart.so");
+    const acceptImpl = libart.getExportByName("_ZN3art4JDWP12JdwpAdbState6AcceptEv");
+    const receiveClientFdImpl = libart.getExportByName("_ZN3art4JDWP12JdwpAdbState15ReceiveClientFdEv");
+    const controlPair = makeSocketPair();
+    const clientPair = makeSocketPair();
+    this._controlFd = controlPair[0];
+    this._clientFd = clientPair[0];
+    let acceptListener = null;
+    acceptListener = Interceptor.attach(acceptImpl, function(args) {
+      const state = args[0];
+      const controlSockPtr = Memory.scanSync(state.add(8252), 256, "00 ff ff ff ff 00")[0].address.add(1);
+      controlSockPtr.writeS32(controlPair[1]);
+      acceptListener.detach();
+    });
+    Interceptor.replace(receiveClientFdImpl, new NativeCallback(function(state) {
+      Interceptor.revert(receiveClientFdImpl);
+      return clientPair[1];
+    }, "int", ["pointer"]));
+    Interceptor.flush();
+    this._handshakeRequest = this._performHandshake();
+  }
+  async _performHandshake() {
+    const input = new UnixInputStream(this._clientFd, { autoClose: false });
+    const output = new UnixOutputStream(this._clientFd, { autoClose: false });
+    const handshakePacket = [74, 68, 87, 80, 45, 72, 97, 110, 100, 115, 104, 97, 107, 101];
+    try {
+      await output.writeAll(handshakePacket);
+      await input.readAll(handshakePacket.length);
+    } catch (e) {
+    }
+  }
+};
+function startJdwp(api3) {
+  const session = new JdwpSession();
+  api3["art::Dbg::SetJdwpAllowed"](1);
+  const options = makeJdwpOptions();
+  api3["art::Dbg::ConfigureJdwp"](options);
+  const startDebugger = api3["art::InternalDebuggerControlCallback::StartDebugger"];
+  if (startDebugger !== void 0) {
+    startDebugger(NULL);
+  } else {
+    api3["art::Dbg::StartJdwp"]();
+  }
+  return session;
+}
+function makeJdwpOptions() {
+  const kJdwpTransportAndroidAdb = getAndroidApiLevel() < 28 ? 2 : 3;
+  const kJdwpPortFirstAvailable = 0;
+  const transport = kJdwpTransportAndroidAdb;
+  const server = true;
+  const suspend = false;
+  const port = kJdwpPortFirstAvailable;
+  const size = 8 + STD_STRING_SIZE + 2;
+  const result = Memory.alloc(size);
+  result.writeU32(transport).add(4).writeU8(server ? 1 : 0).add(1).writeU8(suspend ? 1 : 0).add(1).add(STD_STRING_SIZE).writeU16(port);
+  return result;
+}
+function makeSocketPair() {
+  if (socketpair === null) {
+    socketpair = new NativeFunction(
+      Process.getModuleByName("libc.so").getExportByName("socketpair"),
+      "int",
+      ["int", "int", "int", "pointer"]
+    );
+  }
+  const buf = Memory.alloc(8);
+  if (socketpair(AF_UNIX, SOCK_STREAM, 0, buf) === -1) {
+    throw new Error("Unable to create socketpair for JDWP");
+  }
+  return [
+    buf.readS32(),
+    buf.add(4).readS32()
+  ];
+}
+function makeAddGlobalRefFallbackForAndroid5(api3) {
+  const offset = getArtVMSpec().offset;
+  const lock = api3.vm.add(offset.globalsLock);
+  const table = api3.vm.add(offset.globals);
+  const add = api3["art::IndirectReferenceTable::Add"];
+  const acquire = api3["art::ReaderWriterMutex::ExclusiveLock"];
+  const release = api3["art::ReaderWriterMutex::ExclusiveUnlock"];
+  const IRT_FIRST_SEGMENT = 0;
+  return function(vm3, thread, obj) {
+    acquire(lock, thread);
+    try {
+      return add(table, IRT_FIRST_SEGMENT, obj);
+    } finally {
+      release(lock, thread);
+    }
+  };
+}
+function makeDecodeGlobalFallback(api3) {
+  const decode = api3["art::Thread::DecodeJObject"];
+  if (decode === void 0) {
+    throw new Error("art::Thread::DecodeJObject is not available; please file a bug");
+  }
+  return function(vm3, thread, ref) {
+    return decode(thread, ref);
+  };
+}
+var threadStateTransitionRecompilers = {
+  ia32: recompileExceptionClearForX86,
+  x64: recompileExceptionClearForX86,
+  arm: recompileExceptionClearForArm,
+  arm64: recompileExceptionClearForArm64
+};
+function makeArtThreadStateTransitionImpl(vm3, env2, callback) {
+  const api3 = getApi();
+  const envVtable = env2.handle.readPointer();
+  let exceptionClearImpl;
+  const innerExceptionClearImpl = api3.find("_ZN3art3JNIILb1EE14ExceptionClearEP7_JNIEnv");
+  if (innerExceptionClearImpl !== null) {
+    exceptionClearImpl = innerExceptionClearImpl;
+  } else {
+    exceptionClearImpl = envVtable.add(ENV_VTABLE_OFFSET_EXCEPTION_CLEAR).readPointer();
+  }
+  let nextFuncImpl;
+  const innerNextFuncImpl = api3.find("_ZN3art3JNIILb1EE10FatalErrorEP7_JNIEnvPKc");
+  if (innerNextFuncImpl !== null) {
+    nextFuncImpl = innerNextFuncImpl;
+  } else {
+    nextFuncImpl = envVtable.add(ENV_VTABLE_OFFSET_FATAL_ERROR).readPointer();
+  }
+  const recompile = threadStateTransitionRecompilers[Process.arch];
+  if (recompile === void 0) {
+    throw new Error("Not yet implemented for " + Process.arch);
+  }
+  let perform = null;
+  const threadOffsets = getArtThreadSpec(vm3).offset;
+  const exceptionOffset = threadOffsets.exception;
+  const neuteredOffsets = /* @__PURE__ */ new Set();
+  const isReportedOffset = threadOffsets.isExceptionReportedToInstrumentation;
+  if (isReportedOffset !== null) {
+    neuteredOffsets.add(isReportedOffset);
+  }
+  const throwLocationStartOffset = threadOffsets.throwLocation;
+  if (throwLocationStartOffset !== null) {
+    neuteredOffsets.add(throwLocationStartOffset);
+    neuteredOffsets.add(throwLocationStartOffset + pointerSize6);
+    neuteredOffsets.add(throwLocationStartOffset + 2 * pointerSize6);
+  }
+  const codeSize = 65536;
+  const code4 = Memory.alloc(codeSize);
+  Memory.patchCode(code4, codeSize, (buffer) => {
+    perform = recompile(buffer, code4, exceptionClearImpl, nextFuncImpl, exceptionOffset, neuteredOffsets, callback);
+  });
+  perform._code = code4;
+  perform._callback = callback;
+  return perform;
+}
+function recompileExceptionClearForX86(buffer, pc, exceptionClearImpl, nextFuncImpl, exceptionOffset, neuteredOffsets, callback) {
+  const blocks = {};
+  const branchTargets = /* @__PURE__ */ new Set();
+  const pending = [exceptionClearImpl];
+  while (pending.length > 0) {
+    let current = pending.shift();
+    const alreadyCovered = Object.values(blocks).some(({ begin, end }) => current.compare(begin) >= 0 && current.compare(end) < 0);
+    if (alreadyCovered) {
+      continue;
+    }
+    const blockAddressKey = current.toString();
+    let block2 = {
+      begin: current
+    };
+    let lastInsn = null;
+    let reachedEndOfBlock = false;
+    do {
+      if (current.equals(nextFuncImpl)) {
+        reachedEndOfBlock = true;
+        break;
+      }
+      const insn = Instruction.parse(current);
+      lastInsn = insn;
+      const existingBlock = blocks[insn.address.toString()];
+      if (existingBlock !== void 0) {
+        delete blocks[existingBlock.begin.toString()];
+        blocks[blockAddressKey] = existingBlock;
+        existingBlock.begin = block2.begin;
+        block2 = null;
+        break;
+      }
+      let branchTarget = null;
+      switch (insn.mnemonic) {
+        case "jmp":
+          branchTarget = ptr(insn.operands[0].value);
+          reachedEndOfBlock = true;
+          break;
+        case "je":
+        case "jg":
+        case "jle":
+        case "jne":
+        case "js":
+          branchTarget = ptr(insn.operands[0].value);
+          break;
+        case "ret":
+          reachedEndOfBlock = true;
+          break;
+      }
+      if (branchTarget !== null) {
+        branchTargets.add(branchTarget.toString());
+        pending.push(branchTarget);
+        pending.sort((a, b) => a.compare(b));
+      }
+      current = insn.next;
+    } while (!reachedEndOfBlock);
+    if (block2 !== null) {
+      block2.end = lastInsn.address.add(lastInsn.size);
+      blocks[blockAddressKey] = block2;
+    }
+  }
+  const blocksOrdered = Object.keys(blocks).map((key) => blocks[key]);
+  blocksOrdered.sort((a, b) => a.begin.compare(b.begin));
+  const entryBlock = blocks[exceptionClearImpl.toString()];
+  blocksOrdered.splice(blocksOrdered.indexOf(entryBlock), 1);
+  blocksOrdered.unshift(entryBlock);
+  const writer = new X86Writer(buffer, { pc });
+  let foundCore = false;
+  let threadReg = null;
+  blocksOrdered.forEach((block2) => {
+    const size = block2.end.sub(block2.begin).toInt32();
+    const relocator = new X86Relocator(block2.begin, writer);
+    let offset;
+    while ((offset = relocator.readOne()) !== 0) {
+      const insn = relocator.input;
+      const { mnemonic } = insn;
+      const insnAddressId = insn.address.toString();
+      if (branchTargets.has(insnAddressId)) {
+        writer.putLabel(insnAddressId);
+      }
+      let keep = true;
+      switch (mnemonic) {
+        case "jmp":
+          writer.putJmpNearLabel(branchLabelFromOperand(insn.operands[0]));
+          keep = false;
+          break;
+        case "je":
+        case "jg":
+        case "jle":
+        case "jne":
+        case "js":
+          writer.putJccNearLabel(mnemonic, branchLabelFromOperand(insn.operands[0]), "no-hint");
+          keep = false;
+          break;
+        /*
+         * JNI::ExceptionClear(), when checked JNI is off.
+         */
+        case "mov": {
+          const [dst, src] = insn.operands;
+          if (dst.type === "mem" && src.type === "imm") {
+            const dstValue = dst.value;
+            const dstOffset = dstValue.disp;
+            if (dstOffset === exceptionOffset && src.value.valueOf() === 0) {
+              threadReg = dstValue.base;
+              writer.putPushfx();
+              writer.putPushax();
+              writer.putMovRegReg("xbp", "xsp");
+              if (pointerSize6 === 4) {
+                writer.putAndRegU32("esp", 4294967280);
+              } else {
+                const scratchReg = threadReg !== "rdi" ? "rdi" : "rsi";
+                writer.putMovRegU64(scratchReg, uint64("0xfffffffffffffff0"));
+                writer.putAndRegReg("rsp", scratchReg);
+              }
+              writer.putCallAddressWithAlignedArguments(callback, [threadReg]);
+              writer.putMovRegReg("xsp", "xbp");
+              writer.putPopax();
+              writer.putPopfx();
+              foundCore = true;
+              keep = false;
+            } else if (neuteredOffsets.has(dstOffset) && dstValue.base === threadReg) {
+              keep = false;
+            }
+          }
+          break;
+        }
+        /*
+         * CheckJNI::ExceptionClear, when checked JNI is on. Wrapper that calls JNI::ExceptionClear().
+         */
+        case "call": {
+          const target = insn.operands[0];
+          if (target.type === "mem" && target.value.disp === ENV_VTABLE_OFFSET_EXCEPTION_CLEAR) {
+            if (pointerSize6 === 4) {
+              writer.putPopReg("eax");
+              writer.putMovRegRegOffsetPtr("eax", "eax", 4);
+              writer.putPushReg("eax");
+            } else {
+              writer.putMovRegRegOffsetPtr("rdi", "rdi", 8);
+            }
+            writer.putCallAddressWithArguments(callback, []);
+            foundCore = true;
+            keep = false;
+          }
+          break;
+        }
+      }
+      if (keep) {
+        relocator.writeAll();
+      } else {
+        relocator.skipOne();
+      }
+      if (offset === size) {
+        break;
+      }
+    }
+    relocator.dispose();
+  });
+  writer.dispose();
+  if (!foundCore) {
+    throwThreadStateTransitionParseError();
+  }
+  return new NativeFunction(pc, "void", ["pointer"], nativeFunctionOptions3);
+}
+function recompileExceptionClearForArm(buffer, pc, exceptionClearImpl, nextFuncImpl, exceptionOffset, neuteredOffsets, callback) {
+  const blocks = {};
+  const branchTargets = /* @__PURE__ */ new Set();
+  const thumbBitRemovalMask = ptr(1).not();
+  const pending = [exceptionClearImpl];
+  while (pending.length > 0) {
+    let current = pending.shift();
+    const alreadyCovered = Object.values(blocks).some(({ begin: begin2, end }) => current.compare(begin2) >= 0 && current.compare(end) < 0);
+    if (alreadyCovered) {
+      continue;
+    }
+    const begin = current.and(thumbBitRemovalMask);
+    const blockId = begin.toString();
+    const thumbBit = current.and(1);
+    let block2 = {
+      begin
+    };
+    let lastInsn = null;
+    let reachedEndOfBlock = false;
+    let ifThenBlockRemaining = 0;
+    do {
+      if (current.equals(nextFuncImpl)) {
+        reachedEndOfBlock = true;
+        break;
+      }
+      const insn = Instruction.parse(current);
+      const { mnemonic } = insn;
+      lastInsn = insn;
+      const currentAddress = current.and(thumbBitRemovalMask);
+      const insnId = currentAddress.toString();
+      const existingBlock = blocks[insnId];
+      if (existingBlock !== void 0) {
+        delete blocks[existingBlock.begin.toString()];
+        blocks[blockId] = existingBlock;
+        existingBlock.begin = block2.begin;
+        block2 = null;
+        break;
+      }
+      const isOutsideIfThenBlock = ifThenBlockRemaining === 0;
+      let branchTarget = null;
+      switch (mnemonic) {
+        case "b":
+          branchTarget = ptr(insn.operands[0].value);
+          reachedEndOfBlock = isOutsideIfThenBlock;
+          break;
+        case "beq.w":
+        case "beq":
+        case "bne":
+        case "bne.w":
+        case "bgt":
+          branchTarget = ptr(insn.operands[0].value);
+          break;
+        case "cbz":
+        case "cbnz":
+          branchTarget = ptr(insn.operands[1].value);
+          break;
+        case "pop.w":
+          if (isOutsideIfThenBlock) {
+            reachedEndOfBlock = insn.operands.filter((op) => op.value === "pc").length === 1;
+          }
+          break;
+      }
+      switch (mnemonic) {
+        case "it":
+          ifThenBlockRemaining = 1;
+          break;
+        case "itt":
+          ifThenBlockRemaining = 2;
+          break;
+        case "ittt":
+          ifThenBlockRemaining = 3;
+          break;
+        case "itttt":
+          ifThenBlockRemaining = 4;
+          break;
+        default:
+          if (ifThenBlockRemaining > 0) {
+            ifThenBlockRemaining--;
+          }
+          break;
+      }
+      if (branchTarget !== null) {
+        branchTargets.add(branchTarget.toString());
+        pending.push(branchTarget.or(thumbBit));
+        pending.sort((a, b) => a.compare(b));
+      }
+      current = insn.next;
+    } while (!reachedEndOfBlock);
+    if (block2 !== null) {
+      block2.end = lastInsn.address.add(lastInsn.size);
+      blocks[blockId] = block2;
+    }
+  }
+  const blocksOrdered = Object.keys(blocks).map((key) => blocks[key]);
+  blocksOrdered.sort((a, b) => a.begin.compare(b.begin));
+  const entryBlock = blocks[exceptionClearImpl.and(thumbBitRemovalMask).toString()];
+  blocksOrdered.splice(blocksOrdered.indexOf(entryBlock), 1);
+  blocksOrdered.unshift(entryBlock);
+  const writer = new ThumbWriter(buffer, { pc });
+  let foundCore = false;
+  let threadReg = null;
+  let realImplReg = null;
+  blocksOrdered.forEach((block2) => {
+    const relocator = new ThumbRelocator(block2.begin, writer);
+    let address = block2.begin;
+    const end = block2.end;
+    let size = 0;
+    do {
+      const offset = relocator.readOne();
+      if (offset === 0) {
+        throw new Error("Unexpected end of block");
+      }
+      const insn = relocator.input;
+      address = insn.address;
+      size = insn.size;
+      const { mnemonic } = insn;
+      const insnAddressId = address.toString();
+      if (branchTargets.has(insnAddressId)) {
+        writer.putLabel(insnAddressId);
+      }
+      let keep = true;
+      switch (mnemonic) {
+        case "b":
+          writer.putBLabel(branchLabelFromOperand(insn.operands[0]));
+          keep = false;
+          break;
+        case "beq.w":
+          writer.putBCondLabelWide("eq", branchLabelFromOperand(insn.operands[0]));
+          keep = false;
+          break;
+        case "bne.w":
+          writer.putBCondLabelWide("ne", branchLabelFromOperand(insn.operands[0]));
+          keep = false;
+          break;
+        case "beq":
+        case "bne":
+        case "bgt":
+          writer.putBCondLabelWide(mnemonic.substr(1), branchLabelFromOperand(insn.operands[0]));
+          keep = false;
+          break;
+        case "cbz": {
+          const ops = insn.operands;
+          writer.putCbzRegLabel(ops[0].value, branchLabelFromOperand(ops[1]));
+          keep = false;
+          break;
+        }
+        case "cbnz": {
+          const ops = insn.operands;
+          writer.putCbnzRegLabel(ops[0].value, branchLabelFromOperand(ops[1]));
+          keep = false;
+          break;
+        }
+        /*
+         * JNI::ExceptionClear(), when checked JNI is off.
+         */
+        case "str":
+        case "str.w": {
+          const dstValue = insn.operands[1].value;
+          const dstOffset = dstValue.disp;
+          if (dstOffset === exceptionOffset) {
+            threadReg = dstValue.base;
+            const nzcvqReg = threadReg !== "r4" ? "r4" : "r5";
+            const clobberedRegs = ["r0", "r1", "r2", "r3", nzcvqReg, "r9", "r12", "lr"];
+            writer.putPushRegs(clobberedRegs);
+            writer.putMrsRegReg(nzcvqReg, "apsr-nzcvq");
+            writer.putCallAddressWithArguments(callback, [threadReg]);
+            writer.putMsrRegReg("apsr-nzcvq", nzcvqReg);
+            writer.putPopRegs(clobberedRegs);
+            foundCore = true;
+            keep = false;
+          } else if (neuteredOffsets.has(dstOffset) && dstValue.base === threadReg) {
+            keep = false;
+          }
+          break;
+        }
+        /*
+         * CheckJNI::ExceptionClear, when checked JNI is on. Wrapper that calls JNI::ExceptionClear().
+         */
+        case "ldr": {
+          const [dstOp, srcOp] = insn.operands;
+          if (srcOp.type === "mem") {
+            const src = srcOp.value;
+            if (src.base[0] === "r" && src.disp === ENV_VTABLE_OFFSET_EXCEPTION_CLEAR) {
+              realImplReg = dstOp.value;
+            }
+          }
+          break;
+        }
+        case "blx":
+          if (insn.operands[0].value === realImplReg) {
+            writer.putLdrRegRegOffset("r0", "r0", 4);
+            writer.putCallAddressWithArguments(callback, ["r0"]);
+            foundCore = true;
+            realImplReg = null;
+            keep = false;
+          }
+          break;
+      }
+      if (keep) {
+        relocator.writeAll();
+      } else {
+        relocator.skipOne();
+      }
+    } while (!address.add(size).equals(end));
+    relocator.dispose();
+  });
+  writer.dispose();
+  if (!foundCore) {
+    throwThreadStateTransitionParseError();
+  }
+  return new NativeFunction(pc.or(1), "void", ["pointer"], nativeFunctionOptions3);
+}
+function recompileExceptionClearForArm64(buffer, pc, exceptionClearImpl, nextFuncImpl, exceptionOffset, neuteredOffsets, callback) {
+  const blocks = {};
+  const branchTargets = /* @__PURE__ */ new Set();
+  const pending = [exceptionClearImpl];
+  while (pending.length > 0) {
+    let current = pending.shift();
+    const alreadyCovered = Object.values(blocks).some(({ begin, end }) => current.compare(begin) >= 0 && current.compare(end) < 0);
+    if (alreadyCovered) {
+      continue;
+    }
+    const blockAddressKey = current.toString();
+    let block2 = {
+      begin: current
+    };
+    let lastInsn = null;
+    let reachedEndOfBlock = false;
+    do {
+      if (current.equals(nextFuncImpl)) {
+        reachedEndOfBlock = true;
+        break;
+      }
+      let insn;
+      try {
+        insn = Instruction.parse(current);
+      } catch (e) {
+        if (current.readU32() === 0) {
+          reachedEndOfBlock = true;
+          break;
+        } else {
+          throw e;
+        }
+      }
+      lastInsn = insn;
+      const existingBlock = blocks[insn.address.toString()];
+      if (existingBlock !== void 0) {
+        delete blocks[existingBlock.begin.toString()];
+        blocks[blockAddressKey] = existingBlock;
+        existingBlock.begin = block2.begin;
+        block2 = null;
+        break;
+      }
+      let branchTarget = null;
+      switch (insn.mnemonic) {
+        case "b":
+          branchTarget = ptr(insn.operands[0].value);
+          reachedEndOfBlock = true;
+          break;
+        case "b.eq":
+        case "b.ne":
+        case "b.le":
+        case "b.gt":
+          branchTarget = ptr(insn.operands[0].value);
+          break;
+        case "cbz":
+        case "cbnz":
+          branchTarget = ptr(insn.operands[1].value);
+          break;
+        case "tbz":
+        case "tbnz":
+          branchTarget = ptr(insn.operands[2].value);
+          break;
+        case "ret":
+          reachedEndOfBlock = true;
+          break;
+      }
+      if (branchTarget !== null) {
+        branchTargets.add(branchTarget.toString());
+        pending.push(branchTarget);
+        pending.sort((a, b) => a.compare(b));
+      }
+      current = insn.next;
+    } while (!reachedEndOfBlock);
+    if (block2 !== null) {
+      block2.end = lastInsn.address.add(lastInsn.size);
+      blocks[blockAddressKey] = block2;
+    }
+  }
+  const blocksOrdered = Object.keys(blocks).map((key) => blocks[key]);
+  blocksOrdered.sort((a, b) => a.begin.compare(b.begin));
+  const entryBlock = blocks[exceptionClearImpl.toString()];
+  blocksOrdered.splice(blocksOrdered.indexOf(entryBlock), 1);
+  blocksOrdered.unshift(entryBlock);
+  const writer = new Arm64Writer(buffer, { pc });
+  writer.putBLabel("performTransition");
+  const invokeCallback = pc.add(writer.offset);
+  writer.putPushAllXRegisters();
+  writer.putCallAddressWithArguments(callback, ["x0"]);
+  writer.putPopAllXRegisters();
+  writer.putRet();
+  writer.putLabel("performTransition");
+  let foundCore = false;
+  let threadReg = null;
+  let realImplReg = null;
+  blocksOrdered.forEach((block2) => {
+    const size = block2.end.sub(block2.begin).toInt32();
+    const relocator = new Arm64Relocator(block2.begin, writer);
+    let offset;
+    while ((offset = relocator.readOne()) !== 0) {
+      const insn = relocator.input;
+      const { mnemonic } = insn;
+      const insnAddressId = insn.address.toString();
+      if (branchTargets.has(insnAddressId)) {
+        writer.putLabel(insnAddressId);
+      }
+      let keep = true;
+      switch (mnemonic) {
+        case "b":
+          writer.putBLabel(branchLabelFromOperand(insn.operands[0]));
+          keep = false;
+          break;
+        case "b.eq":
+        case "b.ne":
+        case "b.le":
+        case "b.gt":
+          writer.putBCondLabel(mnemonic.substr(2), branchLabelFromOperand(insn.operands[0]));
+          keep = false;
+          break;
+        case "cbz": {
+          const ops = insn.operands;
+          writer.putCbzRegLabel(ops[0].value, branchLabelFromOperand(ops[1]));
+          keep = false;
+          break;
+        }
+        case "cbnz": {
+          const ops = insn.operands;
+          writer.putCbnzRegLabel(ops[0].value, branchLabelFromOperand(ops[1]));
+          keep = false;
+          break;
+        }
+        case "tbz": {
+          const ops = insn.operands;
+          writer.putTbzRegImmLabel(ops[0].value, ops[1].value.valueOf(), branchLabelFromOperand(ops[2]));
+          keep = false;
+          break;
+        }
+        case "tbnz": {
+          const ops = insn.operands;
+          writer.putTbnzRegImmLabel(ops[0].value, ops[1].value.valueOf(), branchLabelFromOperand(ops[2]));
+          keep = false;
+          break;
+        }
+        /*
+         * JNI::ExceptionClear(), when checked JNI is off.
+         */
+        case "str": {
+          const ops = insn.operands;
+          const srcReg = ops[0].value;
+          const dstValue = ops[1].value;
+          const dstOffset = dstValue.disp;
+          if (srcReg === "xzr" && dstOffset === exceptionOffset) {
+            threadReg = dstValue.base;
+            writer.putPushRegReg("x0", "lr");
+            writer.putMovRegReg("x0", threadReg);
+            writer.putBlImm(invokeCallback);
+            writer.putPopRegReg("x0", "lr");
+            foundCore = true;
+            keep = false;
+          } else if (neuteredOffsets.has(dstOffset) && dstValue.base === threadReg) {
+            keep = false;
+          }
+          break;
+        }
+        /*
+         * CheckJNI::ExceptionClear, when checked JNI is on. Wrapper that calls JNI::ExceptionClear().
+         */
+        case "ldr": {
+          const ops = insn.operands;
+          const src = ops[1].value;
+          if (src.base[0] === "x" && src.disp === ENV_VTABLE_OFFSET_EXCEPTION_CLEAR) {
+            realImplReg = ops[0].value;
+          }
+          break;
+        }
+        case "blr":
+          if (insn.operands[0].value === realImplReg) {
+            writer.putLdrRegRegOffset("x0", "x0", 8);
+            writer.putCallAddressWithArguments(callback, ["x0"]);
+            foundCore = true;
+            realImplReg = null;
+            keep = false;
+          }
+          break;
+      }
+      if (keep) {
+        relocator.writeAll();
+      } else {
+        relocator.skipOne();
+      }
+      if (offset === size) {
+        break;
+      }
+    }
+    relocator.dispose();
+  });
+  writer.dispose();
+  if (!foundCore) {
+    throwThreadStateTransitionParseError();
+  }
+  return new NativeFunction(pc, "void", ["pointer"], nativeFunctionOptions3);
+}
+function throwThreadStateTransitionParseError() {
+  throw new Error("Unable to parse ART internals; please file a bug");
+}
+function fixupArtQuickDeliverExceptionBug(api3) {
+  const prettyMethod = api3["art::ArtMethod::PrettyMethod"];
+  if (prettyMethod === void 0) {
+    return;
+  }
+  Interceptor.attach(prettyMethod.impl, artController.hooks.ArtMethod.prettyMethod);
+  Interceptor.flush();
+}
+function branchLabelFromOperand(op) {
+  return ptr(op.value).toString();
+}
+function makeCxxMethodWrapperReturningPointerByValueGeneric(address, argTypes2) {
+  return new NativeFunction(address, "pointer", argTypes2, nativeFunctionOptions3);
+}
+function makeCxxMethodWrapperReturningPointerByValueInFirstArg(address, argTypes2) {
+  const impl2 = new NativeFunction(address, "void", ["pointer"].concat(argTypes2), nativeFunctionOptions3);
+  return function() {
+    const resultPtr = Memory.alloc(pointerSize6);
+    impl2(resultPtr, ...arguments);
+    return resultPtr.readPointer();
+  };
+}
+function makeCxxMethodWrapperReturningStdStringByValue(impl2, argTypes2) {
+  const { arch } = Process;
+  switch (arch) {
+    case "ia32":
+    case "arm64": {
+      let thunk;
+      if (arch === "ia32") {
+        thunk = makeThunk(64, (writer) => {
+          const argCount = 1 + argTypes2.length;
+          const argvSize = argCount * 4;
+          writer.putSubRegImm("esp", argvSize);
+          for (let i = 0; i !== argCount; i++) {
+            const offset = i * 4;
+            writer.putMovRegRegOffsetPtr("eax", "esp", argvSize + 4 + offset);
+            writer.putMovRegOffsetPtrReg("esp", offset, "eax");
+          }
+          writer.putCallAddress(impl2);
+          writer.putAddRegImm("esp", argvSize - 4);
+          writer.putRet();
+        });
+      } else {
+        thunk = makeThunk(32, (writer) => {
+          writer.putMovRegReg("x8", "x0");
+          argTypes2.forEach((t, i) => {
+            writer.putMovRegReg("x" + i, "x" + (i + 1));
+          });
+          writer.putLdrRegAddress("x7", impl2);
+          writer.putBrReg("x7");
+        });
+      }
+      const invokeThunk = new NativeFunction(thunk, "void", ["pointer"].concat(argTypes2), nativeFunctionOptions3);
+      const wrapper = function(...args) {
+        invokeThunk(...args);
+      };
+      wrapper.handle = thunk;
+      wrapper.impl = impl2;
+      return wrapper;
+    }
+    default: {
+      const result = new NativeFunction(impl2, "void", ["pointer"].concat(argTypes2), nativeFunctionOptions3);
+      result.impl = impl2;
+      return result;
+    }
+  }
+}
+var StdString = class {
+  constructor() {
+    this.handle = Memory.alloc(STD_STRING_SIZE);
+  }
+  dispose() {
+    const [data, isTiny] = this._getData();
+    if (!isTiny) {
+      getApi().$delete(data);
+    }
+  }
+  disposeToString() {
+    const result = this.toString();
+    this.dispose();
+    return result;
+  }
+  toString() {
+    const [data] = this._getData();
+    return data.readUtf8String();
+  }
+  _getData() {
+    const str = this.handle;
+    const isTiny = (str.readU8() & 1) === 0;
+    const data = isTiny ? str.add(1) : str.add(2 * pointerSize6).readPointer();
+    return [data, isTiny];
+  }
+};
+var StdVector = class {
+  $delete() {
+    this.dispose();
+    getApi().$delete(this);
+  }
+  constructor(storage, elementSize) {
+    this.handle = storage;
+    this._begin = storage;
+    this._end = storage.add(pointerSize6);
+    this._storage = storage.add(2 * pointerSize6);
+    this._elementSize = elementSize;
+  }
+  init() {
+    this.begin = NULL;
+    this.end = NULL;
+    this.storage = NULL;
+  }
+  dispose() {
+    getApi().$delete(this.begin);
+  }
+  get begin() {
+    return this._begin.readPointer();
+  }
+  set begin(value) {
+    this._begin.writePointer(value);
+  }
+  get end() {
+    return this._end.readPointer();
+  }
+  set end(value) {
+    this._end.writePointer(value);
+  }
+  get storage() {
+    return this._storage.readPointer();
+  }
+  set storage(value) {
+    this._storage.writePointer(value);
+  }
+  get size() {
+    return this.end.sub(this.begin).toInt32() / this._elementSize;
+  }
+};
+var HandleVector = class _HandleVector extends StdVector {
+  static $new() {
+    const vector = new _HandleVector(getApi().$new(STD_VECTOR_SIZE));
+    vector.init();
+    return vector;
+  }
+  constructor(storage) {
+    super(storage, pointerSize6);
+  }
+  get handles() {
+    const result = [];
+    let cur = this.begin;
+    const end = this.end;
+    while (!cur.equals(end)) {
+      result.push(cur.readPointer());
+      cur = cur.add(pointerSize6);
+    }
+    return result;
+  }
+};
+var BHS_OFFSET_LINK = 0;
+var BHS_OFFSET_NUM_REFS = pointerSize6;
+var BHS_SIZE = BHS_OFFSET_NUM_REFS + 4;
+var kNumReferencesVariableSized = -1;
+var BaseHandleScope = class _BaseHandleScope {
+  $delete() {
+    this.dispose();
+    getApi().$delete(this);
+  }
+  constructor(storage) {
+    this.handle = storage;
+    this._link = storage.add(BHS_OFFSET_LINK);
+    this._numberOfReferences = storage.add(BHS_OFFSET_NUM_REFS);
+  }
+  init(link, numberOfReferences) {
+    this.link = link;
+    this.numberOfReferences = numberOfReferences;
+  }
+  dispose() {
+  }
+  get link() {
+    return new _BaseHandleScope(this._link.readPointer());
+  }
+  set link(value) {
+    this._link.writePointer(value);
+  }
+  get numberOfReferences() {
+    return this._numberOfReferences.readS32();
+  }
+  set numberOfReferences(value) {
+    this._numberOfReferences.writeS32(value);
+  }
+};
+var VSHS_OFFSET_SELF = alignPointerOffset(BHS_SIZE);
+var VSHS_OFFSET_CURRENT_SCOPE = VSHS_OFFSET_SELF + pointerSize6;
+var VSHS_SIZE = VSHS_OFFSET_CURRENT_SCOPE + pointerSize6;
+var VariableSizedHandleScope = class _VariableSizedHandleScope extends BaseHandleScope {
+  static $new(thread, vm3) {
+    const scope = new _VariableSizedHandleScope(getApi().$new(VSHS_SIZE));
+    scope.init(thread, vm3);
+    return scope;
+  }
+  constructor(storage) {
+    super(storage);
+    this._self = storage.add(VSHS_OFFSET_SELF);
+    this._currentScope = storage.add(VSHS_OFFSET_CURRENT_SCOPE);
+    const kLocalScopeSize = 64;
+    const kSizeOfReferencesPerScope = kLocalScopeSize - pointerSize6 - 4 - 4;
+    const kNumReferencesPerScope = kSizeOfReferencesPerScope / 4;
+    this._scopeLayout = FixedSizeHandleScope.layoutForCapacity(kNumReferencesPerScope);
+    this._topHandleScopePtr = null;
+  }
+  init(thread, vm3) {
+    const topHandleScopePtr = thread.add(getArtThreadSpec(vm3).offset.topHandleScope);
+    this._topHandleScopePtr = topHandleScopePtr;
+    super.init(topHandleScopePtr.readPointer(), kNumReferencesVariableSized);
+    this.self = thread;
+    this.currentScope = FixedSizeHandleScope.$new(this._scopeLayout);
+    topHandleScopePtr.writePointer(this);
+  }
+  dispose() {
+    this._topHandleScopePtr.writePointer(this.link);
+    let scope;
+    while ((scope = this.currentScope) !== null) {
+      const next = scope.link;
+      scope.$delete();
+      this.currentScope = next;
+    }
+  }
+  get self() {
+    return this._self.readPointer();
+  }
+  set self(value) {
+    this._self.writePointer(value);
+  }
+  get currentScope() {
+    const storage = this._currentScope.readPointer();
+    if (storage.isNull()) {
+      return null;
+    }
+    return new FixedSizeHandleScope(storage, this._scopeLayout);
+  }
+  set currentScope(value) {
+    this._currentScope.writePointer(value);
+  }
+  newHandle(object) {
+    return this.currentScope.newHandle(object);
+  }
+};
+var FixedSizeHandleScope = class _FixedSizeHandleScope extends BaseHandleScope {
+  static $new(layout) {
+    const scope = new _FixedSizeHandleScope(getApi().$new(layout.size), layout);
+    scope.init();
+    return scope;
+  }
+  constructor(storage, layout) {
+    super(storage);
+    const { offset } = layout;
+    this._refsStorage = storage.add(offset.refsStorage);
+    this._pos = storage.add(offset.pos);
+    this._layout = layout;
+  }
+  init() {
+    super.init(NULL, this._layout.numberOfReferences);
+    this.pos = 0;
+  }
+  get pos() {
+    return this._pos.readU32();
+  }
+  set pos(value) {
+    this._pos.writeU32(value);
+  }
+  newHandle(object) {
+    const pos = this.pos;
+    const handle2 = this._refsStorage.add(pos * 4);
+    handle2.writeS32(object.toInt32());
+    this.pos = pos + 1;
+    return handle2;
+  }
+  static layoutForCapacity(numRefs) {
+    const refsStorage = BHS_SIZE;
+    const pos = refsStorage + numRefs * 4;
+    return {
+      size: pos + 4,
+      numberOfReferences: numRefs,
+      offset: {
+        refsStorage,
+        pos
+      }
+    };
+  }
+};
+var objectVisitorPredicateFactories = {
+  arm: function(needle, onMatch) {
+    const size = Process.pageSize;
+    const predicate = Memory.alloc(size);
+    Memory.protect(predicate, size, "rwx");
+    const onMatchCallback = new NativeCallback(onMatch, "void", ["pointer"]);
+    predicate._onMatchCallback = onMatchCallback;
+    const instructions = [
+      26625,
+      // ldr r1, [r0]
+      18947,
+      // ldr r2, =needle
+      17041,
+      // cmp r1, r2
+      53505,
+      // bne mismatch
+      19202,
+      // ldr r3, =onMatch
+      18200,
+      // bx r3
+      18288,
+      // bx lr
+      48896
+      // nop
+    ];
+    const needleOffset = instructions.length * 2;
+    const onMatchOffset = needleOffset + 4;
+    const codeSize = onMatchOffset + 4;
+    Memory.patchCode(predicate, codeSize, function(address) {
+      instructions.forEach((instruction, index) => {
+        address.add(index * 2).writeU16(instruction);
+      });
+      address.add(needleOffset).writeS32(needle);
+      address.add(onMatchOffset).writePointer(onMatchCallback);
+    });
+    return predicate.or(1);
+  },
+  arm64: function(needle, onMatch) {
+    const size = Process.pageSize;
+    const predicate = Memory.alloc(size);
+    Memory.protect(predicate, size, "rwx");
+    const onMatchCallback = new NativeCallback(onMatch, "void", ["pointer"]);
+    predicate._onMatchCallback = onMatchCallback;
+    const instructions = [
+      3107979265,
+      // ldr w1, [x0]
+      402653378,
+      // ldr w2, =needle
+      1795293247,
+      // cmp w1, w2
+      1409286241,
+      // b.ne mismatch
+      1476395139,
+      // ldr x3, =onMatch
+      3592355936,
+      // br x3
+      3596551104
+      // ret
+    ];
+    const needleOffset = instructions.length * 4;
+    const onMatchOffset = needleOffset + 4;
+    const codeSize = onMatchOffset + 8;
+    Memory.patchCode(predicate, codeSize, function(address) {
+      instructions.forEach((instruction, index) => {
+        address.add(index * 4).writeU32(instruction);
+      });
+      address.add(needleOffset).writeS32(needle);
+      address.add(onMatchOffset).writePointer(onMatchCallback);
+    });
+    return predicate;
+  }
+};
+function makeObjectVisitorPredicate(needle, onMatch) {
+  const factory = objectVisitorPredicateFactories[Process.arch] || makeGenericObjectVisitorPredicate;
+  return factory(needle, onMatch);
+}
+function makeGenericObjectVisitorPredicate(needle, onMatch) {
+  return new NativeCallback((object) => {
+    const klass = object.readS32();
+    if (klass === needle) {
+      onMatch(object);
+    }
+  }, "void", ["pointer", "pointer"]);
+}
+function alignPointerOffset(offset) {
+  const remainder = offset % pointerSize6;
+  if (remainder !== 0) {
+    return offset + pointerSize6 - remainder;
+  }
+  return offset;
+}
+
+// node_modules/frida-java-bridge/lib/jvm.js
+var jsizeSize2 = 4;
+var { pointerSize: pointerSize7 } = Process;
+var JVM_ACC_NATIVE = 256;
+var JVM_ACC_IS_OLD = 65536;
+var JVM_ACC_IS_OBSOLETE = 131072;
+var JVM_ACC_NOT_C2_COMPILABLE = 33554432;
+var JVM_ACC_NOT_C1_COMPILABLE = 67108864;
+var JVM_ACC_NOT_C2_OSR_COMPILABLE = 134217728;
+var nativeFunctionOptions4 = {
+  exceptions: "propagate"
+};
+var getJvmMethodSpec = memoize(_getJvmMethodSpec);
+var getJvmInstanceKlassSpec = memoize(_getJvmInstanceKlassSpec);
+var getJvmThreadSpec = memoize(_getJvmThreadSpec);
+var cachedApi2 = null;
+var manglersScheduled = false;
+var replaceManglers = /* @__PURE__ */ new Map();
+var revertManglers = /* @__PURE__ */ new Map();
+function getApi2() {
+  if (cachedApi2 === null) {
+    cachedApi2 = _getApi2();
+  }
+  return cachedApi2;
+}
+function _getApi2() {
+  const vmModules = Process.enumerateModules().filter((m2) => /jvm.(dll|dylib|so)$/.test(m2.name));
+  if (vmModules.length === 0) {
+    return null;
+  }
+  const vmModule = vmModules[0];
+  const temporaryApi = {
+    flavor: "jvm"
+  };
+  const pending = Process.platform === "windows" ? [{
+    module: vmModule,
+    functions: {
+      JNI_GetCreatedJavaVMs: ["JNI_GetCreatedJavaVMs", "int", ["pointer", "int", "pointer"]],
+      JVM_Sleep: ["JVM_Sleep", "void", ["pointer", "pointer", "long"]],
+      "VMThread::execute": ["VMThread::execute", "void", ["pointer"]],
+      "Method::size": ["Method::size", "int", ["int"]],
+      "Method::set_native_function": ["Method::set_native_function", "void", ["pointer", "pointer", "int"]],
+      "Method::clear_native_function": ["Method::clear_native_function", "void", ["pointer"]],
+      "Method::jmethod_id": ["Method::jmethod_id", "pointer", ["pointer"]],
+      "ClassLoaderDataGraph::classes_do": ["ClassLoaderDataGraph::classes_do", "void", ["pointer"]],
+      "NMethodSweeper::sweep_code_cache": ["NMethodSweeper::sweep_code_cache", "void", []],
+      "OopMapCache::flush_obsolete_entries": ["OopMapCache::flush_obsolete_entries", "void", ["pointer"]]
+    },
+    variables: {
+      "VM_RedefineClasses::`vftable'": function(address) {
+        this.vtableRedefineClasses = address;
+      },
+      "VM_RedefineClasses::doit": function(address) {
+        this.redefineClassesDoIt = address;
+      },
+      "VM_RedefineClasses::doit_prologue": function(address) {
+        this.redefineClassesDoItPrologue = address;
+      },
+      "VM_RedefineClasses::doit_epilogue": function(address) {
+        this.redefineClassesDoItEpilogue = address;
+      },
+      "VM_RedefineClasses::allow_nested_vm_operations": function(address) {
+        this.redefineClassesAllow = address;
+      },
+      "NMethodSweeper::_traversals": function(address) {
+        this.traversals = address;
+      },
+      "NMethodSweeper::_should_sweep": function(address) {
+        this.shouldSweep = address;
+      }
+    },
+    optionals: []
+  }] : [{
+    module: vmModule,
+    functions: {
+      JNI_GetCreatedJavaVMs: ["JNI_GetCreatedJavaVMs", "int", ["pointer", "int", "pointer"]],
+      _ZN6Method4sizeEb: ["Method::size", "int", ["int"]],
+      _ZN6Method19set_native_functionEPhb: ["Method::set_native_function", "void", ["pointer", "pointer", "int"]],
+      _ZN6Method21clear_native_functionEv: ["Method::clear_native_function", "void", ["pointer"]],
+      // JDK >= 17
+      _ZN6Method24restore_unshareable_infoEP10JavaThread: ["Method::restore_unshareable_info", "void", ["pointer", "pointer"]],
+      // JDK < 17
+      _ZN6Method24restore_unshareable_infoEP6Thread: ["Method::restore_unshareable_info", "void", ["pointer", "pointer"]],
+      _ZN6Method11link_methodERK12methodHandleP10JavaThread: ["Method::link_method", "void", ["pointer", "pointer", "pointer"]],
+      _ZN6Method10jmethod_idEv: ["Method::jmethod_id", "pointer", ["pointer"]],
+      _ZN6Method10clear_codeEv: function(address) {
+        const clearCode = new NativeFunction(address, "void", ["pointer"], nativeFunctionOptions4);
+        this["Method::clear_code"] = function(thisPtr) {
+          clearCode(thisPtr);
+        };
+      },
+      _ZN6Method10clear_codeEb: function(address) {
+        const clearCode = new NativeFunction(address, "void", ["pointer", "int"], nativeFunctionOptions4);
+        const lock = 0;
+        this["Method::clear_code"] = function(thisPtr) {
+          clearCode(thisPtr, lock);
+        };
+      },
+      // JDK >= 13
+      _ZN18VM_RedefineClasses19mark_dependent_codeEP13InstanceKlass: ["VM_RedefineClasses::mark_dependent_code", "void", ["pointer", "pointer"]],
+      _ZN18VM_RedefineClasses20flush_dependent_codeEv: ["VM_RedefineClasses::flush_dependent_code", "void", []],
+      // JDK < 13
+      _ZN18VM_RedefineClasses20flush_dependent_codeEP13InstanceKlassP6Thread: ["VM_RedefineClasses::flush_dependent_code", "void", ["pointer", "pointer", "pointer"]],
+      // JDK < 10
+      _ZN18VM_RedefineClasses20flush_dependent_codeE19instanceKlassHandleP6Thread: ["VM_RedefineClasses::flush_dependent_code", "void", ["pointer", "pointer", "pointer"]],
+      _ZN19ResolvedMethodTable21adjust_method_entriesEPb: ["ResolvedMethodTable::adjust_method_entries", "void", ["pointer"]],
+      // JDK < 10
+      _ZN15MemberNameTable21adjust_method_entriesEP13InstanceKlassPb: ["MemberNameTable::adjust_method_entries", "void", ["pointer", "pointer", "pointer"]],
+      _ZN17ConstantPoolCache21adjust_method_entriesEPb: function(address) {
+        const adjustMethod = new NativeFunction(address, "void", ["pointer", "pointer"], nativeFunctionOptions4);
+        this["ConstantPoolCache::adjust_method_entries"] = function(thisPtr, holderPtr, tracePtr) {
+          adjustMethod(thisPtr, tracePtr);
+        };
+      },
+      // JDK < 13
+      _ZN17ConstantPoolCache21adjust_method_entriesEP13InstanceKlassPb: function(address) {
+        const adjustMethod = new NativeFunction(address, "void", ["pointer", "pointer", "pointer"], nativeFunctionOptions4);
+        this["ConstantPoolCache::adjust_method_entries"] = function(thisPtr, holderPtr, tracePtr) {
+          adjustMethod(thisPtr, holderPtr, tracePtr);
+        };
+      },
+      _ZN20ClassLoaderDataGraph10classes_doEP12KlassClosure: ["ClassLoaderDataGraph::classes_do", "void", ["pointer"]],
+      _ZN20ClassLoaderDataGraph22clean_deallocate_listsEb: ["ClassLoaderDataGraph::clean_deallocate_lists", "void", ["int"]],
+      _ZN10JavaThread27thread_from_jni_environmentEP7JNIEnv_: ["JavaThread::thread_from_jni_environment", "pointer", ["pointer"]],
+      _ZN8VMThread7executeEP12VM_Operation: ["VMThread::execute", "void", ["pointer"]],
+      _ZN11OopMapCache22flush_obsolete_entriesEv: ["OopMapCache::flush_obsolete_entries", "void", ["pointer"]],
+      _ZN14NMethodSweeper11force_sweepEv: ["NMethodSweeper::force_sweep", "void", []],
+      _ZN14NMethodSweeper16sweep_code_cacheEv: ["NMethodSweeper::sweep_code_cache", "void", []],
+      _ZN14NMethodSweeper17sweep_in_progressEv: ["NMethodSweeper::sweep_in_progress", "bool", []],
+      JVM_Sleep: ["JVM_Sleep", "void", ["pointer", "pointer", "long"]]
+    },
+    variables: {
+      // JDK <= 9
+      _ZN18VM_RedefineClasses14_the_class_oopE: function(address) {
+        this.redefineClass = address;
+      },
+      // 9 < JDK < 13
+      _ZN18VM_RedefineClasses10_the_classE: function(address) {
+        this.redefineClass = address;
+      },
+      // JDK < 13
+      _ZN18VM_RedefineClasses25AdjustCpoolCacheAndVtable8do_klassEP5Klass: function(address) {
+        this.doKlass = address;
+      },
+      // JDK >= 13
+      _ZN18VM_RedefineClasses22AdjustAndCleanMetadata8do_klassEP5Klass: function(address) {
+        this.doKlass = address;
+      },
+      _ZTV18VM_RedefineClasses: function(address) {
+        this.vtableRedefineClasses = address;
+      },
+      _ZN18VM_RedefineClasses4doitEv: function(address) {
+        this.redefineClassesDoIt = address;
+      },
+      _ZN18VM_RedefineClasses13doit_prologueEv: function(address) {
+        this.redefineClassesDoItPrologue = address;
+      },
+      _ZN18VM_RedefineClasses13doit_epilogueEv: function(address) {
+        this.redefineClassesDoItEpilogue = address;
+      },
+      _ZN18VM_RedefineClassesD0Ev: function(address) {
+        this.redefineClassesDispose0 = address;
+      },
+      _ZN18VM_RedefineClassesD1Ev: function(address) {
+        this.redefineClassesDispose1 = address;
+      },
+      _ZNK18VM_RedefineClasses26allow_nested_vm_operationsEv: function(address) {
+        this.redefineClassesAllow = address;
+      },
+      _ZNK18VM_RedefineClasses14print_on_errorEP12outputStream: function(address) {
+        this.redefineClassesOnError = address;
+      },
+      // JDK >= 17
+      _ZN13InstanceKlass33create_new_default_vtable_indicesEiP10JavaThread: function(address) {
+        this.createNewDefaultVtableIndices = address;
+      },
+      // JDK < 17
+      _ZN13InstanceKlass33create_new_default_vtable_indicesEiP6Thread: function(address) {
+        this.createNewDefaultVtableIndices = address;
+      },
+      _ZN19Abstract_VM_Version19jre_release_versionEv: function(address) {
+        const getVersion = new NativeFunction(address, "pointer", [], nativeFunctionOptions4);
+        const versionS = getVersion().readCString();
+        this.version = versionS.startsWith("1.8") ? 8 : versionS.startsWith("9.") ? 9 : parseInt(versionS.slice(0, 2), 10);
+        this.versionS = versionS;
+      },
+      _ZN14NMethodSweeper11_traversalsE: function(address) {
+        this.traversals = address;
+      },
+      _ZN14NMethodSweeper21_sweep_fractions_leftE: function(address) {
+        this.fractions = address;
+      },
+      _ZN14NMethodSweeper13_should_sweepE: function(address) {
+        this.shouldSweep = address;
+      }
+    },
+    optionals: [
+      "_ZN6Method24restore_unshareable_infoEP10JavaThread",
+      "_ZN6Method24restore_unshareable_infoEP6Thread",
+      "_ZN6Method11link_methodERK12methodHandleP10JavaThread",
+      "_ZN6Method10clear_codeEv",
+      "_ZN6Method10clear_codeEb",
+      "_ZN18VM_RedefineClasses19mark_dependent_codeEP13InstanceKlass",
+      "_ZN18VM_RedefineClasses20flush_dependent_codeEv",
+      "_ZN18VM_RedefineClasses20flush_dependent_codeEP13InstanceKlassP6Thread",
+      "_ZN18VM_RedefineClasses20flush_dependent_codeE19instanceKlassHandleP6Thread",
+      "_ZN19ResolvedMethodTable21adjust_method_entriesEPb",
+      "_ZN15MemberNameTable21adjust_method_entriesEP13InstanceKlassPb",
+      "_ZN17ConstantPoolCache21adjust_method_entriesEPb",
+      "_ZN17ConstantPoolCache21adjust_method_entriesEP13InstanceKlassPb",
+      "_ZN20ClassLoaderDataGraph22clean_deallocate_listsEb",
+      "_ZN10JavaThread27thread_from_jni_environmentEP7JNIEnv_",
+      "_ZN14NMethodSweeper11force_sweepEv",
+      "_ZN14NMethodSweeper17sweep_in_progressEv",
+      "_ZN18VM_RedefineClasses14_the_class_oopE",
+      "_ZN18VM_RedefineClasses10_the_classE",
+      "_ZN18VM_RedefineClasses25AdjustCpoolCacheAndVtable8do_klassEP5Klass",
+      "_ZN18VM_RedefineClasses22AdjustAndCleanMetadata8do_klassEP5Klass",
+      "_ZN18VM_RedefineClassesD0Ev",
+      "_ZN18VM_RedefineClassesD1Ev",
+      "_ZNK18VM_RedefineClasses14print_on_errorEP12outputStream",
+      "_ZN13InstanceKlass33create_new_default_vtable_indicesEiP10JavaThread",
+      "_ZN13InstanceKlass33create_new_default_vtable_indicesEiP6Thread",
+      "_ZN14NMethodSweeper21_sweep_fractions_leftE"
+    ]
+  }];
+  const missing = [];
+  pending.forEach(function(api3) {
+    const module2 = api3.module;
+    const functions = api3.functions || {};
+    const variables = api3.variables || {};
+    const optionals = new Set(api3.optionals || []);
+    const tmp = module2.enumerateExports().reduce(function(result, exp) {
+      result[exp.name] = exp;
+      return result;
+    }, {});
+    const exportByName = module2.enumerateSymbols().reduce(function(result, exp) {
+      result[exp.name] = exp;
+      return result;
+    }, tmp);
+    Object.keys(functions).forEach(function(name) {
+      const exp = exportByName[name];
+      if (exp !== void 0) {
+        const signature2 = functions[name];
+        if (typeof signature2 === "function") {
+          signature2.call(temporaryApi, exp.address);
+        } else {
+          temporaryApi[signature2[0]] = new NativeFunction(exp.address, signature2[1], signature2[2], nativeFunctionOptions4);
+        }
+      } else {
+        if (!optionals.has(name)) {
+          missing.push(name);
+        }
+      }
+    });
+    Object.keys(variables).forEach(function(name) {
+      const exp = exportByName[name];
+      if (exp !== void 0) {
+        const handler = variables[name];
+        handler.call(temporaryApi, exp.address);
+      } else {
+        if (!optionals.has(name)) {
+          missing.push(name);
+        }
+      }
+    });
+  });
+  if (missing.length > 0) {
+    throw new Error("Java API only partially available; please file a bug. Missing: " + missing.join(", "));
+  }
+  const vms = Memory.alloc(pointerSize7);
+  const vmCount = Memory.alloc(jsizeSize2);
+  checkJniResult("JNI_GetCreatedJavaVMs", temporaryApi.JNI_GetCreatedJavaVMs(vms, 1, vmCount));
+  if (vmCount.readInt() === 0) {
+    return null;
+  }
+  temporaryApi.vm = vms.readPointer();
+  const allocatorFunctions = Process.platform === "windows" ? {
+    $new: ["??2@YAPEAX_K@Z", "pointer", ["ulong"]],
+    $delete: ["??3@YAXPEAX@Z", "void", ["pointer"]]
+  } : {
+    $new: ["_Znwm", "pointer", ["ulong"]],
+    $delete: ["_ZdlPv", "void", ["pointer"]]
+  };
+  for (const [name, [rawName, retType2, argTypes2]] of Object.entries(allocatorFunctions)) {
+    let address = Module.findGlobalExportByName(rawName);
+    if (address === null) {
+      address = DebugSymbol.fromName(rawName).address;
+      if (address.isNull()) {
+        throw new Error(`unable to find C++ allocator API, missing: '${rawName}'`);
+      }
+    }
+    temporaryApi[name] = new NativeFunction(address, retType2, argTypes2, nativeFunctionOptions4);
+  }
+  temporaryApi.jvmti = getEnvJvmti(temporaryApi);
+  if (temporaryApi["JavaThread::thread_from_jni_environment"] === void 0) {
+    temporaryApi["JavaThread::thread_from_jni_environment"] = makeThreadFromJniHelper(temporaryApi);
+  }
+  return temporaryApi;
+}
+function getEnvJvmti(api3) {
+  const vm3 = new VM(api3);
+  let env2;
+  vm3.perform(() => {
+    const handle2 = vm3.tryGetEnvHandle(jvmtiVersion.v1_0);
+    if (handle2 === null) {
+      throw new Error("JVMTI not available");
+    }
+    env2 = new EnvJvmti(handle2, vm3);
+    const capaBuf = Memory.alloc(8);
+    capaBuf.writeU64(jvmtiCapabilities.canTagObjects);
+    const result = env2.addCapabilities(capaBuf);
+    checkJniResult("getEnvJvmti::AddCapabilities", result);
+  });
+  return env2;
+}
+var threadOffsetParsers = {
+  x64: parseX64ThreadOffset
+};
+function makeThreadFromJniHelper(api3) {
+  let offset = null;
+  const tryParse = threadOffsetParsers[Process.arch];
+  if (tryParse !== void 0) {
+    const vm3 = new VM(api3);
+    const findClassImpl = vm3.perform((env2) => env2.handle.readPointer().add(6 * pointerSize7).readPointer());
+    offset = parseInstructionsAt(findClassImpl, tryParse, { limit: 11 });
+  }
+  if (offset === null) {
+    return () => {
+      throw new Error("Unable to make thread_from_jni_environment() helper for the current architecture");
+    };
+  }
+  return (env2) => {
+    return env2.add(offset);
+  };
+}
+function parseX64ThreadOffset(insn) {
+  if (insn.mnemonic !== "lea") {
+    return null;
+  }
+  const { base, disp } = insn.operands[1].value;
+  if (!(base === "rdi" && disp < 0)) {
+    return null;
+  }
+  return disp;
+}
+function ensureClassInitialized2(env2, classRef) {
+}
+var JvmMethodMangler = class {
+  constructor(methodId) {
+    this.methodId = methodId;
+    this.method = methodId.readPointer();
+    this.originalMethod = null;
+    this.newMethod = null;
+    this.resolved = null;
+    this.impl = null;
+    this.key = methodId.toString(16);
+  }
+  replace(impl2, isInstanceMethod, argTypes2, vm3, api3) {
+    const { key } = this;
+    const mangler = revertManglers.get(key);
+    if (mangler !== void 0) {
+      revertManglers.delete(key);
+      this.method = mangler.method;
+      this.originalMethod = mangler.originalMethod;
+      this.newMethod = mangler.newMethod;
+      this.resolved = mangler.resolved;
+    }
+    this.impl = impl2;
+    replaceManglers.set(key, this);
+    ensureManglersScheduled(vm3);
+  }
+  revert(vm3) {
+    const { key } = this;
+    replaceManglers.delete(key);
+    revertManglers.set(key, this);
+    ensureManglersScheduled(vm3);
+  }
+  resolveTarget(wrapper, isInstanceMethod, env2, api3) {
+    const { resolved, originalMethod, methodId } = this;
+    if (resolved !== null) {
+      return resolved;
+    }
+    if (originalMethod === null) {
+      return methodId;
+    }
+    const vip = originalMethod.oldMethod.vtableIndexPtr;
+    vip.writeS32(-2);
+    const jmethodID = Memory.alloc(pointerSize7);
+    jmethodID.writePointer(this.method);
+    this.resolved = jmethodID;
+    return jmethodID;
+  }
+};
+function ensureManglersScheduled(vm3) {
+  if (!manglersScheduled) {
+    manglersScheduled = true;
+    Script.nextTick(doManglers, vm3);
+  }
+}
+function doManglers(vm3) {
+  const localReplaceManglers = new Map(replaceManglers);
+  const localRevertManglers = new Map(revertManglers);
+  replaceManglers.clear();
+  revertManglers.clear();
+  manglersScheduled = false;
+  vm3.perform((env2) => {
+    const api3 = getApi2();
+    const thread = api3["JavaThread::thread_from_jni_environment"](env2.handle);
+    let force = false;
+    withJvmThread(() => {
+      localReplaceManglers.forEach((mangler) => {
+        const { method: method2, originalMethod, impl: impl2, methodId, newMethod } = mangler;
+        if (originalMethod === null) {
+          mangler.originalMethod = fetchJvmMethod(method2);
+          mangler.newMethod = nativeJvmMethod(method2, impl2, thread);
+          installJvmMethod(mangler.newMethod, methodId, thread);
+        } else {
+          api3["Method::set_native_function"](newMethod.method, impl2, 0);
+        }
+      });
+      localRevertManglers.forEach((mangler) => {
+        const { originalMethod, methodId, newMethod } = mangler;
+        if (originalMethod !== null) {
+          revertJvmMethod(originalMethod);
+          const revert = originalMethod.oldMethod;
+          revert.oldMethod = newMethod;
+          installJvmMethod(revert, methodId, thread);
+          force = true;
+        }
+      });
+    });
+    if (force) {
+      forceSweep(env2.handle);
+    }
+  });
+}
+function forceSweep(env2) {
+  const {
+    fractions,
+    shouldSweep,
+    traversals,
+    "NMethodSweeper::sweep_code_cache": sweep,
+    "NMethodSweeper::sweep_in_progress": inProgress,
+    "NMethodSweeper::force_sweep": force,
+    JVM_Sleep: sleep
+  } = getApi2();
+  if (force !== void 0) {
+    Thread.sleep(0.05);
+    force();
+    Thread.sleep(0.05);
+    force();
+  } else {
+    let trav = traversals.readS64();
+    const endTrav = trav + 2;
+    while (endTrav > trav) {
+      fractions.writeS32(1);
+      sleep(env2, NULL, 50);
+      if (!inProgress()) {
+        withJvmThread(() => {
+          Thread.sleep(0.05);
+        });
+      }
+      const sweepNotAlreadyInProgress = shouldSweep.readU8() === 0;
+      if (sweepNotAlreadyInProgress) {
+        fractions.writeS32(1);
+        sweep();
+      }
+      trav = traversals.readS64();
+    }
+  }
+}
+function withJvmThread(fn, fnPrologue, fnEpilogue) {
+  const {
+    execute,
+    vtable: vtable2,
+    vtableSize,
+    doItOffset,
+    prologueOffset,
+    epilogueOffset
+  } = getJvmThreadSpec();
+  const vtableDup = Memory.dup(vtable2, vtableSize);
+  const vmOperation = Memory.alloc(pointerSize7 * 25);
+  vmOperation.writePointer(vtableDup);
+  const doIt = new NativeCallback(fn, "void", ["pointer"]);
+  vtableDup.add(doItOffset).writePointer(doIt);
+  let prologue = null;
+  if (fnPrologue !== void 0) {
+    prologue = new NativeCallback(fnPrologue, "int", ["pointer"]);
+    vtableDup.add(prologueOffset).writePointer(prologue);
+  }
+  let epilogue = null;
+  if (fnEpilogue !== void 0) {
+    epilogue = new NativeCallback(fnEpilogue, "void", ["pointer"]);
+    vtableDup.add(epilogueOffset).writePointer(epilogue);
+  }
+  execute(vmOperation);
+}
+function _getJvmThreadSpec() {
+  const {
+    vtableRedefineClasses,
+    redefineClassesDoIt,
+    redefineClassesDoItPrologue,
+    redefineClassesDoItEpilogue,
+    redefineClassesOnError,
+    redefineClassesAllow,
+    redefineClassesDispose0,
+    redefineClassesDispose1,
+    "VMThread::execute": execute
+  } = getApi2();
+  const vtablePtr = vtableRedefineClasses.add(2 * pointerSize7);
+  const vtableSize = 15 * pointerSize7;
+  const vtable2 = Memory.dup(vtablePtr, vtableSize);
+  const emptyCallback = new NativeCallback(() => {
+  }, "void", ["pointer"]);
+  let doItOffset, prologueOffset, epilogueOffset;
+  for (let offset = 0; offset !== vtableSize; offset += pointerSize7) {
+    const element = vtable2.add(offset);
+    const value = element.readPointer();
+    if (redefineClassesOnError !== void 0 && value.equals(redefineClassesOnError) || redefineClassesDispose0 !== void 0 && value.equals(redefineClassesDispose0) || redefineClassesDispose1 !== void 0 && value.equals(redefineClassesDispose1)) {
+      element.writePointer(emptyCallback);
+    } else if (value.equals(redefineClassesDoIt)) {
+      doItOffset = offset;
+    } else if (value.equals(redefineClassesDoItPrologue)) {
+      prologueOffset = offset;
+      element.writePointer(redefineClassesAllow);
+    } else if (value.equals(redefineClassesDoItEpilogue)) {
+      epilogueOffset = offset;
+      element.writePointer(emptyCallback);
+    }
+  }
+  return {
+    execute,
+    emptyCallback,
+    vtable: vtable2,
+    vtableSize,
+    doItOffset,
+    prologueOffset,
+    epilogueOffset
+  };
+}
+function makeMethodMangler2(methodId) {
+  return new JvmMethodMangler(methodId);
+}
+function installJvmMethod(method2, methodId, thread) {
+  const { method: handle2, oldMethod: old } = method2;
+  const api3 = getApi2();
+  method2.methodsArray.add(method2.methodIndex * pointerSize7).writePointer(handle2);
+  if (method2.vtableIndex >= 0) {
+    method2.vtable.add(method2.vtableIndex * pointerSize7).writePointer(handle2);
+  }
+  methodId.writePointer(handle2);
+  old.accessFlagsPtr.writeU32((old.accessFlags | JVM_ACC_IS_OLD | JVM_ACC_IS_OBSOLETE) >>> 0);
+  const flushObs = api3["OopMapCache::flush_obsolete_entries"];
+  if (flushObs !== void 0) {
+    const { oopMapCache } = method2;
+    if (!oopMapCache.isNull()) {
+      flushObs(oopMapCache);
+    }
+  }
+  const mark = api3["VM_RedefineClasses::mark_dependent_code"];
+  const flush = api3["VM_RedefineClasses::flush_dependent_code"];
+  if (mark !== void 0) {
+    mark(NULL, method2.instanceKlass);
+    flush();
+  } else {
+    flush(NULL, method2.instanceKlass, thread);
+  }
+  const traceNamePrinted = Memory.alloc(1);
+  traceNamePrinted.writeU8(1);
+  api3["ConstantPoolCache::adjust_method_entries"](method2.cache, method2.instanceKlass, traceNamePrinted);
+  const klassClosure = Memory.alloc(3 * pointerSize7);
+  const doKlassPtr = Memory.alloc(pointerSize7);
+  doKlassPtr.writePointer(api3.doKlass);
+  klassClosure.writePointer(doKlassPtr);
+  klassClosure.add(pointerSize7).writePointer(thread);
+  klassClosure.add(2 * pointerSize7).writePointer(thread);
+  if (api3.redefineClass !== void 0) {
+    api3.redefineClass.writePointer(method2.instanceKlass);
+  }
+  api3["ClassLoaderDataGraph::classes_do"](klassClosure);
+  const rmtAdjustMethodEntries = api3["ResolvedMethodTable::adjust_method_entries"];
+  if (rmtAdjustMethodEntries !== void 0) {
+    rmtAdjustMethodEntries(traceNamePrinted);
+  } else {
+    const { memberNames } = method2;
+    if (!memberNames.isNull()) {
+      const mntAdjustMethodEntries = api3["MemberNameTable::adjust_method_entries"];
+      if (mntAdjustMethodEntries !== void 0) {
+        mntAdjustMethodEntries(memberNames, method2.instanceKlass, traceNamePrinted);
+      }
+    }
+  }
+  const clean = api3["ClassLoaderDataGraph::clean_deallocate_lists"];
+  if (clean !== void 0) {
+    clean(0);
+  }
+}
+function nativeJvmMethod(method2, impl2, thread) {
+  const api3 = getApi2();
+  const newMethod = fetchJvmMethod(method2);
+  newMethod.constPtr.writePointer(newMethod.const);
+  const flags = (newMethod.accessFlags | JVM_ACC_NATIVE | JVM_ACC_NOT_C2_COMPILABLE | JVM_ACC_NOT_C1_COMPILABLE | JVM_ACC_NOT_C2_OSR_COMPILABLE) >>> 0;
+  newMethod.accessFlagsPtr.writeU32(flags);
+  newMethod.signatureHandler.writePointer(NULL);
+  newMethod.adapter.writePointer(NULL);
+  newMethod.i2iEntry.writePointer(NULL);
+  api3["Method::clear_code"](newMethod.method);
+  newMethod.dataPtr.writePointer(NULL);
+  newMethod.countersPtr.writePointer(NULL);
+  newMethod.stackmapPtr.writePointer(NULL);
+  api3["Method::clear_native_function"](newMethod.method);
+  api3["Method::set_native_function"](newMethod.method, impl2, 0);
+  api3["Method::restore_unshareable_info"](newMethod.method, thread);
+  if (api3.version >= 17) {
+    const methodHandle = Memory.alloc(2 * pointerSize7);
+    methodHandle.writePointer(newMethod.method);
+    methodHandle.add(pointerSize7).writePointer(thread);
+    api3["Method::link_method"](newMethod.method, methodHandle, thread);
+  }
+  return newMethod;
+}
+function fetchJvmMethod(method2) {
+  const spec = getJvmMethodSpec();
+  const constMethod = method2.add(spec.method.constMethodOffset).readPointer();
+  const constMethodSize = constMethod.add(spec.constMethod.sizeOffset).readS32() * pointerSize7;
+  const newConstMethod = Memory.alloc(constMethodSize + spec.method.size);
+  Memory.copy(newConstMethod, constMethod, constMethodSize);
+  const newMethod = newConstMethod.add(constMethodSize);
+  Memory.copy(newMethod, method2, spec.method.size);
+  const result = readJvmMethod(newMethod, newConstMethod, constMethodSize);
+  const oldMethod = readJvmMethod(method2, constMethod, constMethodSize);
+  result.oldMethod = oldMethod;
+  return result;
+}
+function readJvmMethod(method2, constMethod, constMethodSize) {
+  const api3 = getApi2();
+  const spec = getJvmMethodSpec();
+  const constPtr = method2.add(spec.method.constMethodOffset);
+  const dataPtr = method2.add(spec.method.methodDataOffset);
+  const countersPtr = method2.add(spec.method.methodCountersOffset);
+  const accessFlagsPtr = method2.add(spec.method.accessFlagsOffset);
+  const accessFlags = accessFlagsPtr.readU32();
+  const adapter = spec.getAdapterPointer(method2, constMethod);
+  const i2iEntry = method2.add(spec.method.i2iEntryOffset);
+  const signatureHandler = method2.add(spec.method.signatureHandlerOffset);
+  const constantPool = constMethod.add(spec.constMethod.constantPoolOffset).readPointer();
+  const stackmapPtr = constMethod.add(spec.constMethod.stackmapDataOffset);
+  const instanceKlass = constantPool.add(spec.constantPool.instanceKlassOffset).readPointer();
+  const cache = constantPool.add(spec.constantPool.cacheOffset).readPointer();
+  const instanceKlassSpec = getJvmInstanceKlassSpec();
+  const methods = instanceKlass.add(instanceKlassSpec.methodsOffset).readPointer();
+  const methodsCount = methods.readS32();
+  const methodsArray = methods.add(pointerSize7);
+  const methodIndex = constMethod.add(spec.constMethod.methodIdnumOffset).readU16();
+  const vtableIndexPtr = method2.add(spec.method.vtableIndexOffset);
+  const vtableIndex = vtableIndexPtr.readS32();
+  const vtable2 = instanceKlass.add(instanceKlassSpec.vtableOffset);
+  const oopMapCache = instanceKlass.add(instanceKlassSpec.oopMapCacheOffset).readPointer();
+  const memberNames = api3.version >= 10 ? instanceKlass.add(instanceKlassSpec.memberNamesOffset).readPointer() : NULL;
+  return {
+    method: method2,
+    methodSize: spec.method.size,
+    const: constMethod,
+    constSize: constMethodSize,
+    constPtr,
+    dataPtr,
+    countersPtr,
+    stackmapPtr,
+    instanceKlass,
+    methodsArray,
+    methodsCount,
+    methodIndex,
+    vtableIndex,
+    vtableIndexPtr,
+    vtable: vtable2,
+    accessFlags,
+    accessFlagsPtr,
+    adapter,
+    i2iEntry,
+    signatureHandler,
+    memberNames,
+    cache,
+    oopMapCache
+  };
+}
+function revertJvmMethod(method2) {
+  const { oldMethod: old } = method2;
+  old.accessFlagsPtr.writeU32(old.accessFlags);
+  old.vtableIndexPtr.writeS32(old.vtableIndex);
+}
+function _getJvmMethodSpec() {
+  const api3 = getApi2();
+  const { version: version2 } = api3;
+  let adapterHandlerLocation;
+  if (version2 >= 17) {
+    adapterHandlerLocation = "method:early";
+  } else if (version2 >= 9 && version2 <= 16) {
+    adapterHandlerLocation = "const-method";
+  } else {
+    adapterHandlerLocation = "method:late";
+  }
+  const isNative = 1;
+  const methodSize = api3["Method::size"](isNative) * pointerSize7;
+  const constMethodOffset = pointerSize7;
+  const methodDataOffset = 2 * pointerSize7;
+  const methodCountersOffset = 3 * pointerSize7;
+  const adapterInMethodEarlyOffset = 4 * pointerSize7;
+  const adapterInMethodEarlySize = adapterHandlerLocation === "method:early" ? pointerSize7 : 0;
+  const accessFlagsOffset = adapterInMethodEarlyOffset + adapterInMethodEarlySize;
+  const vtableIndexOffset = accessFlagsOffset + 4;
+  const i2iEntryOffset = vtableIndexOffset + 4 + 8;
+  const adapterInMethodLateOffset = i2iEntryOffset + pointerSize7;
+  const adapterInMethodOffset = adapterInMethodEarlySize !== 0 ? adapterInMethodEarlyOffset : adapterInMethodLateOffset;
+  const nativeFunctionOffset = methodSize - 2 * pointerSize7;
+  const signatureHandlerOffset = methodSize - pointerSize7;
+  const constantPoolOffset = 8;
+  const stackmapDataOffset = constantPoolOffset + pointerSize7;
+  const adapterInConstMethodOffset = stackmapDataOffset + pointerSize7;
+  const adapterInConstMethodSize = adapterHandlerLocation === "const-method" ? pointerSize7 : 0;
+  const constMethodSizeOffset = adapterInConstMethodOffset + adapterInConstMethodSize;
+  const methodIdnumOffset = constMethodSizeOffset + 14;
+  const cacheOffset = 2 * pointerSize7;
+  const instanceKlassOffset = 3 * pointerSize7;
+  const getAdapterPointer = adapterInConstMethodSize !== 0 ? function(method2, constMethod) {
+    return constMethod.add(adapterInConstMethodOffset);
+  } : function(method2, constMethod) {
+    return method2.add(adapterInMethodOffset);
+  };
+  return {
+    getAdapterPointer,
+    method: {
+      size: methodSize,
+      constMethodOffset,
+      methodDataOffset,
+      methodCountersOffset,
+      accessFlagsOffset,
+      vtableIndexOffset,
+      i2iEntryOffset,
+      nativeFunctionOffset,
+      signatureHandlerOffset
+    },
+    constMethod: {
+      constantPoolOffset,
+      stackmapDataOffset,
+      sizeOffset: constMethodSizeOffset,
+      methodIdnumOffset
+    },
+    constantPool: {
+      cacheOffset,
+      instanceKlassOffset
+    }
+  };
+}
+var vtableOffsetParsers = {
+  x64: parseX64VTableOffset
+};
+function _getJvmInstanceKlassSpec() {
+  const { version: jvmVersion, createNewDefaultVtableIndices } = getApi2();
+  const tryParse = vtableOffsetParsers[Process.arch];
+  if (tryParse === void 0) {
+    throw new Error(`Missing vtable offset parser for ${Process.arch}`);
+  }
+  const vtableOffset = parseInstructionsAt(createNewDefaultVtableIndices, tryParse, { limit: 32 });
+  if (vtableOffset === null) {
+    throw new Error("Unable to deduce vtable offset");
+  }
+  const oopMultiplier = jvmVersion >= 10 && jvmVersion <= 11 || jvmVersion >= 15 ? 17 : 18;
+  const methodsOffset = vtableOffset - 7 * pointerSize7;
+  const memberNamesOffset = vtableOffset - 17 * pointerSize7;
+  const oopMapCacheOffset = vtableOffset - oopMultiplier * pointerSize7;
+  return {
+    vtableOffset,
+    methodsOffset,
+    memberNamesOffset,
+    oopMapCacheOffset
+  };
+}
+function parseX64VTableOffset(insn) {
+  if (insn.mnemonic !== "mov") {
+    return null;
+  }
+  const dst = insn.operands[0];
+  if (dst.type !== "mem") {
+    return null;
+  }
+  const { value: dstValue } = dst;
+  if (dstValue.scale !== 1) {
+    return null;
+  }
+  const { disp } = dstValue;
+  if (disp < 256) {
+    return null;
+  }
+  const defaultVtableIndicesOffset = disp;
+  return defaultVtableIndicesOffset + 16;
+}
+
+// node_modules/frida-java-bridge/lib/api.js
+var getApi3 = getApi;
+try {
+  getAndroidVersion();
+} catch (e) {
+  getApi3 = getApi2;
+}
+var api_default = getApi3;
+
+// node_modules/frida-java-bridge/lib/class-model.js
+var code2 = `#include <json-glib/json-glib.h>
+#include <string.h>
+
+#define kAccStatic 0x0008
+#define kAccConstructor 0x00010000
+
+typedef struct _Model Model;
+typedef struct _EnumerateMethodsContext EnumerateMethodsContext;
+
+typedef struct _JavaApi JavaApi;
+typedef struct _JavaClassApi JavaClassApi;
+typedef struct _JavaMethodApi JavaMethodApi;
+typedef struct _JavaFieldApi JavaFieldApi;
+
+typedef struct _JNIEnv JNIEnv;
+typedef guint8 jboolean;
+typedef gint32 jint;
+typedef jint jsize;
+typedef gpointer jobject;
+typedef jobject jclass;
+typedef jobject jstring;
+typedef jobject jarray;
+typedef jarray jobjectArray;
+typedef gpointer jfieldID;
+typedef gpointer jmethodID;
+
+typedef struct _jvmtiEnv jvmtiEnv;
+typedef enum
+{
+  JVMTI_ERROR_NONE = 0
+} jvmtiError;
+
+typedef struct _ArtApi ArtApi;
+typedef guint32 ArtHeapReference;
+typedef struct _ArtObject ArtObject;
+typedef struct _ArtClass ArtClass;
+typedef struct _ArtClassLinker ArtClassLinker;
+typedef struct _ArtClassVisitor ArtClassVisitor;
+typedef struct _ArtClassVisitorVTable ArtClassVisitorVTable;
+typedef struct _ArtMethod ArtMethod;
+typedef struct _ArtString ArtString;
+
+typedef union _StdString StdString;
+typedef struct _StdStringShort StdStringShort;
+typedef struct _StdStringLong StdStringLong;
+
+typedef void (* ArtVisitClassesFunc) (ArtClassLinker * linker, ArtClassVisitor * visitor);
+typedef const char * (* ArtGetClassDescriptorFunc) (ArtClass * klass, StdString * storage);
+typedef void (* ArtPrettyMethodFunc) (StdString * result, ArtMethod * method, jboolean with_signature);
+
+struct _Model
+{
+  GHashTable * members;
+};
+
+struct _EnumerateMethodsContext
+{
+  GPatternSpec * class_query;
+  GPatternSpec * method_query;
+  jboolean include_signature;
+  jboolean ignore_case;
+  jboolean skip_system_classes;
+  GHashTable * groups;
+};
+
+struct _JavaClassApi
+{
+  jmethodID get_declared_methods;
+  jmethodID get_declared_fields;
+};
+
+struct _JavaMethodApi
+{
+  jmethodID get_name;
+  jmethodID get_modifiers;
+};
+
+struct _JavaFieldApi
+{
+  jmethodID get_name;
+  jmethodID get_modifiers;
+};
+
+struct _JavaApi
+{
+  JavaClassApi clazz;
+  JavaMethodApi method;
+  JavaFieldApi field;
+};
+
+struct _JNIEnv
+{
+  gpointer * functions;
+};
+
+struct _jvmtiEnv
+{
+  gpointer * functions;
+};
+
+struct _ArtApi
+{
+  gboolean available;
+
+  guint class_offset_ifields;
+  guint class_offset_methods;
+  guint class_offset_sfields;
+  guint class_offset_copied_methods_offset;
+
+  guint method_size;
+  guint method_offset_access_flags;
+
+  guint field_size;
+  guint field_offset_access_flags;
+
+  guint alignment_padding;
+
+  ArtClassLinker * linker;
+  ArtVisitClassesFunc visit_classes;
+  ArtGetClassDescriptorFunc get_class_descriptor;
+  ArtPrettyMethodFunc pretty_method;
+
+  void (* free) (gpointer mem);
+};
+
+struct _ArtObject
+{
+  ArtHeapReference klass;
+  ArtHeapReference monitor;
+};
+
+struct _ArtClass
+{
+  ArtObject parent;
+
+  ArtHeapReference class_loader;
+};
+
+struct _ArtClassVisitor
+{
+  ArtClassVisitorVTable * vtable;
+  gpointer user_data;
+};
+
+struct _ArtClassVisitorVTable
+{
+  void (* reserved1) (ArtClassVisitor * self);
+  void (* reserved2) (ArtClassVisitor * self);
+  jboolean (* visit) (ArtClassVisitor * self, ArtClass * klass);
+};
+
+struct _ArtString
+{
+  ArtObject parent;
+
+  gint32 count;
+  guint32 hash_code;
+
+  union
+  {
+    guint16 value[0];
+    guint8 value_compressed[0];
+  };
+};
+
+struct _StdStringShort
+{
+  guint8 size;
+  gchar data[(3 * sizeof (gpointer)) - sizeof (guint8)];
+};
+
+struct _StdStringLong
+{
+  gsize capacity;
+  gsize size;
+  gchar * data;
+};
+
+union _StdString
+{
+  StdStringShort s;
+  StdStringLong l;
+};
+
+static void model_add_method (Model * self, const gchar * name, jmethodID id, jint modifiers);
+static void model_add_field (Model * self, const gchar * name, jfieldID id, jint modifiers);
+static void model_free (Model * model);
+
+static jboolean collect_matching_class_methods (ArtClassVisitor * self, ArtClass * klass);
+static gchar * finalize_method_groups_to_json (GHashTable * groups);
+static GPatternSpec * make_pattern_spec (const gchar * pattern, jboolean ignore_case);
+static gchar * class_name_from_signature (const gchar * signature);
+static gchar * format_method_signature (const gchar * name, const gchar * signature);
+static void append_type (GString * output, const gchar ** type);
+
+static gpointer read_art_array (gpointer object_base, guint field_offset, guint length_size, guint * length);
+
+static void std_string_destroy (StdString * str);
+static gchar * std_string_c_str (StdString * self);
+
+extern GMutex lock;
+extern GArray * models;
+extern JavaApi java_api;
+extern ArtApi art_api;
+
+void
+init (void)
+{
+  g_mutex_init (&lock);
+  models = g_array_new (FALSE, FALSE, sizeof (Model *));
+}
+
+void
+finalize (void)
+{
+  guint n, i;
+
+  n = models->len;
+  for (i = 0; i != n; i++)
+  {
+    Model * model = g_array_index (models, Model *, i);
+    model_free (model);
+  }
+
+  g_array_unref (models);
+  g_mutex_clear (&lock);
+}
+
+Model *
+model_new (jclass class_handle,
+           gpointer class_object,
+           JNIEnv * env)
+{
+  Model * model;
+  GHashTable * members;
+  gpointer * funcs = env->functions;
+  jmethodID (* from_reflected_method) (JNIEnv *, jobject) = funcs[7];
+  jfieldID (* from_reflected_field) (JNIEnv *, jobject) = funcs[8];
+  jobject (* to_reflected_method) (JNIEnv *, jclass, jmethodID, jboolean) = funcs[9];
+  jobject (* to_reflected_field) (JNIEnv *, jclass, jfieldID, jboolean) = funcs[12];
+  void (* delete_local_ref) (JNIEnv *, jobject) = funcs[23];
+  jobject (* call_object_method) (JNIEnv *, jobject, jmethodID, ...) = funcs[34];
+  jint (* call_int_method) (JNIEnv *, jobject, jmethodID, ...) = funcs[49];
+  const char * (* get_string_utf_chars) (JNIEnv *, jstring, jboolean *) = funcs[169];
+  void (* release_string_utf_chars) (JNIEnv *, jstring, const char *) = funcs[170];
+  jsize (* get_array_length) (JNIEnv *, jarray) = funcs[171];
+  jobject (* get_object_array_element) (JNIEnv *, jobjectArray, jsize) = funcs[173];
+  jsize n, i;
+
+  model = g_new (Model, 1);
+
+  members = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  model->members = members;
+
+  if (art_api.available)
+  {
+    gpointer elements;
+    guint n, i;
+    const guint field_arrays[] = {
+      art_api.class_offset_ifields,
+      art_api.class_offset_sfields
+    };
+    guint field_array_cursor;
+
+    elements = read_art_array (class_object, art_api.class_offset_methods, sizeof (gsize), NULL);
+    n = *(guint16 *) (class_object + art_api.class_offset_copied_methods_offset);
+    for (i = 0; i != n; i++)
+    {
+      jmethodID id;
+      guint32 access_flags;
+      jboolean is_static;
+      jobject method, name;
+      const char * name_str;
+      jint modifiers;
+
+      id = elements + (i * art_api.method_size);
+
+      access_flags = *(guint32 *) (id + art_api.method_offset_access_flags);
+      if ((access_flags & kAccConstructor) != 0)
+        continue;
+      is_static = (access_flags & kAccStatic) != 0;
+      method = to_reflected_method (env, class_handle, id, is_static);
+      name = call_object_method (env, method, java_api.method.get_name);
+      name_str = get_string_utf_chars (env, name, NULL);
+      modifiers = access_flags & 0xffff;
+
+      model_add_method (model, name_str, id, modifiers);
+
+      release_string_utf_chars (env, name, name_str);
+      delete_local_ref (env, name);
+      delete_local_ref (env, method);
+    }
+
+    for (field_array_cursor = 0; field_array_cursor != G_N_ELEMENTS (field_arrays); field_array_cursor++)
+    {
+      jboolean is_static;
+
+      is_static = field_array_cursor == 1;
+
+      elements = read_art_array (class_object, field_arrays[field_array_cursor], sizeof (guint32), &n);
+      for (i = 0; i != n; i++)
+      {
+        jfieldID id;
+        guint32 access_flags;
+        jobject field, name;
+        const char * name_str;
+        jint modifiers;
+
+        id = elements + (i * art_api.field_size);
+
+        access_flags = *(guint32 *) (id + art_api.field_offset_access_flags);
+        field = to_reflected_field (env, class_handle, id, is_static);
+        name = call_object_method (env, field, java_api.field.get_name);
+        name_str = get_string_utf_chars (env, name, NULL);
+        modifiers = access_flags & 0xffff;
+
+        model_add_field (model, name_str, id, modifiers);
+
+        release_string_utf_chars (env, name, name_str);
+        delete_local_ref (env, name);
+        delete_local_ref (env, field);
+      }
+    }
+  }
+  else
+  {
+    jobject elements;
+
+    elements = call_object_method (env, class_handle, java_api.clazz.get_declared_methods);
+    n = get_array_length (env, elements);
+    for (i = 0; i != n; i++)
+    {
+      jobject method, name;
+      const char * name_str;
+      jmethodID id;
+      jint modifiers;
+
+      method = get_object_array_element (env, elements, i);
+      name = call_object_method (env, method, java_api.method.get_name);
+      name_str = get_string_utf_chars (env, name, NULL);
+      id = from_reflected_method (env, method);
+      modifiers = call_int_method (env, method, java_api.method.get_modifiers);
+
+      model_add_method (model, name_str, id, modifiers);
+
+      release_string_utf_chars (env, name, name_str);
+      delete_local_ref (env, name);
+      delete_local_ref (env, method);
+    }
+    delete_local_ref (env, elements);
+
+    elements = call_object_method (env, class_handle, java_api.clazz.get_declared_fields);
+    n = get_array_length (env, elements);
+    for (i = 0; i != n; i++)
+    {
+      jobject field, name;
+      const char * name_str;
+      jfieldID id;
+      jint modifiers;
+
+      field = get_object_array_element (env, elements, i);
+      name = call_object_method (env, field, java_api.field.get_name);
+      name_str = get_string_utf_chars (env, name, NULL);
+      id = from_reflected_field (env, field);
+      modifiers = call_int_method (env, field, java_api.field.get_modifiers);
+
+      model_add_field (model, name_str, id, modifiers);
+
+      release_string_utf_chars (env, name, name_str);
+      delete_local_ref (env, name);
+      delete_local_ref (env, field);
+    }
+    delete_local_ref (env, elements);
+  }
+
+  g_mutex_lock (&lock);
+  g_array_append_val (models, model);
+  g_mutex_unlock (&lock);
+
+  return model;
+}
+
+static void
+model_add_method (Model * self,
+                  const gchar * name,
+                  jmethodID id,
+                  jint modifiers)
+{
+  GHashTable * members = self->members;
+  gchar * key, type;
+  const gchar * value;
+
+  if (name[0] == '$')
+    key = g_strdup_printf ("_%s", name);
+  else
+    key = g_strdup (name);
+
+  type = (modifiers & kAccStatic) != 0 ? 's' : 'i';
+
+  value = g_hash_table_lookup (members, key);
+  if (value == NULL)
+    g_hash_table_insert (members, key, g_strdup_printf ("m:%c0x%zx", type, id));
+  else
+    g_hash_table_insert (members, key, g_strdup_printf ("%s:%c0x%zx", value, type, id));
+}
+
+static void
+model_add_field (Model * self,
+                 const gchar * name,
+                 jfieldID id,
+                 jint modifiers)
+{
+  GHashTable * members = self->members;
+  gchar * key, type;
+
+  if (name[0] == '$')
+    key = g_strdup_printf ("_%s", name);
+  else
+    key = g_strdup (name);
+  while (g_hash_table_contains (members, key))
+  {
+    gchar * new_key = g_strdup_printf ("_%s", key);
+    g_free (key);
+    key = new_key;
+  }
+
+  type = (modifiers & kAccStatic) != 0 ? 's' : 'i';
+
+  g_hash_table_insert (members, key, g_strdup_printf ("f:%c0x%zx", type, id));
+}
+
+static void
+model_free (Model * model)
+{
+  g_hash_table_unref (model->members);
+
+  g_free (model);
+}
+
+gboolean
+model_has (Model * self,
+           const gchar * member)
+{
+  return g_hash_table_contains (self->members, member);
+}
+
+const gchar *
+model_find (Model * self,
+            const gchar * member)
+{
+  return g_hash_table_lookup (self->members, member);
+}
+
+gchar *
+model_list (Model * self)
+{
+  GString * result;
+  GHashTableIter iter;
+  guint i;
+  const gchar * name;
+
+  result = g_string_sized_new (128);
+
+  g_string_append_c (result, '[');
+
+  g_hash_table_iter_init (&iter, self->members);
+  for (i = 0; g_hash_table_iter_next (&iter, (gpointer *) &name, NULL); i++)
+  {
+    if (i > 0)
+      g_string_append_c (result, ',');
+
+    g_string_append_c (result, '"');
+    g_string_append (result, name);
+    g_string_append_c (result, '"');
+  }
+
+  g_string_append_c (result, ']');
+
+  return g_string_free (result, FALSE);
+}
+
+gchar *
+enumerate_methods_art (const gchar * class_query,
+                       const gchar * method_query,
+                       jboolean include_signature,
+                       jboolean ignore_case,
+                       jboolean skip_system_classes)
+{
+  gchar * result;
+  EnumerateMethodsContext ctx;
+  ArtClassVisitor visitor;
+  ArtClassVisitorVTable visitor_vtable = { NULL, };
+
+  ctx.class_query = make_pattern_spec (class_query, ignore_case);
+  ctx.method_query = make_pattern_spec (method_query, ignore_case);
+  ctx.include_signature = include_signature;
+  ctx.ignore_case = ignore_case;
+  ctx.skip_system_classes = skip_system_classes;
+  ctx.groups = g_hash_table_new_full (NULL, NULL, NULL, NULL);
+
+  visitor.vtable = &visitor_vtable;
+  visitor.user_data = &ctx;
+
+  visitor_vtable.visit = collect_matching_class_methods;
+
+  art_api.visit_classes (art_api.linker, &visitor);
+
+  result = finalize_method_groups_to_json (ctx.groups);
+
+  g_hash_table_unref (ctx.groups);
+  g_pattern_spec_free (ctx.method_query);
+  g_pattern_spec_free (ctx.class_query);
+
+  return result;
+}
+
+static jboolean
+collect_matching_class_methods (ArtClassVisitor * self,
+                                ArtClass * klass)
+{
+  EnumerateMethodsContext * ctx = self->user_data;
+  const char * descriptor;
+  StdString descriptor_storage = { 0, };
+  gchar * class_name = NULL;
+  gchar * class_name_copy = NULL;
+  const gchar * normalized_class_name;
+  JsonBuilder * group;
+  size_t class_name_length;
+  GHashTable * seen_method_names;
+  gpointer elements;
+  guint n, i;
+
+  if (ctx->skip_system_classes && klass->class_loader == 0)
+    goto skip_class;
+
+  descriptor = art_api.get_class_descriptor (klass, &descriptor_storage);
+  if (descriptor[0] != 'L')
+    goto skip_class;
+
+  class_name = class_name_from_signature (descriptor);
+
+  if (ctx->ignore_case)
+  {
+    class_name_copy = g_utf8_strdown (class_name, -1);
+    normalized_class_name = class_name_copy;
+  }
+  else
+  {
+    normalized_class_name = class_name;
+  }
+
+  if (!g_pattern_match_string (ctx->class_query, normalized_class_name))
+    goto skip_class;
+
+  group = NULL;
+  class_name_length = strlen (class_name);
+  seen_method_names = ctx->include_signature ? NULL : g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  elements = read_art_array (klass, art_api.class_offset_methods, sizeof (gsize), NULL);
+  n = *(guint16 *) ((gpointer) klass + art_api.class_offset_copied_methods_offset);
+  for (i = 0; i != n; i++)
+  {
+    ArtMethod * method;
+    guint32 access_flags;
+    jboolean is_constructor;
+    StdString method_name = { 0, };
+    const gchar * bare_method_name;
+    gchar * bare_method_name_copy = NULL;
+    const gchar * normalized_method_name;
+    gchar * normalized_method_name_copy = NULL;
+
+    method = elements + (i * art_api.method_size);
+
+    access_flags = *(guint32 *) ((gpointer) method + art_api.method_offset_access_flags);
+    is_constructor = (access_flags & kAccConstructor) != 0;
+
+    art_api.pretty_method (&method_name, method, ctx->include_signature);
+    bare_method_name = std_string_c_str (&method_name);
+    if (ctx->include_signature)
+    {
+      const gchar * return_type_end, * name_begin;
+      GString * name;
+
+      return_type_end = strchr (bare_method_name, ' ');
+      name_begin = return_type_end + 1 + class_name_length + 1;
+      if (is_constructor && g_str_has_prefix (name_begin, "<clinit>"))
+        goto skip_method;
+
+      name = g_string_sized_new (64);
+
+      if (is_constructor)
+      {
+        g_string_append (name, "$init");
+        g_string_append (name, strchr (name_begin, '>') + 1);
+      }
+      else
+      {
+        g_string_append (name, name_begin);
+      }
+      g_string_append (name, ": ");
+      g_string_append_len (name, bare_method_name, return_type_end - bare_method_name);
+
+      bare_method_name_copy = g_string_free (name, FALSE);
+      bare_method_name = bare_method_name_copy;
+    }
+    else
+    {
+      const gchar * name_begin;
+
+      name_begin = bare_method_name + class_name_length + 1;
+      if (is_constructor && strcmp (name_begin, "<clinit>") == 0)
+        goto skip_method;
+
+      if (is_constructor)
+        bare_method_name = "$init";
+      else
+        bare_method_name += class_name_length + 1;
+    }
+
+    if (seen_method_names != NULL && g_hash_table_contains (seen_method_names, bare_method_name))
+      goto skip_method;
+
+    if (ctx->ignore_case)
+    {
+      normalized_method_name_copy = g_utf8_strdown (bare_method_name, -1);
+      normalized_method_name = normalized_method_name_copy;
+    }
+    else
+    {
+      normalized_method_name = bare_method_name;
+    }
+
+    if (!g_pattern_match_string (ctx->method_query, normalized_method_name))
+      goto skip_method;
+
+    if (group == NULL)
+    {
+      group = g_hash_table_lookup (ctx->groups, GUINT_TO_POINTER (klass->class_loader));
+      if (group == NULL)
+      {
+        group = json_builder_new_immutable ();
+        g_hash_table_insert (ctx->groups, GUINT_TO_POINTER (klass->class_loader), group);
+
+        json_builder_begin_object (group);
+
+        json_builder_set_member_name (group, "loader");
+        json_builder_add_int_value (group, klass->class_loader);
+
+        json_builder_set_member_name (group, "classes");
+        json_builder_begin_array (group);
+      }
+
+      json_builder_begin_object (group);
+
+      json_builder_set_member_name (group, "name");
+      json_builder_add_string_value (group, class_name);
+
+      json_builder_set_member_name (group, "methods");
+      json_builder_begin_array (group);
+    }
+
+    json_builder_add_string_value (group, bare_method_name);
+
+    if (seen_method_names != NULL)
+      g_hash_table_add (seen_method_names, g_strdup (bare_method_name));
+
+skip_method:
+    g_free (normalized_method_name_copy);
+    g_free (bare_method_name_copy);
+    std_string_destroy (&method_name);
+  }
+
+  if (seen_method_names != NULL)
+    g_hash_table_unref (seen_method_names);
+
+  if (group == NULL)
+    goto skip_class;
+
+  json_builder_end_array (group);
+  json_builder_end_object (group);
+
+skip_class:
+  g_free (class_name_copy);
+  g_free (class_name);
+  std_string_destroy (&descriptor_storage);
+
+  return TRUE;
+}
+
+gchar *
+enumerate_methods_jvm (const gchar * class_query,
+                       const gchar * method_query,
+                       jboolean include_signature,
+                       jboolean ignore_case,
+                       jboolean skip_system_classes,
+                       JNIEnv * env,
+                       jvmtiEnv * jvmti)
+{
+  gchar * result;
+  GPatternSpec * class_pattern, * method_pattern;
+  GHashTable * groups;
+  gpointer * ef = env->functions;
+  jobject (* new_global_ref) (JNIEnv *, jobject) = ef[21];
+  void (* delete_local_ref) (JNIEnv *, jobject) = ef[23];
+  jboolean (* is_same_object) (JNIEnv *, jobject, jobject) = ef[24];
+  gpointer * jf = jvmti->functions - 1;
+  jvmtiError (* deallocate) (jvmtiEnv *, void * mem) = jf[47];
+  jvmtiError (* get_class_signature) (jvmtiEnv *, jclass, char **, char **) = jf[48];
+  jvmtiError (* get_class_methods) (jvmtiEnv *, jclass, jint *, jmethodID **) = jf[52];
+  jvmtiError (* get_class_loader) (jvmtiEnv *, jclass, jobject *) = jf[57];
+  jvmtiError (* get_method_name) (jvmtiEnv *, jmethodID, char **, char **, char **) = jf[64];
+  jvmtiError (* get_loaded_classes) (jvmtiEnv *, jint *, jclass **) = jf[78];
+  jint class_count, class_index;
+  jclass * classes;
+
+  class_pattern = make_pattern_spec (class_query, ignore_case);
+  method_pattern = make_pattern_spec (method_query, ignore_case);
+  groups = g_hash_table_new_full (NULL, NULL, NULL, NULL);
+
+  if (get_loaded_classes (jvmti, &class_count, &classes) != JVMTI_ERROR_NONE)
+    goto emit_results;
+
+  for (class_index = 0; class_index != class_count; class_index++)
+  {
+    jclass klass = classes[class_index];
+    jobject loader = NULL;
+    gboolean have_loader = FALSE;
+    char * signature = NULL;
+    gchar * class_name = NULL;
+    gchar * class_name_copy = NULL;
+    const gchar * normalized_class_name;
+    jint method_count, method_index;
+    jmethodID * methods = NULL;
+    JsonBuilder * group = NULL;
+    GHashTable * seen_method_names = NULL;
+
+    if (skip_system_classes)
+    {
+      if (get_class_loader (jvmti, klass, &loader) != JVMTI_ERROR_NONE)
+        goto skip_class;
+      have_loader = TRUE;
+
+      if (loader == NULL)
+        goto skip_class;
+    }
+
+    if (get_class_signature (jvmti, klass, &signature, NULL) != JVMTI_ERROR_NONE)
+      goto skip_class;
+
+    class_name = class_name_from_signature (signature);
+
+    if (ignore_case)
+    {
+      class_name_copy = g_utf8_strdown (class_name, -1);
+      normalized_class_name = class_name_copy;
+    }
+    else
+    {
+      normalized_class_name = class_name;
+    }
+
+    if (!g_pattern_match_string (class_pattern, normalized_class_name))
+      goto skip_class;
+
+    if (get_class_methods (jvmti, klass, &method_count, &methods) != JVMTI_ERROR_NONE)
+      goto skip_class;
+
+    if (!include_signature)
+      seen_method_names = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+    for (method_index = 0; method_index != method_count; method_index++)
+    {
+      jmethodID method = methods[method_index];
+      const gchar * method_name;
+      char * method_name_value = NULL;
+      char * method_signature_value = NULL;
+      gchar * method_name_copy = NULL;
+      const gchar * normalized_method_name;
+      gchar * normalized_method_name_copy = NULL;
+
+      if (get_method_name (jvmti, method, &method_name_value, include_signature ? &method_signature_value : NULL, NULL) != JVMTI_ERROR_NONE)
+        goto skip_method;
+      method_name = method_name_value;
+
+      if (method_name[0] == '<')
+      {
+        if (strcmp (method_name, "<init>") == 0)
+          method_name = "$init";
+        else if (strcmp (method_name, "<clinit>") == 0)
+          goto skip_method;
+      }
+
+      if (include_signature)
+      {
+        method_name_copy = format_method_signature (method_name, method_signature_value);
+        method_name = method_name_copy;
+      }
+
+      if (seen_method_names != NULL && g_hash_table_contains (seen_method_names, method_name))
+        goto skip_method;
+
+      if (ignore_case)
+      {
+        normalized_method_name_copy = g_utf8_strdown (method_name, -1);
+        normalized_method_name = normalized_method_name_copy;
+      }
+      else
+      {
+        normalized_method_name = method_name;
+      }
+
+      if (!g_pattern_match_string (method_pattern, normalized_method_name))
+        goto skip_method;
+
+      if (group == NULL)
+      {
+        if (!have_loader && get_class_loader (jvmti, klass, &loader) != JVMTI_ERROR_NONE)
+          goto skip_method;
+
+        if (loader == NULL)
+        {
+          group = g_hash_table_lookup (groups, NULL);
+        }
+        else
+        {
+          GHashTableIter iter;
+          jobject cur_loader;
+          JsonBuilder * cur_group;
+
+          g_hash_table_iter_init (&iter, groups);
+          while (g_hash_table_iter_next (&iter, (gpointer *) &cur_loader, (gpointer *) &cur_group))
+          {
+            if (cur_loader != NULL && is_same_object (env, cur_loader, loader))
+            {
+              group = cur_group;
+              break;
+            }
+          }
+        }
+
+        if (group == NULL)
+        {
+          jobject l;
+          gchar * str;
+
+          l = (loader != NULL) ? new_global_ref (env, loader) : NULL;
+
+          group = json_builder_new_immutable ();
+          g_hash_table_insert (groups, l, group);
+
+          json_builder_begin_object (group);
+
+          json_builder_set_member_name (group, "loader");
+          str = g_strdup_printf ("0x%" G_GSIZE_MODIFIER "x", GPOINTER_TO_SIZE (l));
+          json_builder_add_string_value (group, str);
+          g_free (str);
+
+          json_builder_set_member_name (group, "classes");
+          json_builder_begin_array (group);
+        }
+
+        json_builder_begin_object (group);
+
+        json_builder_set_member_name (group, "name");
+        json_builder_add_string_value (group, class_name);
+
+        json_builder_set_member_name (group, "methods");
+        json_builder_begin_array (group);
+      }
+
+      json_builder_add_string_value (group, method_name);
+
+      if (seen_method_names != NULL)
+        g_hash_table_add (seen_method_names, g_strdup (method_name));
+
+skip_method:
+      g_free (normalized_method_name_copy);
+      g_free (method_name_copy);
+      deallocate (jvmti, method_signature_value);
+      deallocate (jvmti, method_name_value);
+    }
+
+skip_class:
+    if (group != NULL)
+    {
+      json_builder_end_array (group);
+      json_builder_end_object (group);
+    }
+
+    if (seen_method_names != NULL)
+      g_hash_table_unref (seen_method_names);
+
+    deallocate (jvmti, methods);
+
+    g_free (class_name_copy);
+    g_free (class_name);
+    deallocate (jvmti, signature);
+
+    if (loader != NULL)
+      delete_local_ref (env, loader);
+
+    delete_local_ref (env, klass);
+  }
+
+  deallocate (jvmti, classes);
+
+emit_results:
+  result = finalize_method_groups_to_json (groups);
+
+  g_hash_table_unref (groups);
+  g_pattern_spec_free (method_pattern);
+  g_pattern_spec_free (class_pattern);
+
+  return result;
+}
+
+static gchar *
+finalize_method_groups_to_json (GHashTable * groups)
+{
+  GString * result;
+  GHashTableIter iter;
+  guint i;
+  JsonBuilder * group;
+
+  result = g_string_sized_new (1024);
+
+  g_string_append_c (result, '[');
+
+  g_hash_table_iter_init (&iter, groups);
+  for (i = 0; g_hash_table_iter_next (&iter, NULL, (gpointer *) &group); i++)
+  {
+    JsonNode * root;
+    gchar * json;
+
+    if (i > 0)
+      g_string_append_c (result, ',');
+
+    json_builder_end_array (group);
+    json_builder_end_object (group);
+
+    root = json_builder_get_root (group);
+    json = json_to_string (root, FALSE);
+    g_string_append (result, json);
+    g_free (json);
+    json_node_unref (root);
+
+    g_object_unref (group);
+  }
+
+  g_string_append_c (result, ']');
+
+  return g_string_free (result, FALSE);
+}
+
+static GPatternSpec *
+make_pattern_spec (const gchar * pattern,
+                   jboolean ignore_case)
+{
+  GPatternSpec * spec;
+
+  if (ignore_case)
+  {
+    gchar * str = g_utf8_strdown (pattern, -1);
+    spec = g_pattern_spec_new (str);
+    g_free (str);
+  }
+  else
+  {
+    spec = g_pattern_spec_new (pattern);
+  }
+
+  return spec;
+}
+
+static gchar *
+class_name_from_signature (const gchar * descriptor)
+{
+  gchar * result, * c;
+
+  result = g_strdup (descriptor + 1);
+
+  for (c = result; *c != '\\0'; c++)
+  {
+    if (*c == '/')
+      *c = '.';
+  }
+
+  c[-1] = '\\0';
+
+  return result;
+}
+
+static gchar *
+format_method_signature (const gchar * name,
+                         const gchar * signature)
+{
+  GString * sig;
+  const gchar * cursor;
+  gint arg_index;
+
+  sig = g_string_sized_new (128);
+
+  g_string_append (sig, name);
+
+  cursor = signature;
+  arg_index = -1;
+  while (TRUE)
+  {
+    const gchar c = *cursor;
+
+    if (c == '(')
+    {
+      g_string_append_c (sig, c);
+      cursor++;
+      arg_index = 0;
+    }
+    else if (c == ')')
+    {
+      g_string_append_c (sig, c);
+      cursor++;
+      break;
+    }
+    else
+    {
+      if (arg_index >= 1)
+        g_string_append (sig, ", ");
+
+      append_type (sig, &cursor);
+
+      if (arg_index != -1)
+        arg_index++;
+    }
+  }
+
+  g_string_append (sig, ": ");
+  append_type (sig, &cursor);
+
+  return g_string_free (sig, FALSE);
+}
+
+static void
+append_type (GString * output,
+             const gchar ** type)
+{
+  const gchar * cursor = *type;
+
+  switch (*cursor)
+  {
+    case 'Z':
+      g_string_append (output, "boolean");
+      cursor++;
+      break;
+    case 'B':
+      g_string_append (output, "byte");
+      cursor++;
+      break;
+    case 'C':
+      g_string_append (output, "char");
+      cursor++;
+      break;
+    case 'S':
+      g_string_append (output, "short");
+      cursor++;
+      break;
+    case 'I':
+      g_string_append (output, "int");
+      cursor++;
+      break;
+    case 'J':
+      g_string_append (output, "long");
+      cursor++;
+      break;
+    case 'F':
+      g_string_append (output, "float");
+      cursor++;
+      break;
+    case 'D':
+      g_string_append (output, "double");
+      cursor++;
+      break;
+    case 'V':
+      g_string_append (output, "void");
+      cursor++;
+      break;
+    case 'L':
+    {
+      gchar ch;
+
+      cursor++;
+      for (; (ch = *cursor) != ';'; cursor++)
+      {
+        g_string_append_c (output, (ch != '/') ? ch : '.');
+      }
+      cursor++;
+
+      break;
+    }
+    case '[':
+      *type = cursor + 1;
+      append_type (output, type);
+      g_string_append (output, "[]");
+      return;
+    default:
+      g_string_append (output, "BUG");
+      cursor++;
+  }
+
+  *type = cursor;
+}
+
+void
+dealloc (gpointer mem)
+{
+  g_free (mem);
+}
+
+static gpointer
+read_art_array (gpointer object_base,
+                guint field_offset,
+                guint length_size,
+                guint * length)
+{
+  gpointer result, header;
+  guint n;
+
+  header = GSIZE_TO_POINTER (*(guint64 *) (object_base + field_offset));
+  if (header != NULL)
+  {
+    result = header + length_size;
+    if (length_size == sizeof (guint32))
+      n = *(guint32 *) header;
+    else
+      n = *(guint64 *) header;
+  }
+  else
+  {
+    result = NULL;
+    n = 0;
+  }
+
+  if (length != NULL)
+    *length = n;
+
+  return result;
+}
+
+static void
+std_string_destroy (StdString * str)
+{
+  if ((str->l.capacity & 1) != 0)
+    art_api.free (str->l.data);
+}
+
+static gchar *
+std_string_c_str (StdString * self)
+{
+  if ((self->l.capacity & 1) != 0)
+    return self->l.data;
+
+  return self->s.data;
+}
+`;
+var methodQueryPattern = /(.+)!([^/]+)\/?([isu]+)?/;
+var cm = null;
+var unwrap = null;
+var Model = class _Model {
+  static build(handle2, env2) {
+    ensureInitialized(env2);
+    return unwrap(handle2, env2, (object) => {
+      return new _Model(cm.new(handle2, object, env2));
+    });
+  }
+  static enumerateMethods(query, api3, env2) {
+    ensureInitialized(env2);
+    const params = query.match(methodQueryPattern);
+    if (params === null) {
+      throw new Error("Invalid query; format is: class!method -- see documentation of Java.enumerateMethods(query) for details");
+    }
+    const classQuery = Memory.allocUtf8String(params[1]);
+    const methodQuery = Memory.allocUtf8String(params[2]);
+    let includeSignature = false;
+    let ignoreCase = false;
+    let skipSystemClasses = false;
+    const modifiers2 = params[3];
+    if (modifiers2 !== void 0) {
+      includeSignature = modifiers2.indexOf("s") !== -1;
+      ignoreCase = modifiers2.indexOf("i") !== -1;
+      skipSystemClasses = modifiers2.indexOf("u") !== -1;
+    }
+    let result;
+    if (api3.flavor === "jvm") {
+      const json = cm.enumerateMethodsJvm(
+        classQuery,
+        methodQuery,
+        boolToNative(includeSignature),
+        boolToNative(ignoreCase),
+        boolToNative(skipSystemClasses),
+        env2,
+        api3.jvmti
+      );
+      try {
+        result = JSON.parse(json.readUtf8String()).map((group) => {
+          const loaderRef = ptr(group.loader);
+          group.loader = !loaderRef.isNull() ? loaderRef : null;
+          return group;
+        });
+      } finally {
+        cm.dealloc(json);
+      }
+    } else {
+      withRunnableArtThread(env2.vm, env2, (thread) => {
+        const json = cm.enumerateMethodsArt(
+          classQuery,
+          methodQuery,
+          boolToNative(includeSignature),
+          boolToNative(ignoreCase),
+          boolToNative(skipSystemClasses)
+        );
+        try {
+          const addGlobalReference = api3["art::JavaVMExt::AddGlobalRef"];
+          const { vm: vmHandle } = api3;
+          result = JSON.parse(json.readUtf8String()).map((group) => {
+            const loaderObj = group.loader;
+            group.loader = loaderObj !== 0 ? addGlobalReference(vmHandle, thread, ptr(loaderObj)) : null;
+            return group;
+          });
+        } finally {
+          cm.dealloc(json);
+        }
+      });
+    }
+    return result;
+  }
+  constructor(handle2) {
+    this.handle = handle2;
+  }
+  has(member) {
+    return cm.has(this.handle, Memory.allocUtf8String(member)) !== 0;
+  }
+  find(member) {
+    return cm.find(this.handle, Memory.allocUtf8String(member)).readUtf8String();
+  }
+  list() {
+    const str = cm.list(this.handle);
+    try {
+      return JSON.parse(str.readUtf8String());
+    } finally {
+      cm.dealloc(str);
+    }
+  }
+};
+function ensureInitialized(env2) {
+  if (cm === null) {
+    cm = compileModule(env2);
+    unwrap = makeHandleUnwrapper(cm, env2.vm);
+  }
+}
+function compileModule(env2) {
+  const { pointerSize: pointerSize12 } = Process;
+  const lockSize = 8;
+  const modelsSize = pointerSize12;
+  const javaApiSize = 6 * pointerSize12;
+  const artApiSize = 10 * 4 + 5 * pointerSize12;
+  const dataSize = lockSize + modelsSize + javaApiSize + artApiSize;
+  const data = Memory.alloc(dataSize);
+  const lock = data;
+  const models = lock.add(lockSize);
+  const javaApi = models.add(modelsSize);
+  const { getDeclaredMethods, getDeclaredFields } = env2.javaLangClass();
+  const method2 = env2.javaLangReflectMethod();
+  const field = env2.javaLangReflectField();
+  let j = javaApi;
+  [
+    getDeclaredMethods,
+    getDeclaredFields,
+    method2.getName,
+    method2.getModifiers,
+    field.getName,
+    field.getModifiers
+  ].forEach((value) => {
+    j = j.writePointer(value).add(pointerSize12);
+  });
+  const artApi = javaApi.add(javaApiSize);
+  const { vm: vm3 } = env2;
+  const artClass = getArtClassSpec(vm3);
+  if (artClass !== null) {
+    const c = artClass.offset;
+    const m2 = getArtMethodSpec(vm3);
+    const f2 = getArtFieldSpec(vm3);
+    let s = artApi;
+    [
+      1,
+      c.ifields,
+      c.methods,
+      c.sfields,
+      c.copiedMethodsOffset,
+      m2.size,
+      m2.offset.accessFlags,
+      f2.size,
+      f2.offset.accessFlags,
+      4294967295
+    ].forEach((value) => {
+      s = s.writeUInt(value).add(4);
+    });
+    const api3 = getApi();
+    [
+      api3.artClassLinker.address,
+      api3["art::ClassLinker::VisitClasses"],
+      api3["art::mirror::Class::GetDescriptor"],
+      api3["art::ArtMethod::PrettyMethod"],
+      Process.getModuleByName("libc.so").getExportByName("free")
+    ].forEach((value, i) => {
+      if (value === void 0) {
+        value = NULL;
+      }
+      s = s.writePointer(value).add(pointerSize12);
+    });
+  }
+  const cm2 = new CModule(code2, {
+    lock,
+    models,
+    java_api: javaApi,
+    art_api: artApi
+  });
+  const reentrantOptions = { exceptions: "propagate" };
+  const fastOptions = { exceptions: "propagate", scheduling: "exclusive" };
+  return {
+    handle: cm2,
+    mode: artClass !== null ? "full" : "basic",
+    new: new NativeFunction(cm2.model_new, "pointer", ["pointer", "pointer", "pointer"], reentrantOptions),
+    has: new NativeFunction(cm2.model_has, "bool", ["pointer", "pointer"], fastOptions),
+    find: new NativeFunction(cm2.model_find, "pointer", ["pointer", "pointer"], fastOptions),
+    list: new NativeFunction(cm2.model_list, "pointer", ["pointer"], fastOptions),
+    enumerateMethodsArt: new NativeFunction(
+      cm2.enumerate_methods_art,
+      "pointer",
+      ["pointer", "pointer", "bool", "bool", "bool"],
+      reentrantOptions
+    ),
+    enumerateMethodsJvm: new NativeFunction(cm2.enumerate_methods_jvm, "pointer", [
+      "pointer",
+      "pointer",
+      "bool",
+      "bool",
+      "bool",
+      "pointer",
+      "pointer"
+    ], reentrantOptions),
+    dealloc: new NativeFunction(cm2.dealloc, "void", ["pointer"], fastOptions)
+  };
+}
+function makeHandleUnwrapper(cm2, vm3) {
+  if (cm2.mode === "basic") {
+    return nullUnwrap;
+  }
+  const decodeGlobal = getApi()["art::JavaVMExt::DecodeGlobal"];
+  return function(handle2, env2, fn) {
+    let result;
+    withRunnableArtThread(vm3, env2, (thread) => {
+      const object = decodeGlobal(vm3, thread, handle2);
+      result = fn(object);
+    });
+    return result;
+  };
+}
+function nullUnwrap(handle2, env2, fn) {
+  return fn(NULL);
+}
+function boolToNative(val) {
+  return val ? 1 : 0;
+}
+
+// node_modules/frida-java-bridge/lib/lru.js
+var LRU = class {
+  constructor(capacity, destroy3) {
+    this.items = /* @__PURE__ */ new Map();
+    this.capacity = capacity;
+    this.destroy = destroy3;
+  }
+  dispose(env2) {
+    const { items, destroy: destroy3 } = this;
+    items.forEach((val) => {
+      destroy3(val, env2);
+    });
+    items.clear();
+  }
+  get(key) {
+    const { items } = this;
+    const item = items.get(key);
+    if (item !== void 0) {
+      items.delete(key);
+      items.set(key, item);
+    }
+    return item;
+  }
+  set(key, val, env2) {
+    const { items } = this;
+    const existingVal = items.get(key);
+    if (existingVal !== void 0) {
+      items.delete(key);
+      this.destroy(existingVal, env2);
+    } else if (items.size === this.capacity) {
+      const oldestKey = items.keys().next().value;
+      const oldestVal = items.get(oldestKey);
+      items.delete(oldestKey);
+      this.destroy(oldestVal, env2);
+    }
+    items.set(key, val);
+  }
+};
+
+// node_modules/frida-java-bridge/lib/mkdex.js
+var kAccPublic2 = 1;
+var kAccNative2 = 256;
+var kAccConstructor = 65536;
+var kEndianTag = 305419896;
+var kClassDefSize = 32;
+var kProtoIdSize = 12;
+var kFieldIdSize = 8;
+var kMethodIdSize = 8;
+var kTypeIdSize = 4;
+var kStringIdSize = 4;
+var kMapItemSize = 12;
+var TYPE_HEADER_ITEM = 0;
+var TYPE_STRING_ID_ITEM = 1;
+var TYPE_TYPE_ID_ITEM = 2;
+var TYPE_PROTO_ID_ITEM = 3;
+var TYPE_FIELD_ID_ITEM = 4;
+var TYPE_METHOD_ID_ITEM = 5;
+var TYPE_CLASS_DEF_ITEM = 6;
+var TYPE_MAP_LIST = 4096;
+var TYPE_TYPE_LIST = 4097;
+var TYPE_ANNOTATION_SET_ITEM = 4099;
+var TYPE_CLASS_DATA_ITEM = 8192;
+var TYPE_CODE_ITEM = 8193;
+var TYPE_STRING_DATA_ITEM = 8194;
+var TYPE_DEBUG_INFO_ITEM = 8195;
+var TYPE_ANNOTATION_ITEM = 8196;
+var TYPE_ANNOTATIONS_DIRECTORY_ITEM = 8198;
+var VALUE_TYPE = 24;
+var VALUE_ARRAY = 28;
+var VISIBILITY_SYSTEM = 2;
+var kDefaultConstructorSize = 24;
+var kDefaultConstructorDebugInfo = Buffer2.from([3, 0, 7, 14, 0]);
+var kDalvikAnnotationTypeThrows = "Ldalvik/annotation/Throws;";
+var kNullTerminator = Buffer2.from([0]);
+function mkdex(spec) {
+  const builder = new DexBuilder();
+  const fullSpec = Object.assign({}, spec);
+  builder.addClass(fullSpec);
+  return builder.build();
+}
+var DexBuilder = class {
+  constructor() {
+    this.classes = [];
+  }
+  addClass(spec) {
+    this.classes.push(spec);
+  }
+  build() {
+    const model = computeModel(this.classes);
+    const {
+      classes,
+      interfaces,
+      fields,
+      methods,
+      protos,
+      parameters,
+      annotationDirectories,
+      annotationSets,
+      throwsAnnotations,
+      types: types3,
+      strings
+    } = model;
+    let offset = 0;
+    const headerOffset = 0;
+    const checksumOffset = 8;
+    const signatureOffset = 12;
+    const signatureSize = 20;
+    const headerSize = 112;
+    offset += headerSize;
+    const stringIdsOffset = offset;
+    const stringIdsSize = strings.length * kStringIdSize;
+    offset += stringIdsSize;
+    const typeIdsOffset = offset;
+    const typeIdsSize = types3.length * kTypeIdSize;
+    offset += typeIdsSize;
+    const protoIdsOffset = offset;
+    const protoIdsSize = protos.length * kProtoIdSize;
+    offset += protoIdsSize;
+    const fieldIdsOffset = offset;
+    const fieldIdsSize = fields.length * kFieldIdSize;
+    offset += fieldIdsSize;
+    const methodIdsOffset = offset;
+    const methodIdsSize = methods.length * kMethodIdSize;
+    offset += methodIdsSize;
+    const classDefsOffset = offset;
+    const classDefsSize = classes.length * kClassDefSize;
+    offset += classDefsSize;
+    const dataOffset = offset;
+    const annotationSetOffsets = annotationSets.map((set) => {
+      const setOffset = offset;
+      set.offset = setOffset;
+      offset += 4 + set.items.length * 4;
+      return setOffset;
+    });
+    const javaCodeItems = classes.reduce((result, klass) => {
+      const constructorMethods = klass.classData.constructorMethods;
+      constructorMethods.forEach((method2) => {
+        const [, accessFlags, superConstructor] = method2;
+        if ((accessFlags & kAccNative2) === 0 && superConstructor >= 0) {
+          method2.push(offset);
+          result.push({ offset, superConstructor });
+          offset += kDefaultConstructorSize;
+        }
+      });
+      return result;
+    }, []);
+    annotationDirectories.forEach((dir) => {
+      dir.offset = offset;
+      offset += 16 + dir.methods.length * 8;
+    });
+    const interfaceOffsets = interfaces.map((iface) => {
+      offset = align2(offset, 4);
+      const ifaceOffset = offset;
+      iface.offset = ifaceOffset;
+      offset += 4 + 2 * iface.types.length;
+      return ifaceOffset;
+    });
+    const parameterOffsets = parameters.map((param) => {
+      offset = align2(offset, 4);
+      const paramOffset = offset;
+      param.offset = paramOffset;
+      offset += 4 + 2 * param.types.length;
+      return paramOffset;
+    });
+    const stringChunks = [];
+    const stringOffsets = strings.map((str) => {
+      const strOffset = offset;
+      const header = Buffer2.from(createUleb128(str.length));
+      const data = Buffer2.from(str, "utf8");
+      const chunk = Buffer2.concat([header, data, kNullTerminator]);
+      stringChunks.push(chunk);
+      offset += chunk.length;
+      return strOffset;
+    });
+    const debugInfoOffsets = javaCodeItems.map((codeItem) => {
+      const debugOffset = offset;
+      offset += kDefaultConstructorDebugInfo.length;
+      return debugOffset;
+    });
+    const throwsAnnotationBlobs = throwsAnnotations.map((annotation) => {
+      const blob = makeThrowsAnnotation(annotation);
+      annotation.offset = offset;
+      offset += blob.length;
+      return blob;
+    });
+    const classDataBlobs = classes.map((klass, index) => {
+      klass.classData.offset = offset;
+      const blob = makeClassData(klass);
+      offset += blob.length;
+      return blob;
+    });
+    const linkSize = 0;
+    const linkOffset = 0;
+    offset = align2(offset, 4);
+    const mapOffset = offset;
+    const typeListLength = interfaces.length + parameters.length;
+    const mapNumItems = 4 + (fields.length > 0 ? 1 : 0) + 2 + annotationSets.length + javaCodeItems.length + annotationDirectories.length + (typeListLength > 0 ? 1 : 0) + 1 + debugInfoOffsets.length + throwsAnnotations.length + classes.length + 1;
+    const mapSize = 4 + mapNumItems * kMapItemSize;
+    offset += mapSize;
+    const dataSize = offset - dataOffset;
+    const fileSize = offset;
+    const dex = Buffer2.alloc(fileSize);
+    dex.write("dex\n035");
+    dex.writeUInt32LE(fileSize, 32);
+    dex.writeUInt32LE(headerSize, 36);
+    dex.writeUInt32LE(kEndianTag, 40);
+    dex.writeUInt32LE(linkSize, 44);
+    dex.writeUInt32LE(linkOffset, 48);
+    dex.writeUInt32LE(mapOffset, 52);
+    dex.writeUInt32LE(strings.length, 56);
+    dex.writeUInt32LE(stringIdsOffset, 60);
+    dex.writeUInt32LE(types3.length, 64);
+    dex.writeUInt32LE(typeIdsOffset, 68);
+    dex.writeUInt32LE(protos.length, 72);
+    dex.writeUInt32LE(protoIdsOffset, 76);
+    dex.writeUInt32LE(fields.length, 80);
+    dex.writeUInt32LE(fields.length > 0 ? fieldIdsOffset : 0, 84);
+    dex.writeUInt32LE(methods.length, 88);
+    dex.writeUInt32LE(methodIdsOffset, 92);
+    dex.writeUInt32LE(classes.length, 96);
+    dex.writeUInt32LE(classDefsOffset, 100);
+    dex.writeUInt32LE(dataSize, 104);
+    dex.writeUInt32LE(dataOffset, 108);
+    stringOffsets.forEach((offset2, index) => {
+      dex.writeUInt32LE(offset2, stringIdsOffset + index * kStringIdSize);
+    });
+    types3.forEach((id, index) => {
+      dex.writeUInt32LE(id, typeIdsOffset + index * kTypeIdSize);
+    });
+    protos.forEach((proto, index) => {
+      const [shortyIndex, returnTypeIndex, params] = proto;
+      const protoOffset = protoIdsOffset + index * kProtoIdSize;
+      dex.writeUInt32LE(shortyIndex, protoOffset);
+      dex.writeUInt32LE(returnTypeIndex, protoOffset + 4);
+      dex.writeUInt32LE(params !== null ? params.offset : 0, protoOffset + 8);
+    });
+    fields.forEach((field, index) => {
+      const [classIndex, typeIndex, nameIndex] = field;
+      const fieldOffset = fieldIdsOffset + index * kFieldIdSize;
+      dex.writeUInt16LE(classIndex, fieldOffset);
+      dex.writeUInt16LE(typeIndex, fieldOffset + 2);
+      dex.writeUInt32LE(nameIndex, fieldOffset + 4);
+    });
+    methods.forEach((method2, index) => {
+      const [classIndex, protoIndex, nameIndex] = method2;
+      const methodOffset = methodIdsOffset + index * kMethodIdSize;
+      dex.writeUInt16LE(classIndex, methodOffset);
+      dex.writeUInt16LE(protoIndex, methodOffset + 2);
+      dex.writeUInt32LE(nameIndex, methodOffset + 4);
+    });
+    classes.forEach((klass, index) => {
+      const { interfaces: interfaces2, annotationsDirectory } = klass;
+      const interfacesOffset = interfaces2 !== null ? interfaces2.offset : 0;
+      const annotationsOffset = annotationsDirectory !== null ? annotationsDirectory.offset : 0;
+      const staticValuesOffset = 0;
+      const classOffset = classDefsOffset + index * kClassDefSize;
+      dex.writeUInt32LE(klass.index, classOffset);
+      dex.writeUInt32LE(klass.accessFlags, classOffset + 4);
+      dex.writeUInt32LE(klass.superClassIndex, classOffset + 8);
+      dex.writeUInt32LE(interfacesOffset, classOffset + 12);
+      dex.writeUInt32LE(klass.sourceFileIndex, classOffset + 16);
+      dex.writeUInt32LE(annotationsOffset, classOffset + 20);
+      dex.writeUInt32LE(klass.classData.offset, classOffset + 24);
+      dex.writeUInt32LE(staticValuesOffset, classOffset + 28);
+    });
+    annotationSets.forEach((set, index) => {
+      const { items } = set;
+      const setOffset = annotationSetOffsets[index];
+      dex.writeUInt32LE(items.length, setOffset);
+      items.forEach((item, index2) => {
+        dex.writeUInt32LE(item.offset, setOffset + 4 + index2 * 4);
+      });
+    });
+    javaCodeItems.forEach((codeItem, index) => {
+      const { offset: offset2, superConstructor } = codeItem;
+      const registersSize = 1;
+      const insSize = 1;
+      const outsSize = 1;
+      const triesSize = 0;
+      const insnsSize = 4;
+      dex.writeUInt16LE(registersSize, offset2);
+      dex.writeUInt16LE(insSize, offset2 + 2);
+      dex.writeUInt16LE(outsSize, offset2 + 4);
+      dex.writeUInt16LE(triesSize, offset2 + 6);
+      dex.writeUInt32LE(debugInfoOffsets[index], offset2 + 8);
+      dex.writeUInt32LE(insnsSize, offset2 + 12);
+      dex.writeUInt16LE(4208, offset2 + 16);
+      dex.writeUInt16LE(superConstructor, offset2 + 18);
+      dex.writeUInt16LE(0, offset2 + 20);
+      dex.writeUInt16LE(14, offset2 + 22);
+    });
+    annotationDirectories.forEach((dir) => {
+      const dirOffset = dir.offset;
+      const classAnnotationsOffset = 0;
+      const fieldsSize = 0;
+      const annotatedMethodsSize = dir.methods.length;
+      const annotatedParametersSize = 0;
+      dex.writeUInt32LE(classAnnotationsOffset, dirOffset);
+      dex.writeUInt32LE(fieldsSize, dirOffset + 4);
+      dex.writeUInt32LE(annotatedMethodsSize, dirOffset + 8);
+      dex.writeUInt32LE(annotatedParametersSize, dirOffset + 12);
+      dir.methods.forEach((method2, index) => {
+        const entryOffset = dirOffset + 16 + index * 8;
+        const [methodIndex, annotationSet] = method2;
+        dex.writeUInt32LE(methodIndex, entryOffset);
+        dex.writeUInt32LE(annotationSet.offset, entryOffset + 4);
+      });
+    });
+    interfaces.forEach((iface, index) => {
+      const ifaceOffset = interfaceOffsets[index];
+      dex.writeUInt32LE(iface.types.length, ifaceOffset);
+      iface.types.forEach((type, typeIndex) => {
+        dex.writeUInt16LE(type, ifaceOffset + 4 + typeIndex * 2);
+      });
+    });
+    parameters.forEach((param, index) => {
+      const paramOffset = parameterOffsets[index];
+      dex.writeUInt32LE(param.types.length, paramOffset);
+      param.types.forEach((type, typeIndex) => {
+        dex.writeUInt16LE(type, paramOffset + 4 + typeIndex * 2);
+      });
+    });
+    stringChunks.forEach((chunk, index) => {
+      chunk.copy(dex, stringOffsets[index]);
+    });
+    debugInfoOffsets.forEach((debugInfoOffset) => {
+      kDefaultConstructorDebugInfo.copy(dex, debugInfoOffset);
+    });
+    throwsAnnotationBlobs.forEach((annotationBlob, index) => {
+      annotationBlob.copy(dex, throwsAnnotations[index].offset);
+    });
+    classDataBlobs.forEach((classDataBlob, index) => {
+      classDataBlob.copy(dex, classes[index].classData.offset);
+    });
+    dex.writeUInt32LE(mapNumItems, mapOffset);
+    const mapItems = [
+      [TYPE_HEADER_ITEM, 1, headerOffset],
+      [TYPE_STRING_ID_ITEM, strings.length, stringIdsOffset],
+      [TYPE_TYPE_ID_ITEM, types3.length, typeIdsOffset],
+      [TYPE_PROTO_ID_ITEM, protos.length, protoIdsOffset]
+    ];
+    if (fields.length > 0) {
+      mapItems.push([TYPE_FIELD_ID_ITEM, fields.length, fieldIdsOffset]);
+    }
+    mapItems.push([TYPE_METHOD_ID_ITEM, methods.length, methodIdsOffset]);
+    mapItems.push([TYPE_CLASS_DEF_ITEM, classes.length, classDefsOffset]);
+    annotationSets.forEach((set, index) => {
+      mapItems.push([TYPE_ANNOTATION_SET_ITEM, set.items.length, annotationSetOffsets[index]]);
+    });
+    javaCodeItems.forEach((codeItem) => {
+      mapItems.push([TYPE_CODE_ITEM, 1, codeItem.offset]);
+    });
+    annotationDirectories.forEach((dir) => {
+      mapItems.push([TYPE_ANNOTATIONS_DIRECTORY_ITEM, 1, dir.offset]);
+    });
+    if (typeListLength > 0) {
+      mapItems.push([TYPE_TYPE_LIST, typeListLength, interfaceOffsets.concat(parameterOffsets)[0]]);
+    }
+    mapItems.push([TYPE_STRING_DATA_ITEM, strings.length, stringOffsets[0]]);
+    debugInfoOffsets.forEach((debugInfoOffset) => {
+      mapItems.push([TYPE_DEBUG_INFO_ITEM, 1, debugInfoOffset]);
+    });
+    throwsAnnotations.forEach((annotation) => {
+      mapItems.push([TYPE_ANNOTATION_ITEM, 1, annotation.offset]);
+    });
+    classes.forEach((klass) => {
+      mapItems.push([TYPE_CLASS_DATA_ITEM, 1, klass.classData.offset]);
+    });
+    mapItems.push([TYPE_MAP_LIST, 1, mapOffset]);
+    mapItems.forEach((item, index) => {
+      const [type, size, offset2] = item;
+      const itemOffset = mapOffset + 4 + index * kMapItemSize;
+      dex.writeUInt16LE(type, itemOffset);
+      dex.writeUInt32LE(size, itemOffset + 4);
+      dex.writeUInt32LE(offset2, itemOffset + 8);
+    });
+    const hash = new Checksum("sha1");
+    hash.update(dex.slice(signatureOffset + signatureSize));
+    Buffer2.from(hash.getDigest()).copy(dex, signatureOffset);
+    dex.writeUInt32LE(adler32(dex, signatureOffset), checksumOffset);
+    return dex;
+  }
+};
+function makeClassData(klass) {
+  const { instanceFields, constructorMethods, virtualMethods } = klass.classData;
+  const staticFieldsSize = 0;
+  return Buffer2.from([
+    staticFieldsSize
+  ].concat(createUleb128(instanceFields.length)).concat(createUleb128(constructorMethods.length)).concat(createUleb128(virtualMethods.length)).concat(instanceFields.reduce((result, [indexDiff, accessFlags]) => {
+    return result.concat(createUleb128(indexDiff)).concat(createUleb128(accessFlags));
+  }, [])).concat(constructorMethods.reduce((result, [indexDiff, accessFlags, , codeOffset]) => {
+    return result.concat(createUleb128(indexDiff)).concat(createUleb128(accessFlags)).concat(createUleb128(codeOffset || 0));
+  }, [])).concat(virtualMethods.reduce((result, [indexDiff, accessFlags]) => {
+    const codeOffset = 0;
+    return result.concat(createUleb128(indexDiff)).concat(createUleb128(accessFlags)).concat([codeOffset]);
+  }, [])));
+}
+function makeThrowsAnnotation(annotation) {
+  const { thrownTypes } = annotation;
+  return Buffer2.from(
+    [
+      VISIBILITY_SYSTEM
+    ].concat(createUleb128(annotation.type)).concat([1]).concat(createUleb128(annotation.value)).concat([VALUE_ARRAY, thrownTypes.length]).concat(thrownTypes.reduce((result, type) => {
+      result.push(VALUE_TYPE, type);
+      return result;
+    }, []))
+  );
+}
+function computeModel(classes) {
+  const strings = /* @__PURE__ */ new Set();
+  const types3 = /* @__PURE__ */ new Set();
+  const protos = {};
+  const fields = [];
+  const methods = [];
+  const throwsAnnotations = {};
+  const javaConstructors = /* @__PURE__ */ new Set();
+  const superConstructors = /* @__PURE__ */ new Set();
+  classes.forEach((klass) => {
+    const { name, superClass, sourceFileName } = klass;
+    strings.add("this");
+    strings.add(name);
+    types3.add(name);
+    strings.add(superClass);
+    types3.add(superClass);
+    strings.add(sourceFileName);
+    klass.interfaces.forEach((iface) => {
+      strings.add(iface);
+      types3.add(iface);
+    });
+    klass.fields.forEach((field) => {
+      const [fieldName, fieldType] = field;
+      strings.add(fieldName);
+      strings.add(fieldType);
+      types3.add(fieldType);
+      fields.push([klass.name, fieldType, fieldName]);
+    });
+    if (!klass.methods.some(([methodName]) => methodName === "<init>")) {
+      klass.methods.unshift(["<init>", "V", []]);
+      javaConstructors.add(name);
+    }
+    klass.methods.forEach((method2) => {
+      const [methodName, retType2, argTypes2, thrownTypes = [], accessFlags] = method2;
+      strings.add(methodName);
+      const protoId = addProto(retType2, argTypes2);
+      let throwsAnnotationId = null;
+      if (thrownTypes.length > 0) {
+        const typesNormalized = thrownTypes.slice();
+        typesNormalized.sort();
+        throwsAnnotationId = typesNormalized.join("|");
+        let throwsAnnotation = throwsAnnotations[throwsAnnotationId];
+        if (throwsAnnotation === void 0) {
+          throwsAnnotation = {
+            id: throwsAnnotationId,
+            types: typesNormalized
+          };
+          throwsAnnotations[throwsAnnotationId] = throwsAnnotation;
+        }
+        strings.add(kDalvikAnnotationTypeThrows);
+        types3.add(kDalvikAnnotationTypeThrows);
+        thrownTypes.forEach((type) => {
+          strings.add(type);
+          types3.add(type);
+        });
+        strings.add("value");
+      }
+      methods.push([klass.name, protoId, methodName, throwsAnnotationId, accessFlags]);
+      if (methodName === "<init>") {
+        superConstructors.add(name + "|" + protoId);
+        const superConstructorId = superClass + "|" + protoId;
+        if (javaConstructors.has(name) && !superConstructors.has(superConstructorId)) {
+          methods.push([superClass, protoId, methodName, null, 0]);
+          superConstructors.add(superConstructorId);
+        }
+      }
+    });
+  });
+  function addProto(retType2, argTypes2) {
+    const signature2 = [retType2].concat(argTypes2);
+    const id = signature2.join("|");
+    if (protos[id] !== void 0) {
+      return id;
+    }
+    strings.add(retType2);
+    types3.add(retType2);
+    argTypes2.forEach((argType) => {
+      strings.add(argType);
+      types3.add(argType);
+    });
+    const shorty = signature2.map(typeToShorty).join("");
+    strings.add(shorty);
+    protos[id] = [id, shorty, retType2, argTypes2];
+    return id;
+  }
+  const stringItems = Array.from(strings);
+  stringItems.sort();
+  const stringToIndex = stringItems.reduce((result, string, index) => {
+    result[string] = index;
+    return result;
+  }, {});
+  const typeItems = Array.from(types3).map((name) => stringToIndex[name]);
+  typeItems.sort(compareNumbers);
+  const typeToIndex = typeItems.reduce((result, stringIndex, typeIndex) => {
+    result[stringItems[stringIndex]] = typeIndex;
+    return result;
+  }, {});
+  const literalProtoItems = Object.keys(protos).map((id) => protos[id]);
+  literalProtoItems.sort(compareProtoItems);
+  const parameters = {};
+  const protoItems = literalProtoItems.map((item) => {
+    const [, shorty, retType2, argTypes2] = item;
+    let params;
+    if (argTypes2.length > 0) {
+      const argTypesSig = argTypes2.join("|");
+      params = parameters[argTypesSig];
+      if (params === void 0) {
+        params = {
+          types: argTypes2.map((type) => typeToIndex[type]),
+          offset: -1
+        };
+        parameters[argTypesSig] = params;
+      }
+    } else {
+      params = null;
+    }
+    return [
+      stringToIndex[shorty],
+      typeToIndex[retType2],
+      params
+    ];
+  });
+  const protoToIndex = literalProtoItems.reduce((result, item, index) => {
+    const [id] = item;
+    result[id] = index;
+    return result;
+  }, {});
+  const parameterItems = Object.keys(parameters).map((id) => parameters[id]);
+  const fieldItems = fields.map((field) => {
+    const [klass, fieldType, fieldName] = field;
+    return [
+      typeToIndex[klass],
+      typeToIndex[fieldType],
+      stringToIndex[fieldName]
+    ];
+  });
+  fieldItems.sort(compareFieldItems);
+  const methodItems = methods.map((method2) => {
+    const [klass, protoId, name, annotationsId, accessFlags] = method2;
+    return [
+      typeToIndex[klass],
+      protoToIndex[protoId],
+      stringToIndex[name],
+      annotationsId,
+      accessFlags
+    ];
+  });
+  methodItems.sort(compareMethodItems);
+  const throwsAnnotationItems = Object.keys(throwsAnnotations).map((id) => throwsAnnotations[id]).map((item) => {
+    return {
+      id: item.id,
+      type: typeToIndex[kDalvikAnnotationTypeThrows],
+      value: stringToIndex.value,
+      thrownTypes: item.types.map((type) => typeToIndex[type]),
+      offset: -1
+    };
+  });
+  const annotationSetItems = throwsAnnotationItems.map((item) => {
+    return {
+      id: item.id,
+      items: [item],
+      offset: -1
+    };
+  });
+  const annotationSetIdToIndex = annotationSetItems.reduce((result, item, index) => {
+    result[item.id] = index;
+    return result;
+  }, {});
+  const interfaceLists = {};
+  const annotationDirectories = [];
+  const classItems = classes.map((klass) => {
+    const classIndex = typeToIndex[klass.name];
+    const accessFlags = kAccPublic2;
+    const superClassIndex = typeToIndex[klass.superClass];
+    let ifaceList;
+    const ifaces = klass.interfaces.map((type) => typeToIndex[type]);
+    if (ifaces.length > 0) {
+      ifaces.sort(compareNumbers);
+      const ifacesId = ifaces.join("|");
+      ifaceList = interfaceLists[ifacesId];
+      if (ifaceList === void 0) {
+        ifaceList = {
+          types: ifaces,
+          offset: -1
+        };
+        interfaceLists[ifacesId] = ifaceList;
+      }
+    } else {
+      ifaceList = null;
+    }
+    const sourceFileIndex = stringToIndex[klass.sourceFileName];
+    const classMethods = methodItems.reduce((result, method2, index) => {
+      const [holder, protoIndex, name, annotationsId, accessFlags2] = method2;
+      if (holder === classIndex) {
+        result.push([index, name, annotationsId, protoIndex, accessFlags2]);
+      }
+      return result;
+    }, []);
+    let annotationsDirectory = null;
+    const methodAnnotations = classMethods.filter(([, , annotationsId]) => {
+      return annotationsId !== null;
+    }).map(([index, , annotationsId]) => {
+      return [index, annotationSetItems[annotationSetIdToIndex[annotationsId]]];
+    });
+    if (methodAnnotations.length > 0) {
+      annotationsDirectory = {
+        methods: methodAnnotations,
+        offset: -1
+      };
+      annotationDirectories.push(annotationsDirectory);
+    }
+    const instanceFields = fieldItems.reduce((result, field, index) => {
+      const [holder] = field;
+      if (holder === classIndex) {
+        result.push([index > 0 ? 1 : 0, kAccPublic2]);
+      }
+      return result;
+    }, []);
+    const constructorNameIndex = stringToIndex["<init>"];
+    const constructorMethods = classMethods.filter(([, name]) => name === constructorNameIndex).map(([index, , , protoIndex]) => {
+      if (javaConstructors.has(klass.name)) {
+        let superConstructor = -1;
+        const numMethodItems = methodItems.length;
+        for (let i = 0; i !== numMethodItems; i++) {
+          const [methodClass, methodProto, methodName] = methodItems[i];
+          if (methodClass === superClassIndex && methodName === constructorNameIndex && methodProto === protoIndex) {
+            superConstructor = i;
+            break;
+          }
+        }
+        return [index, kAccPublic2 | kAccConstructor, superConstructor];
+      } else {
+        return [index, kAccPublic2 | kAccConstructor | kAccNative2, -1];
+      }
+    });
+    const virtualMethods = compressClassMethodIndexes(classMethods.filter(([, name]) => name !== constructorNameIndex).map(([index, , , , accessFlags2]) => {
+      return [index, accessFlags2 | kAccPublic2 | kAccNative2];
+    }));
+    const classData = {
+      instanceFields,
+      constructorMethods,
+      virtualMethods,
+      offset: -1
+    };
+    return {
+      index: classIndex,
+      accessFlags,
+      superClassIndex,
+      interfaces: ifaceList,
+      sourceFileIndex,
+      annotationsDirectory,
+      classData
+    };
+  });
+  const interfaceItems = Object.keys(interfaceLists).map((id) => interfaceLists[id]);
+  return {
+    classes: classItems,
+    interfaces: interfaceItems,
+    fields: fieldItems,
+    methods: methodItems,
+    protos: protoItems,
+    parameters: parameterItems,
+    annotationDirectories,
+    annotationSets: annotationSetItems,
+    throwsAnnotations: throwsAnnotationItems,
+    types: typeItems,
+    strings: stringItems
+  };
+}
+function compressClassMethodIndexes(items) {
+  let previousIndex = 0;
+  return items.map(([index, accessFlags], elementIndex) => {
+    let result;
+    if (elementIndex === 0) {
+      result = [index, accessFlags];
+    } else {
+      result = [index - previousIndex, accessFlags];
+    }
+    previousIndex = index;
+    return result;
+  });
+}
+function compareNumbers(a, b) {
+  return a - b;
+}
+function compareProtoItems(a, b) {
+  const [, , aRetType, aArgTypes] = a;
+  const [, , bRetType, bArgTypes] = b;
+  if (aRetType < bRetType) {
+    return -1;
+  }
+  if (aRetType > bRetType) {
+    return 1;
+  }
+  const aArgTypesSig = aArgTypes.join("|");
+  const bArgTypesSig = bArgTypes.join("|");
+  if (aArgTypesSig < bArgTypesSig) {
+    return -1;
+  }
+  if (aArgTypesSig > bArgTypesSig) {
+    return 1;
+  }
+  return 0;
+}
+function compareFieldItems(a, b) {
+  const [aClass, aType, aName] = a;
+  const [bClass, bType, bName] = b;
+  if (aClass !== bClass) {
+    return aClass - bClass;
+  }
+  if (aName !== bName) {
+    return aName - bName;
+  }
+  return aType - bType;
+}
+function compareMethodItems(a, b) {
+  const [aClass, aProto, aName] = a;
+  const [bClass, bProto, bName] = b;
+  if (aClass !== bClass) {
+    return aClass - bClass;
+  }
+  if (aName !== bName) {
+    return aName - bName;
+  }
+  return aProto - bProto;
+}
+function typeToShorty(type) {
+  const firstCharacter = type[0];
+  return firstCharacter === "L" || firstCharacter === "[" ? "L" : type;
+}
+function createUleb128(value) {
+  if (value <= 127) {
+    return [value];
+  }
+  const result = [];
+  let moreSlicesNeeded = false;
+  do {
+    let slice2 = value & 127;
+    value >>= 7;
+    moreSlicesNeeded = value !== 0;
+    if (moreSlicesNeeded) {
+      slice2 |= 128;
+    }
+    result.push(slice2);
+  } while (moreSlicesNeeded);
+  return result;
+}
+function align2(value, alignment) {
+  const alignmentDelta = value % alignment;
+  if (alignmentDelta === 0) {
+    return value;
+  }
+  return value + alignment - alignmentDelta;
+}
+function adler32(buffer, offset) {
+  let a = 1;
+  let b = 0;
+  const length = buffer.length;
+  for (let i = offset; i < length; i++) {
+    a = (a + buffer[i]) % 65521;
+    b = (b + a) % 65521;
+  }
+  return (b << 16 | a) >>> 0;
+}
+var mkdex_default = mkdex;
+
+// node_modules/frida-java-bridge/lib/types.js
+var JNILocalRefType = 1;
+var vm = null;
+var primitiveArrayHandler = null;
+function initialize(_vm) {
+  vm = _vm;
+}
+function getType(typeName, unbox, factory) {
+  let type = getPrimitiveType(typeName);
+  if (type === null) {
+    if (typeName.indexOf("[") === 0) {
+      type = getArrayType(typeName, unbox, factory);
+    } else {
+      if (typeName[0] === "L" && typeName[typeName.length - 1] === ";") {
+        typeName = typeName.substring(1, typeName.length - 1);
+      }
+      type = getObjectType(typeName, unbox, factory);
+    }
+  }
+  return Object.assign({ className: typeName }, type);
+}
+var primitiveTypes = {
+  boolean: {
+    name: "Z",
+    type: "uint8",
+    size: 1,
+    byteSize: 1,
+    defaultValue: false,
+    isCompatible(v) {
+      return typeof v === "boolean";
+    },
+    fromJni(v) {
+      return !!v;
+    },
+    toJni(v) {
+      return v ? 1 : 0;
+    },
+    read(address) {
+      return address.readU8();
+    },
+    write(address, value) {
+      address.writeU8(value);
+    },
+    toString() {
+      return this.name;
+    }
+  },
+  byte: {
+    name: "B",
+    type: "int8",
+    size: 1,
+    byteSize: 1,
+    defaultValue: 0,
+    isCompatible(v) {
+      return Number.isInteger(v) && v >= -128 && v <= 127;
+    },
+    fromJni: identity,
+    toJni: identity,
+    read(address) {
+      return address.readS8();
+    },
+    write(address, value) {
+      address.writeS8(value);
+    },
+    toString() {
+      return this.name;
+    }
+  },
+  char: {
+    name: "C",
+    type: "uint16",
+    size: 1,
+    byteSize: 2,
+    defaultValue: 0,
+    isCompatible(v) {
+      if (typeof v !== "string" || v.length !== 1) {
+        return false;
+      }
+      const code4 = v.charCodeAt(0);
+      return code4 >= 0 && code4 <= 65535;
+    },
+    fromJni(c) {
+      return String.fromCharCode(c);
+    },
+    toJni(s) {
+      return s.charCodeAt(0);
+    },
+    read(address) {
+      return address.readU16();
+    },
+    write(address, value) {
+      address.writeU16(value);
+    },
+    toString() {
+      return this.name;
+    }
+  },
+  short: {
+    name: "S",
+    type: "int16",
+    size: 1,
+    byteSize: 2,
+    defaultValue: 0,
+    isCompatible(v) {
+      return Number.isInteger(v) && v >= -32768 && v <= 32767;
+    },
+    fromJni: identity,
+    toJni: identity,
+    read(address) {
+      return address.readS16();
+    },
+    write(address, value) {
+      address.writeS16(value);
+    },
+    toString() {
+      return this.name;
+    }
+  },
+  int: {
+    name: "I",
+    type: "int32",
+    size: 1,
+    byteSize: 4,
+    defaultValue: 0,
+    isCompatible(v) {
+      return Number.isInteger(v) && v >= -2147483648 && v <= 2147483647;
+    },
+    fromJni: identity,
+    toJni: identity,
+    read(address) {
+      return address.readS32();
+    },
+    write(address, value) {
+      address.writeS32(value);
+    },
+    toString() {
+      return this.name;
+    }
+  },
+  long: {
+    name: "J",
+    type: "int64",
+    size: 2,
+    byteSize: 8,
+    defaultValue: 0,
+    isCompatible(v) {
+      return typeof v === "number" || v instanceof Int64;
+    },
+    fromJni: identity,
+    toJni: identity,
+    read(address) {
+      return address.readS64();
+    },
+    write(address, value) {
+      address.writeS64(value);
+    },
+    toString() {
+      return this.name;
+    }
+  },
+  float: {
+    name: "F",
+    type: "float",
+    size: 1,
+    byteSize: 4,
+    defaultValue: 0,
+    isCompatible(v) {
+      return typeof v === "number";
+    },
+    fromJni: identity,
+    toJni: identity,
+    read(address) {
+      return address.readFloat();
+    },
+    write(address, value) {
+      address.writeFloat(value);
+    },
+    toString() {
+      return this.name;
+    }
+  },
+  double: {
+    name: "D",
+    type: "double",
+    size: 2,
+    byteSize: 8,
+    defaultValue: 0,
+    isCompatible(v) {
+      return typeof v === "number";
+    },
+    fromJni: identity,
+    toJni: identity,
+    read(address) {
+      return address.readDouble();
+    },
+    write(address, value) {
+      address.writeDouble(value);
+    },
+    toString() {
+      return this.name;
+    }
+  },
+  void: {
+    name: "V",
+    type: "void",
+    size: 0,
+    byteSize: 0,
+    defaultValue: void 0,
+    isCompatible(v) {
+      return v === void 0;
+    },
+    fromJni() {
+      return void 0;
+    },
+    toJni() {
+      return NULL;
+    },
+    toString() {
+      return this.name;
+    }
+  }
+};
+var primitiveTypesNames = new Set(Object.values(primitiveTypes).map((t) => t.name));
+function getPrimitiveType(name) {
+  const result = primitiveTypes[name];
+  return result !== void 0 ? result : null;
+}
+function getObjectType(typeName, unbox, factory) {
+  const cache = factory._types[unbox ? 1 : 0];
+  let type = cache[typeName];
+  if (type !== void 0) {
+    return type;
+  }
+  if (typeName === "java.lang.Object") {
+    type = getJavaLangObjectType(factory);
+  } else {
+    type = getAnyObjectType(typeName, unbox, factory);
+  }
+  cache[typeName] = type;
+  return type;
+}
+function getJavaLangObjectType(factory) {
+  return {
+    name: "Ljava/lang/Object;",
+    type: "pointer",
+    size: 1,
+    defaultValue: NULL,
+    isCompatible(v) {
+      if (v === null) {
+        return true;
+      }
+      if (v === void 0) {
+        return false;
+      }
+      const isWrapper = v.$h instanceof NativePointer;
+      if (isWrapper) {
+        return true;
+      }
+      return typeof v === "string";
+    },
+    fromJni(h, env2, owned) {
+      if (h.isNull()) {
+        return null;
+      }
+      return factory.cast(h, factory.use("java.lang.Object"), owned);
+    },
+    toJni(o, env2) {
+      if (o === null) {
+        return NULL;
+      }
+      if (typeof o === "string") {
+        return env2.newStringUtf(o);
+      }
+      return o.$h;
+    }
+  };
+}
+function getAnyObjectType(typeName, unbox, factory) {
+  let cachedClass = null;
+  let cachedIsInstance = null;
+  let cachedIsDefaultString = null;
+  function getClass() {
+    if (cachedClass === null) {
+      cachedClass = factory.use(typeName).class;
+    }
+    return cachedClass;
+  }
+  function isInstance(v) {
+    const klass = getClass();
+    if (cachedIsInstance === null) {
+      cachedIsInstance = klass.isInstance.overload("java.lang.Object");
+    }
+    return cachedIsInstance.call(klass, v);
+  }
+  function typeIsDefaultString() {
+    if (cachedIsDefaultString === null) {
+      const x = getClass();
+      cachedIsDefaultString = factory.use("java.lang.String").class.isAssignableFrom(x);
+    }
+    return cachedIsDefaultString;
+  }
+  return {
+    name: makeJniObjectTypeName(typeName),
+    type: "pointer",
+    size: 1,
+    defaultValue: NULL,
+    isCompatible(v) {
+      if (v === null) {
+        return true;
+      }
+      if (v === void 0) {
+        return false;
+      }
+      const isWrapper = v.$h instanceof NativePointer;
+      if (isWrapper) {
+        return isInstance(v);
+      }
+      return typeof v === "string" && typeIsDefaultString();
+    },
+    fromJni(h, env2, owned) {
+      if (h.isNull()) {
+        return null;
+      }
+      if (typeIsDefaultString() && unbox) {
+        return env2.stringFromJni(h);
+      }
+      return factory.cast(h, factory.use(typeName), owned);
+    },
+    toJni(o, env2) {
+      if (o === null) {
+        return NULL;
+      }
+      if (typeof o === "string") {
+        return env2.newStringUtf(o);
+      }
+      return o.$h;
+    },
+    toString() {
+      return this.name;
+    }
+  };
+}
+var primitiveArrayTypes = [
+  ["Z", "boolean"],
+  ["B", "byte"],
+  ["C", "char"],
+  ["D", "double"],
+  ["F", "float"],
+  ["I", "int"],
+  ["J", "long"],
+  ["S", "short"]
+].reduce((result, [shorty, name]) => {
+  result["[" + shorty] = makePrimitiveArrayType("[" + shorty, name);
+  return result;
+}, {});
+function makePrimitiveArrayType(shorty, name) {
+  const envProto = Env.prototype;
+  const nameTitled = toTitleCase(name);
+  const spec = {
+    typeName: name,
+    newArray: envProto["new" + nameTitled + "Array"],
+    setRegion: envProto["set" + nameTitled + "ArrayRegion"],
+    getElements: envProto["get" + nameTitled + "ArrayElements"],
+    releaseElements: envProto["release" + nameTitled + "ArrayElements"]
+  };
+  return {
+    name: shorty,
+    type: "pointer",
+    size: 1,
+    defaultValue: NULL,
+    isCompatible(v) {
+      return isCompatiblePrimitiveArray(v, name);
+    },
+    fromJni(h, env2, owned) {
+      return fromJniPrimitiveArray(h, spec, env2, owned);
+    },
+    toJni(arr, env2) {
+      return toJniPrimitiveArray(arr, spec, env2);
+    }
+  };
+}
+function getArrayType(typeName, unbox, factory) {
+  const primitiveType = primitiveArrayTypes[typeName];
+  if (primitiveType !== void 0) {
+    return primitiveType;
+  }
+  if (typeName.indexOf("[") !== 0) {
+    throw new Error("Unsupported type: " + typeName);
+  }
+  let elementTypeName = typeName.substring(1);
+  const elementType = getType(elementTypeName, unbox, factory);
+  let numInternalArrays = 0;
+  const end = elementTypeName.length;
+  while (numInternalArrays !== end && elementTypeName[numInternalArrays] === "[") {
+    numInternalArrays++;
+  }
+  elementTypeName = elementTypeName.substring(numInternalArrays);
+  if (elementTypeName[0] === "L" && elementTypeName[elementTypeName.length - 1] === ";") {
+    elementTypeName = elementTypeName.substring(1, elementTypeName.length - 1);
+  }
+  let internalElementTypeName = elementTypeName.replace(/\./g, "/");
+  if (primitiveTypesNames.has(internalElementTypeName)) {
+    internalElementTypeName = "[".repeat(numInternalArrays) + internalElementTypeName;
+  } else {
+    internalElementTypeName = "[".repeat(numInternalArrays) + "L" + internalElementTypeName + ";";
+  }
+  const internalTypeName = "[" + internalElementTypeName;
+  elementTypeName = "[".repeat(numInternalArrays) + elementTypeName;
+  return {
+    name: typeName.replace(/\./g, "/"),
+    type: "pointer",
+    size: 1,
+    defaultValue: NULL,
+    isCompatible(v) {
+      if (v === null) {
+        return true;
+      }
+      if (typeof v !== "object" || v.length === void 0) {
+        return false;
+      }
+      return v.every(function(element) {
+        return elementType.isCompatible(element);
+      });
+    },
+    fromJni(arr, env2, owned) {
+      if (arr.isNull()) {
+        return null;
+      }
+      const result = [];
+      const n = env2.getArrayLength(arr);
+      for (let i = 0; i !== n; i++) {
+        const element = env2.getObjectArrayElement(arr, i);
+        try {
+          result.push(elementType.fromJni(element, env2));
+        } finally {
+          env2.deleteLocalRef(element);
+        }
+      }
+      try {
+        result.$w = factory.cast(arr, factory.use(internalTypeName), owned);
+      } catch (e) {
+        factory.use("java.lang.reflect.Array").newInstance(factory.use(elementTypeName).class, 0);
+        result.$w = factory.cast(arr, factory.use(internalTypeName), owned);
+      }
+      result.$dispose = disposeObjectArray;
+      return result;
+    },
+    toJni(elements, env2) {
+      if (elements === null) {
+        return NULL;
+      }
+      if (!(elements instanceof Array)) {
+        throw new Error("Expected an array");
+      }
+      const wrapper = elements.$w;
+      if (wrapper !== void 0) {
+        return wrapper.$h;
+      }
+      const n = elements.length;
+      const klassObj = factory.use(elementTypeName);
+      const classHandle = klassObj.$borrowClassHandle(env2);
+      try {
+        const result = env2.newObjectArray(n, classHandle.value, NULL);
+        env2.throwIfExceptionPending();
+        for (let i = 0; i !== n; i++) {
+          const handle2 = elementType.toJni(elements[i], env2);
+          try {
+            env2.setObjectArrayElement(result, i, handle2);
+          } finally {
+            if (elementType.type === "pointer" && env2.getObjectRefType(handle2) === JNILocalRefType) {
+              env2.deleteLocalRef(handle2);
+            }
+          }
+          env2.throwIfExceptionPending();
+        }
+        return result;
+      } finally {
+        classHandle.unref(env2);
+      }
+    }
+  };
+}
+function disposeObjectArray() {
+  const n = this.length;
+  for (let i = 0; i !== n; i++) {
+    const obj = this[i];
+    if (obj === null) {
+      continue;
+    }
+    const dispose2 = obj.$dispose;
+    if (dispose2 === void 0) {
+      break;
+    }
+    dispose2.call(obj);
+  }
+  this.$w.$dispose();
+}
+function fromJniPrimitiveArray(arr, spec, env2, owned) {
+  if (arr.isNull()) {
+    return null;
+  }
+  const type = getPrimitiveType(spec.typeName);
+  const length = env2.getArrayLength(arr);
+  return new PrimitiveArray(arr, spec, type, length, env2, owned);
+}
+function toJniPrimitiveArray(arr, spec, env2) {
+  if (arr === null) {
+    return NULL;
+  }
+  const handle2 = arr.$h;
+  if (handle2 !== void 0) {
+    return handle2;
+  }
+  const length = arr.length;
+  const type = getPrimitiveType(spec.typeName);
+  const result = spec.newArray.call(env2, length);
+  if (result.isNull()) {
+    throw new Error("Unable to construct array");
+  }
+  if (length > 0) {
+    const elementSize = type.byteSize;
+    const writeElement = type.write;
+    const unparseElementValue = type.toJni;
+    const elements = Memory.alloc(length * type.byteSize);
+    for (let index = 0; index !== length; index++) {
+      writeElement(elements.add(index * elementSize), unparseElementValue(arr[index]));
+    }
+    spec.setRegion.call(env2, result, 0, length, elements);
+    env2.throwIfExceptionPending();
+  }
+  return result;
+}
+function isCompatiblePrimitiveArray(value, typeName) {
+  if (value === null) {
+    return true;
+  }
+  if (value instanceof PrimitiveArray) {
+    return value.$s.typeName === typeName;
+  }
+  const isArrayLike = typeof value === "object" && value.length !== void 0;
+  if (!isArrayLike) {
+    return false;
+  }
+  const elementType = getPrimitiveType(typeName);
+  return Array.prototype.every.call(value, (element) => elementType.isCompatible(element));
+}
+function PrimitiveArray(handle2, spec, type, length, env2, owned = true) {
+  if (owned) {
+    const h = env2.newGlobalRef(handle2);
+    this.$h = h;
+    this.$r = Script.bindWeak(this, env2.vm.makeHandleDestructor(h));
+  } else {
+    this.$h = handle2;
+    this.$r = null;
+  }
+  this.$s = spec;
+  this.$t = type;
+  this.length = length;
+  return new Proxy(this, primitiveArrayHandler);
+}
+primitiveArrayHandler = {
+  has(target, property) {
+    if (property in target) {
+      return true;
+    }
+    return target.tryParseIndex(property) !== null;
+  },
+  get(target, property, receiver) {
+    const index = target.tryParseIndex(property);
+    if (index === null) {
+      return target[property];
+    }
+    return target.readElement(index);
+  },
+  set(target, property, value, receiver) {
+    const index = target.tryParseIndex(property);
+    if (index === null) {
+      target[property] = value;
+      return true;
+    }
+    target.writeElement(index, value);
+    return true;
+  },
+  ownKeys(target) {
+    const keys = [];
+    const { length } = target;
+    for (let i = 0; i !== length; i++) {
+      const key = i.toString();
+      keys.push(key);
+    }
+    keys.push("length");
+    return keys;
+  },
+  getOwnPropertyDescriptor(target, property) {
+    const index = target.tryParseIndex(property);
+    if (index !== null) {
+      return {
+        writable: true,
+        configurable: true,
+        enumerable: true
+      };
+    }
+    return Object.getOwnPropertyDescriptor(target, property);
+  }
+};
+Object.defineProperties(PrimitiveArray.prototype, {
+  $dispose: {
+    enumerable: true,
+    value() {
+      const ref = this.$r;
+      if (ref !== null) {
+        this.$r = null;
+        Script.unbindWeak(ref);
+      }
+    }
+  },
+  $clone: {
+    value(env2) {
+      return new PrimitiveArray(this.$h, this.$s, this.$t, this.length, env2);
+    }
+  },
+  tryParseIndex: {
+    value(rawIndex) {
+      if (typeof rawIndex === "symbol") {
+        return null;
+      }
+      const index = parseInt(rawIndex);
+      if (isNaN(index) || index < 0 || index >= this.length) {
+        return null;
+      }
+      return index;
+    }
+  },
+  readElement: {
+    value(index) {
+      return this.withElements((elements) => {
+        const type = this.$t;
+        return type.fromJni(type.read(elements.add(index * type.byteSize)));
+      });
+    }
+  },
+  writeElement: {
+    value(index, value) {
+      const { $h: handle2, $s: spec, $t: type } = this;
+      const env2 = vm.getEnv();
+      const element = Memory.alloc(type.byteSize);
+      type.write(element, type.toJni(value));
+      spec.setRegion.call(env2, handle2, index, 1, element);
+    }
+  },
+  withElements: {
+    value(perform) {
+      const { $h: handle2, $s: spec } = this;
+      const env2 = vm.getEnv();
+      const elements = spec.getElements.call(env2, handle2);
+      if (elements.isNull()) {
+        throw new Error("Unable to get array elements");
+      }
+      try {
+        return perform(elements);
+      } finally {
+        spec.releaseElements.call(env2, handle2, elements);
+      }
+    }
+  },
+  toJSON: {
+    value() {
+      const { length, $t: type } = this;
+      const { byteSize: elementSize, fromJni, read: read2 } = type;
+      return this.withElements((elements) => {
+        const values = [];
+        for (let i = 0; i !== length; i++) {
+          const value = fromJni(read2(elements.add(i * elementSize)));
+          values.push(value);
+        }
+        return values;
+      });
+    }
+  },
+  toString: {
+    value() {
+      return this.toJSON().toString();
+    }
+  }
+});
+function makeJniObjectTypeName(typeName) {
+  return "L" + typeName.replace(/\./g, "/") + ";";
+}
+function toTitleCase(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+function identity(value) {
+  return value;
+}
+
+// node_modules/frida-java-bridge/lib/class-factory.js
+var jsizeSize3 = 4;
+var {
+  ensureClassInitialized: ensureClassInitialized3,
+  makeMethodMangler: makeMethodMangler3
+} = android_exports;
+var kAccStatic2 = 8;
+var CONSTRUCTOR_METHOD = 1;
+var STATIC_METHOD = 2;
+var INSTANCE_METHOD = 3;
+var STATIC_FIELD = 1;
+var INSTANCE_FIELD = 2;
+var STRATEGY_VIRTUAL = 1;
+var STRATEGY_DIRECT = 2;
+var PENDING_USE = Symbol("PENDING_USE");
+var DEFAULT_CACHE_DIR = "/data/local/tmp";
+var {
+  getCurrentThreadId,
+  pointerSize: pointerSize8
+} = Process;
+var factoryCache = {
+  state: "empty",
+  factories: [],
+  loaders: null,
+  Integer: null
+};
+var vm2 = null;
+var api2 = null;
+var isArtVm = null;
+var wrapperHandler = null;
+var dispatcherPrototype = null;
+var methodPrototype = null;
+var valueOfPrototype = null;
+var cachedLoaderInvoke = null;
+var cachedLoaderMethod = null;
+var ignoredThreads = /* @__PURE__ */ new Map();
+var ClassFactory = class _ClassFactory {
+  static _initialize(_vm, _api) {
+    vm2 = _vm;
+    api2 = _api;
+    isArtVm = _api.flavor === "art";
+    if (_api.flavor === "jvm") {
+      ensureClassInitialized3 = ensureClassInitialized2;
+      makeMethodMangler3 = makeMethodMangler2;
+    }
+  }
+  static _disposeAll(env2) {
+    factoryCache.factories.forEach((factory) => {
+      factory._dispose(env2);
+    });
+  }
+  static get(classLoader) {
+    const cache = getFactoryCache();
+    const defaultFactory = cache.factories[0];
+    if (classLoader === null) {
+      return defaultFactory;
+    }
+    const indexObj = cache.loaders.get(classLoader);
+    if (indexObj !== null) {
+      const index = defaultFactory.cast(indexObj, cache.Integer);
+      return cache.factories[index.intValue()];
+    }
+    const factory = new _ClassFactory();
+    factory.loader = classLoader;
+    factory.cacheDir = defaultFactory.cacheDir;
+    addFactoryToCache(factory, classLoader);
+    return factory;
+  }
+  constructor() {
+    this.cacheDir = DEFAULT_CACHE_DIR;
+    this.codeCacheDir = DEFAULT_CACHE_DIR + "/dalvik-cache";
+    this.tempFileNaming = {
+      prefix: "frida",
+      suffix: ""
+    };
+    this._classes = {};
+    this._classHandles = new LRU(10, releaseClassHandle);
+    this._patchedMethods = /* @__PURE__ */ new Set();
+    this._loader = null;
+    this._types = [{}, {}];
+    factoryCache.factories.push(this);
+  }
+  _dispose(env2) {
+    Array.from(this._patchedMethods).forEach((method2) => {
+      method2.implementation = null;
+    });
+    this._patchedMethods.clear();
+    revertGlobalPatches();
+    this._classHandles.dispose(env2);
+    this._classes = {};
+  }
+  get loader() {
+    return this._loader;
+  }
+  set loader(value) {
+    const isInitial = this._loader === null && value !== null;
+    this._loader = value;
+    if (isInitial && factoryCache.state === "ready" && this === factoryCache.factories[0]) {
+      addFactoryToCache(this, value);
+    }
+  }
+  use(className, options = {}) {
+    const allowCached = options.cache !== "skip";
+    let C = allowCached ? this._getUsedClass(className) : void 0;
+    if (C === void 0) {
+      try {
+        const env2 = vm2.getEnv();
+        const { _loader: loader } = this;
+        const getClassHandle = loader !== null ? makeLoaderClassHandleGetter(className, loader, env2) : makeBasicClassHandleGetter(className);
+        C = this._make(className, getClassHandle, env2);
+      } finally {
+        if (allowCached) {
+          this._setUsedClass(className, C);
+        }
+      }
+    }
+    return C;
+  }
+  _getUsedClass(className) {
+    let c;
+    while ((c = this._classes[className]) === PENDING_USE) {
+      Thread.sleep(0.05);
+    }
+    if (c === void 0) {
+      this._classes[className] = PENDING_USE;
+    }
+    return c;
+  }
+  _setUsedClass(className, c) {
+    if (c !== void 0) {
+      this._classes[className] = c;
+    } else {
+      delete this._classes[className];
+    }
+  }
+  _make(name, getClassHandle, env2) {
+    const C = makeClassWrapperConstructor();
+    const proto = Object.create(Wrapper.prototype, {
+      [Symbol.for("n")]: {
+        value: name
+      },
+      $n: {
+        get() {
+          return this[Symbol.for("n")];
+        }
+      },
+      [Symbol.for("C")]: {
+        value: C
+      },
+      $C: {
+        get() {
+          return this[Symbol.for("C")];
+        }
+      },
+      [Symbol.for("w")]: {
+        value: null,
+        writable: true
+      },
+      $w: {
+        get() {
+          return this[Symbol.for("w")];
+        },
+        set(val) {
+          this[Symbol.for("w")] = val;
+        }
+      },
+      [Symbol.for("_s")]: {
+        writable: true
+      },
+      $_s: {
+        get() {
+          return this[Symbol.for("_s")];
+        },
+        set(val) {
+          this[Symbol.for("_s")] = val;
+        }
+      },
+      [Symbol.for("c")]: {
+        value: [null]
+      },
+      $c: {
+        get() {
+          return this[Symbol.for("c")];
+        }
+      },
+      [Symbol.for("m")]: {
+        value: /* @__PURE__ */ new Map()
+      },
+      $m: {
+        get() {
+          return this[Symbol.for("m")];
+        }
+      },
+      [Symbol.for("l")]: {
+        value: null,
+        writable: true
+      },
+      $l: {
+        get() {
+          return this[Symbol.for("l")];
+        },
+        set(val) {
+          this[Symbol.for("l")] = val;
+        }
+      },
+      [Symbol.for("gch")]: {
+        value: getClassHandle
+      },
+      $gch: {
+        get() {
+          return this[Symbol.for("gch")];
+        }
+      },
+      [Symbol.for("f")]: {
+        value: this
+      },
+      $f: {
+        get() {
+          return this[Symbol.for("f")];
+        }
+      }
+    });
+    C.prototype = proto;
+    const classWrapper = new C(null);
+    proto[Symbol.for("w")] = classWrapper;
+    proto.$w = classWrapper;
+    const h = classWrapper.$borrowClassHandle(env2);
+    try {
+      const classHandle = h.value;
+      ensureClassInitialized3(env2, classHandle);
+      proto.$l = Model.build(classHandle, env2);
+    } finally {
+      h.unref(env2);
+    }
+    return classWrapper;
+  }
+  retain(obj) {
+    const env2 = vm2.getEnv();
+    return obj.$clone(env2);
+  }
+  cast(obj, klass, owned) {
+    const env2 = vm2.getEnv();
+    let handle2 = obj.$h;
+    if (handle2 === void 0) {
+      handle2 = obj;
+    }
+    const h = klass.$borrowClassHandle(env2);
+    try {
+      const isValidCast = env2.isInstanceOf(handle2, h.value);
+      if (!isValidCast) {
+        throw new Error(`Cast from '${env2.getObjectClassName(handle2)}' to '${klass.$n}' isn't possible`);
+      }
+    } finally {
+      h.unref(env2);
+    }
+    const C = klass.$C;
+    return new C(handle2, STRATEGY_VIRTUAL, env2, owned);
+  }
+  wrap(handle2, klass, env2) {
+    const C = klass.$C;
+    const wrapper = new C(handle2, STRATEGY_VIRTUAL, env2, false);
+    wrapper.$r = Script.bindWeak(wrapper, vm2.makeHandleDestructor(handle2));
+    return wrapper;
+  }
+  array(type, elements) {
+    const env2 = vm2.getEnv();
+    const primitiveType = getPrimitiveType(type);
+    if (primitiveType !== null) {
+      type = primitiveType.name;
+    }
+    const arrayType2 = getArrayType("[" + type, false, this);
+    const rawArray = arrayType2.toJni(elements, env2);
+    return arrayType2.fromJni(rawArray, env2, true);
+  }
+  registerClass(spec) {
+    const env2 = vm2.getEnv();
+    const tempHandles = [];
+    try {
+      const Class = this.use("java.lang.Class");
+      const Method = env2.javaLangReflectMethod();
+      const invokeObjectMethodNoArgs = env2.vaMethod("pointer", []);
+      const className = spec.name;
+      const interfaces = spec.implements || [];
+      const superClass = spec.superClass || this.use("java.lang.Object");
+      const dexFields = [];
+      const dexMethods = [];
+      const dexSpec = {
+        name: makeJniObjectTypeName(className),
+        sourceFileName: makeSourceFileName(className),
+        superClass: makeJniObjectTypeName(superClass.$n),
+        interfaces: interfaces.map((iface) => makeJniObjectTypeName(iface.$n)),
+        fields: dexFields,
+        methods: dexMethods
+      };
+      const allInterfaces = interfaces.slice();
+      interfaces.forEach((iface) => {
+        Array.prototype.slice.call(iface.class.getInterfaces()).forEach((baseIface) => {
+          const baseIfaceName = this.cast(baseIface, Class).getCanonicalName();
+          allInterfaces.push(this.use(baseIfaceName));
+        });
+      });
+      const fields = spec.fields || {};
+      Object.getOwnPropertyNames(fields).forEach((name) => {
+        const fieldType = this._getType(fields[name]);
+        dexFields.push([name, fieldType.name]);
+      });
+      const baseMethods = {};
+      const pendingOverloads = {};
+      allInterfaces.forEach((iface) => {
+        const h = iface.$borrowClassHandle(env2);
+        tempHandles.push(h);
+        const ifaceHandle = h.value;
+        iface.$ownMembers.filter((name) => {
+          return iface[name].overloads !== void 0;
+        }).forEach((name) => {
+          const method2 = iface[name];
+          const overloads = method2.overloads;
+          const overloadIds = overloads.map((overload) => makeOverloadId(name, overload.returnType, overload.argumentTypes));
+          baseMethods[name] = [method2, overloadIds, ifaceHandle];
+          overloads.forEach((overload, index) => {
+            const id = overloadIds[index];
+            pendingOverloads[id] = [overload, ifaceHandle];
+          });
+        });
+      });
+      const methods = spec.methods || {};
+      const methodNames = Object.keys(methods);
+      const methodEntries = methodNames.reduce((result, name) => {
+        const entry = methods[name];
+        const rawName = name === "$init" ? "<init>" : name;
+        if (entry instanceof Array) {
+          result.push(...entry.map((e) => [rawName, e]));
+        } else {
+          result.push([rawName, entry]);
+        }
+        return result;
+      }, []);
+      const implMethods = [];
+      methodEntries.forEach(([name, methodValue]) => {
+        let type = INSTANCE_METHOD;
+        let returnType;
+        let argumentTypes;
+        let thrownTypeNames = [];
+        let impl2;
+        if (typeof methodValue === "function") {
+          const m2 = baseMethods[name];
+          if (m2 !== void 0 && Array.isArray(m2)) {
+            const [baseMethod, overloadIds, parentTypeHandle] = m2;
+            if (overloadIds.length > 1) {
+              throw new Error(`More than one overload matching '${name}': signature must be specified`);
+            }
+            delete pendingOverloads[overloadIds[0]];
+            const overload = baseMethod.overloads[0];
+            type = overload.type;
+            returnType = overload.returnType;
+            argumentTypes = overload.argumentTypes;
+            impl2 = methodValue;
+            const reflectedMethod = env2.toReflectedMethod(parentTypeHandle, overload.handle, 0);
+            const thrownTypes = invokeObjectMethodNoArgs(env2.handle, reflectedMethod, Method.getGenericExceptionTypes);
+            thrownTypeNames = readTypeNames(env2, thrownTypes).map(makeJniObjectTypeName);
+            env2.deleteLocalRef(thrownTypes);
+            env2.deleteLocalRef(reflectedMethod);
+          } else {
+            returnType = this._getType("void");
+            argumentTypes = [];
+            impl2 = methodValue;
+          }
+        } else {
+          if (methodValue.isStatic) {
+            type = STATIC_METHOD;
+          }
+          returnType = this._getType(methodValue.returnType || "void");
+          argumentTypes = (methodValue.argumentTypes || []).map((name2) => this._getType(name2));
+          impl2 = methodValue.implementation;
+          if (typeof impl2 !== "function") {
+            throw new Error("Expected a function implementation for method: " + name);
+          }
+          const id = makeOverloadId(name, returnType, argumentTypes);
+          const pendingOverload = pendingOverloads[id];
+          if (pendingOverload !== void 0) {
+            const [overload, parentTypeHandle] = pendingOverload;
+            delete pendingOverloads[id];
+            type = overload.type;
+            returnType = overload.returnType;
+            argumentTypes = overload.argumentTypes;
+            const reflectedMethod = env2.toReflectedMethod(parentTypeHandle, overload.handle, 0);
+            const thrownTypes = invokeObjectMethodNoArgs(env2.handle, reflectedMethod, Method.getGenericExceptionTypes);
+            thrownTypeNames = readTypeNames(env2, thrownTypes).map(makeJniObjectTypeName);
+            env2.deleteLocalRef(thrownTypes);
+            env2.deleteLocalRef(reflectedMethod);
+          }
+        }
+        const returnTypeName = returnType.name;
+        const argumentTypeNames = argumentTypes.map((t) => t.name);
+        const signature2 = "(" + argumentTypeNames.join("") + ")" + returnTypeName;
+        dexMethods.push([name, returnTypeName, argumentTypeNames, thrownTypeNames, type === STATIC_METHOD ? kAccStatic2 : 0]);
+        implMethods.push([name, signature2, type, returnType, argumentTypes, impl2]);
+      });
+      const unimplementedMethodIds = Object.keys(pendingOverloads);
+      if (unimplementedMethodIds.length > 0) {
+        throw new Error("Missing implementation for: " + unimplementedMethodIds.join(", "));
+      }
+      const dex = DexFile.fromBuffer(mkdex_default(dexSpec), this);
+      try {
+        dex.load();
+      } finally {
+        dex.file.delete();
+      }
+      const classWrapper = this.use(spec.name);
+      const numMethods = methodEntries.length;
+      if (numMethods > 0) {
+        const methodElementSize = 3 * pointerSize8;
+        const methodElements = Memory.alloc(numMethods * methodElementSize);
+        const nativeMethods = [];
+        const temporaryHandles = [];
+        implMethods.forEach(([name, signature2, type, returnType, argumentTypes, impl2], index) => {
+          const rawName = Memory.allocUtf8String(name);
+          const rawSignature = Memory.allocUtf8String(signature2);
+          const rawImpl = implement(name, classWrapper, type, returnType, argumentTypes, impl2);
+          methodElements.add(index * methodElementSize).writePointer(rawName);
+          methodElements.add(index * methodElementSize + pointerSize8).writePointer(rawSignature);
+          methodElements.add(index * methodElementSize + 2 * pointerSize8).writePointer(rawImpl);
+          temporaryHandles.push(rawName, rawSignature);
+          nativeMethods.push(rawImpl);
+        });
+        const h = classWrapper.$borrowClassHandle(env2);
+        tempHandles.push(h);
+        const classHandle = h.value;
+        env2.registerNatives(classHandle, methodElements, numMethods);
+        env2.throwIfExceptionPending();
+        classWrapper.$nativeMethods = nativeMethods;
+      }
+      return classWrapper;
+    } finally {
+      tempHandles.forEach((h) => {
+        h.unref(env2);
+      });
+    }
+  }
+  choose(specifier, callbacks) {
+    const env2 = vm2.getEnv();
+    const { flavor } = api2;
+    if (flavor === "jvm") {
+      this._chooseObjectsJvm(specifier, env2, callbacks);
+    } else if (flavor === "art") {
+      const legacyApiMissing = api2["art::gc::Heap::VisitObjects"] === void 0;
+      if (legacyApiMissing) {
+        const preA12ApiMissing = api2["art::gc::Heap::GetInstances"] === void 0;
+        if (preA12ApiMissing) {
+          return this._chooseObjectsJvm(specifier, env2, callbacks);
+        }
+      }
+      withRunnableArtThread(vm2, env2, (thread) => {
+        if (legacyApiMissing) {
+          this._chooseObjectsArtPreA12(specifier, env2, thread, callbacks);
+        } else {
+          this._chooseObjectsArtLegacy(specifier, env2, thread, callbacks);
+        }
+      });
+    } else {
+      this._chooseObjectsDalvik(specifier, env2, callbacks);
+    }
+  }
+  _chooseObjectsJvm(className, env2, callbacks) {
+    const classWrapper = this.use(className);
+    const { jvmti } = api2;
+    const JVMTI_ITERATION_CONTINUE = 1;
+    const JVMTI_HEAP_OBJECT_EITHER = 3;
+    const h = classWrapper.$borrowClassHandle(env2);
+    const tag = int64(h.value.toString());
+    try {
+      const heapObjectCallback = new NativeCallback((classTag, size, tagPtr2, userData) => {
+        tagPtr2.writeS64(tag);
+        return JVMTI_ITERATION_CONTINUE;
+      }, "int", ["int64", "int64", "pointer", "pointer"]);
+      jvmti.iterateOverInstancesOfClass(h.value, JVMTI_HEAP_OBJECT_EITHER, heapObjectCallback, h.value);
+      const tagPtr = Memory.alloc(8);
+      tagPtr.writeS64(tag);
+      const countPtr = Memory.alloc(jsizeSize3);
+      const objectsPtr = Memory.alloc(pointerSize8);
+      jvmti.getObjectsWithTags(1, tagPtr, countPtr, objectsPtr, NULL);
+      const count = countPtr.readS32();
+      const objects = objectsPtr.readPointer();
+      const handles = [];
+      for (let i = 0; i !== count; i++) {
+        handles.push(objects.add(i * pointerSize8).readPointer());
+      }
+      jvmti.deallocate(objects);
+      try {
+        for (const handle2 of handles) {
+          const instance = this.cast(handle2, classWrapper);
+          const result = callbacks.onMatch(instance);
+          if (result === "stop") {
+            break;
+          }
+        }
+        callbacks.onComplete();
+      } finally {
+        handles.forEach((handle2) => {
+          env2.deleteLocalRef(handle2);
+        });
+      }
+    } finally {
+      h.unref(env2);
+    }
+  }
+  _chooseObjectsArtPreA12(className, env2, thread, callbacks) {
+    const classWrapper = this.use(className);
+    const scope = VariableSizedHandleScope.$new(thread, vm2);
+    let needle;
+    const h = classWrapper.$borrowClassHandle(env2);
+    try {
+      const object = api2["art::JavaVMExt::DecodeGlobal"](api2.vm, thread, h.value);
+      needle = scope.newHandle(object);
+    } finally {
+      h.unref(env2);
+    }
+    const maxCount = 0;
+    const instances = HandleVector.$new();
+    api2["art::gc::Heap::GetInstances"](api2.artHeap, scope, needle, maxCount, instances);
+    const instanceHandles = instances.handles.map((handle2) => env2.newGlobalRef(handle2));
+    instances.$delete();
+    scope.$delete();
+    try {
+      for (const handle2 of instanceHandles) {
+        const instance = this.cast(handle2, classWrapper);
+        const result = callbacks.onMatch(instance);
+        if (result === "stop") {
+          break;
+        }
+      }
+      callbacks.onComplete();
+    } finally {
+      instanceHandles.forEach((handle2) => {
+        env2.deleteGlobalRef(handle2);
+      });
+    }
+  }
+  _chooseObjectsArtLegacy(className, env2, thread, callbacks) {
+    const classWrapper = this.use(className);
+    const instanceHandles = [];
+    const addGlobalReference = api2["art::JavaVMExt::AddGlobalRef"];
+    const vmHandle = api2.vm;
+    let needle;
+    const h = classWrapper.$borrowClassHandle(env2);
+    try {
+      needle = api2["art::JavaVMExt::DecodeGlobal"](vmHandle, thread, h.value).toInt32();
+    } finally {
+      h.unref(env2);
+    }
+    const collectMatchingInstanceHandles = makeObjectVisitorPredicate(needle, (object) => {
+      instanceHandles.push(addGlobalReference(vmHandle, thread, object));
+    });
+    api2["art::gc::Heap::VisitObjects"](api2.artHeap, collectMatchingInstanceHandles, NULL);
+    try {
+      for (const handle2 of instanceHandles) {
+        const instance = this.cast(handle2, classWrapper);
+        const result = callbacks.onMatch(instance);
+        if (result === "stop") {
+          break;
+        }
+      }
+    } finally {
+      instanceHandles.forEach((handle2) => {
+        env2.deleteGlobalRef(handle2);
+      });
+    }
+    callbacks.onComplete();
+  }
+  _chooseObjectsDalvik(className, callerEnv, callbacks) {
+    const classWrapper = this.use(className);
+    if (api2.addLocalReference === null) {
+      const libdvm = Process.getModuleByName("libdvm.so");
+      let pattern;
+      switch (Process.arch) {
+        case "arm":
+          pattern = "2d e9 f0 41 05 46 15 4e 0c 46 7e 44 11 b3 43 68";
+          break;
+        case "ia32":
+          pattern = "8d 64 24 d4 89 5c 24 1c 89 74 24 20 e8 ?? ?? ?? ?? ?? ?? ?? ?? ?? ?? 85 d2";
+          break;
+      }
+      Memory.scan(libdvm.base, libdvm.size, pattern, {
+        onMatch: (address, size) => {
+          let wrapper;
+          if (Process.arch === "arm") {
+            address = address.or(1);
+            wrapper = new NativeFunction(address, "pointer", ["pointer", "pointer"]);
+          } else {
+            const thunk = Memory.alloc(Process.pageSize);
+            Memory.patchCode(thunk, 16, (code4) => {
+              const cw = new X86Writer(code4, { pc: thunk });
+              cw.putMovRegRegOffsetPtr("eax", "esp", 4);
+              cw.putMovRegRegOffsetPtr("edx", "esp", 8);
+              cw.putJmpAddress(address);
+              cw.flush();
+            });
+            wrapper = new NativeFunction(thunk, "pointer", ["pointer", "pointer"]);
+            wrapper._thunk = thunk;
+          }
+          api2.addLocalReference = wrapper;
+          vm2.perform((env2) => {
+            enumerateInstances(this, env2);
+          });
+          return "stop";
+        },
+        onError(reason) {
+        },
+        onComplete() {
+          if (api2.addLocalReference === null) {
+            callbacks.onComplete();
+          }
+        }
+      });
+    } else {
+      enumerateInstances(this, callerEnv);
+    }
+    function enumerateInstances(factory, env2) {
+      const { DVM_JNI_ENV_OFFSET_SELF: DVM_JNI_ENV_OFFSET_SELF2 } = android_exports;
+      const thread = env2.handle.add(DVM_JNI_ENV_OFFSET_SELF2).readPointer();
+      let ptrClassObject;
+      const h = classWrapper.$borrowClassHandle(env2);
+      try {
+        ptrClassObject = api2.dvmDecodeIndirectRef(thread, h.value);
+      } finally {
+        h.unref(env2);
+      }
+      const pattern = ptrClassObject.toMatchPattern();
+      const heapSourceBase = api2.dvmHeapSourceGetBase();
+      const heapSourceLimit = api2.dvmHeapSourceGetLimit();
+      const size = heapSourceLimit.sub(heapSourceBase).toInt32();
+      Memory.scan(heapSourceBase, size, pattern, {
+        onMatch: (address, size2) => {
+          if (api2.dvmIsValidObject(address)) {
+            vm2.perform((env3) => {
+              const thread2 = env3.handle.add(DVM_JNI_ENV_OFFSET_SELF2).readPointer();
+              let instance;
+              const localReference = api2.addLocalReference(thread2, address);
+              try {
+                instance = factory.cast(localReference, classWrapper);
+              } finally {
+                env3.deleteLocalRef(localReference);
+              }
+              const result = callbacks.onMatch(instance);
+              if (result === "stop") {
+                return "stop";
+              }
+            });
+          }
+        },
+        onError(reason) {
+        },
+        onComplete() {
+          callbacks.onComplete();
+        }
+      });
+    }
+  }
+  openClassFile(filePath) {
+    return new DexFile(filePath, null, this);
+  }
+  _getType(typeName, unbox = true) {
+    return getType(typeName, unbox, this);
+  }
+};
+function makeClassWrapperConstructor() {
+  return function(handle2, strategy, env2, owned) {
+    return Wrapper.call(this, handle2, strategy, env2, owned);
+  };
+}
+function Wrapper(handle2, strategy, env2, owned = true) {
+  if (handle2 !== null) {
+    if (owned) {
+      const h = env2.newGlobalRef(handle2);
+      this.$h = h;
+      this.$r = Script.bindWeak(this, vm2.makeHandleDestructor(h));
+    } else {
+      this.$h = handle2;
+      this.$r = null;
+    }
+  } else {
+    this.$h = null;
+    this.$r = null;
+  }
+  this.$t = strategy;
+  return new Proxy(this, wrapperHandler);
+}
+wrapperHandler = {
+  has(target, property) {
+    if (property in target) {
+      return true;
+    }
+    return target.$has(property);
+  },
+  get(target, property, receiver) {
+    if (typeof property !== "string" || property.startsWith("$") || property === "class") {
+      return target[property];
+    }
+    const unwrap2 = target.$find(property);
+    if (unwrap2 !== null) {
+      return unwrap2(receiver);
+    }
+    return target[property];
+  },
+  set(target, property, value, receiver) {
+    target[property] = value;
+    return true;
+  },
+  ownKeys(target) {
+    return target.$list();
+  },
+  getOwnPropertyDescriptor(target, property) {
+    if (Object.prototype.hasOwnProperty.call(target, property)) {
+      return Object.getOwnPropertyDescriptor(target, property);
+    }
+    return {
+      writable: false,
+      configurable: true,
+      enumerable: true
+    };
+  }
+};
+Object.defineProperties(Wrapper.prototype, {
+  [Symbol.for("new")]: {
+    enumerable: false,
+    get() {
+      return this.$getCtor("allocAndInit");
+    }
+  },
+  $new: {
+    enumerable: true,
+    get() {
+      return this[Symbol.for("new")];
+    }
+  },
+  [Symbol.for("alloc")]: {
+    enumerable: false,
+    value() {
+      const env2 = vm2.getEnv();
+      const h = this.$borrowClassHandle(env2);
+      try {
+        const obj = env2.allocObject(h.value);
+        const factory = this.$f;
+        return factory.cast(obj, this);
+      } finally {
+        h.unref(env2);
+      }
+    }
+  },
+  $alloc: {
+    enumerable: true,
+    get() {
+      return this[Symbol.for("$alloc")];
+    }
+  },
+  [Symbol.for("init")]: {
+    enumerable: false,
+    get() {
+      return this.$getCtor("initOnly");
+    }
+  },
+  $init: {
+    enumerable: true,
+    get() {
+      return this[Symbol.for("init")];
+    }
+  },
+  [Symbol.for("dispose")]: {
+    enumerable: false,
+    value() {
+      const ref = this.$r;
+      if (ref !== null) {
+        this.$r = null;
+        Script.unbindWeak(ref);
+      }
+      if (this.$h !== null) {
+        this.$h = void 0;
+      }
+    }
+  },
+  $dispose: {
+    enumerable: true,
+    get() {
+      return this[Symbol.for("dispose")];
+    }
+  },
+  [Symbol.for("clone")]: {
+    enumerable: false,
+    value(env2) {
+      const C = this.$C;
+      return new C(this.$h, this.$t, env2);
+    }
+  },
+  $clone: {
+    value(env2) {
+      return this[Symbol.for("clone")](env2);
+    }
+  },
+  [Symbol.for("class")]: {
+    enumerable: false,
+    get() {
+      const env2 = vm2.getEnv();
+      const h = this.$borrowClassHandle(env2);
+      try {
+        const factory = this.$f;
+        return factory.cast(h.value, factory.use("java.lang.Class"));
+      } finally {
+        h.unref(env2);
+      }
+    }
+  },
+  class: {
+    enumerable: true,
+    get() {
+      return this[Symbol.for("class")];
+    }
+  },
+  [Symbol.for("className")]: {
+    enumerable: false,
+    get() {
+      const handle2 = this.$h;
+      if (handle2 === null) {
+        return this.$n;
+      }
+      return vm2.getEnv().getObjectClassName(handle2);
+    }
+  },
+  $className: {
+    enumerable: true,
+    get() {
+      return this[Symbol.for("className")];
+    }
+  },
+  [Symbol.for("ownMembers")]: {
+    enumerable: false,
+    get() {
+      const model = this.$l;
+      return model.list();
+    }
+  },
+  $ownMembers: {
+    enumerable: true,
+    get() {
+      return this[Symbol.for("ownMembers")];
+    }
+  },
+  [Symbol.for("super")]: {
+    enumerable: false,
+    get() {
+      const env2 = vm2.getEnv();
+      const C = this.$s.$C;
+      return new C(this.$h, STRATEGY_DIRECT, env2);
+    }
+  },
+  $super: {
+    enumerable: true,
+    get() {
+      return this[Symbol.for("super")];
+    }
+  },
+  [Symbol.for("s")]: {
+    enumerable: false,
+    get() {
+      const proto = Object.getPrototypeOf(this);
+      let superWrapper = proto.$_s;
+      if (superWrapper === void 0) {
+        const env2 = vm2.getEnv();
+        const h = this.$borrowClassHandle(env2);
+        try {
+          const superHandle = env2.getSuperclass(h.value);
+          if (!superHandle.isNull()) {
+            try {
+              const superClassName = env2.getClassName(superHandle);
+              const factory = proto.$f;
+              superWrapper = factory._getUsedClass(superClassName);
+              if (superWrapper === void 0) {
+                try {
+                  const getSuperClassHandle = makeSuperHandleGetter(this);
+                  superWrapper = factory._make(superClassName, getSuperClassHandle, env2);
+                } finally {
+                  factory._setUsedClass(superClassName, superWrapper);
+                }
+              }
+            } finally {
+              env2.deleteLocalRef(superHandle);
+            }
+          } else {
+            superWrapper = null;
+          }
+        } finally {
+          h.unref(env2);
+        }
+        proto.$_s = superWrapper;
+      }
+      return superWrapper;
+    }
+  },
+  $s: {
+    get() {
+      return this[Symbol.for("s")];
+    }
+  },
+  [Symbol.for("isSameObject")]: {
+    enumerable: false,
+    value(obj) {
+      const env2 = vm2.getEnv();
+      return env2.isSameObject(obj.$h, this.$h);
+    }
+  },
+  $isSameObject: {
+    value(obj) {
+      return this[Symbol.for("isSameObject")](obj);
+    }
+  },
+  [Symbol.for("getCtor")]: {
+    enumerable: false,
+    value(type) {
+      const slot = this.$c;
+      let ctor = slot[0];
+      if (ctor === null) {
+        const env2 = vm2.getEnv();
+        const h = this.$borrowClassHandle(env2);
+        try {
+          ctor = makeConstructor(h.value, this.$w, env2);
+          slot[0] = ctor;
+        } finally {
+          h.unref(env2);
+        }
+      }
+      return ctor[type];
+    }
+  },
+  $getCtor: {
+    value(type) {
+      return this[Symbol.for("getCtor")](type);
+    }
+  },
+  [Symbol.for("borrowClassHandle")]: {
+    enumerable: false,
+    value(env2) {
+      const className = this.$n;
+      const classHandles = this.$f._classHandles;
+      let handle2 = classHandles.get(className);
+      if (handle2 === void 0) {
+        handle2 = new ClassHandle(this.$gch(env2), env2);
+        classHandles.set(className, handle2, env2);
+      }
+      return handle2.ref();
+    }
+  },
+  $borrowClassHandle: {
+    value(env2) {
+      return this[Symbol.for("borrowClassHandle")](env2);
+    }
+  },
+  [Symbol.for("copyClassHandle")]: {
+    enumerable: false,
+    value(env2) {
+      const h = this.$borrowClassHandle(env2);
+      try {
+        return env2.newLocalRef(h.value);
+      } finally {
+        h.unref(env2);
+      }
+    }
+  },
+  $copyClassHandle: {
+    value(env2) {
+      return this[Symbol.for("copyClassHandle")](env2);
+    }
+  },
+  [Symbol.for("getHandle")]: {
+    enumerable: false,
+    value(env2) {
+      const handle2 = this.$h;
+      const isDisposed = handle2 === void 0;
+      if (isDisposed) {
+        throw new Error("Wrapper is disposed; perhaps it was borrowed from a hook instead of calling Java.retain() to make a long-lived wrapper?");
+      }
+      return handle2;
+    }
+  },
+  $getHandle: {
+    value(env2) {
+      return this[Symbol.for("getHandle")](env2);
+    }
+  },
+  [Symbol.for("list")]: {
+    enumerable: false,
+    value() {
+      const superWrapper = this.$s;
+      const superMembers = superWrapper !== null ? superWrapper.$list() : [];
+      const model = this.$l;
+      return Array.from(new Set(superMembers.concat(model.list())));
+    }
+  },
+  $list: {
+    get() {
+      return this[Symbol.for("list")];
+    }
+  },
+  [Symbol.for("has")]: {
+    enumerable: false,
+    value(member) {
+      const members = this.$m;
+      if (members.has(member)) {
+        return true;
+      }
+      const model = this.$l;
+      if (model.has(member)) {
+        return true;
+      }
+      const superWrapper = this.$s;
+      if (superWrapper !== null && superWrapper.$has(member)) {
+        return true;
+      }
+      return false;
+    }
+  },
+  $has: {
+    value(member) {
+      return this[Symbol.for("has")](member);
+    }
+  },
+  [Symbol.for("find")]: {
+    enumerable: false,
+    value(member) {
+      const members = this.$m;
+      let value = members.get(member);
+      if (value !== void 0) {
+        return value;
+      }
+      const model = this.$l;
+      const spec = model.find(member);
+      if (spec !== null) {
+        const env2 = vm2.getEnv();
+        const h = this.$borrowClassHandle(env2);
+        try {
+          value = makeMember(member, spec, h.value, this.$w, env2);
+        } finally {
+          h.unref(env2);
+        }
+        members.set(member, value);
+        return value;
+      }
+      const superWrapper = this.$s;
+      if (superWrapper !== null) {
+        return superWrapper.$find(member);
+      }
+      return null;
+    }
+  },
+  $find: {
+    value(member) {
+      return this[Symbol.for("find")](member);
+    }
+  },
+  [Symbol.for("toJSON")]: {
+    enumerable: false,
+    value() {
+      const wrapperName = this.$n;
+      const handle2 = this.$h;
+      if (handle2 === null) {
+        return `<class: ${wrapperName}>`;
+      }
+      const actualName = this.$className;
+      if (wrapperName === actualName) {
+        return `<instance: ${wrapperName}>`;
+      }
+      return `<instance: ${wrapperName}, $className: ${actualName}>`;
+    }
+  },
+  toJSON: {
+    get() {
+      return this[Symbol.for("toJSON")];
+    }
+  }
+});
+function ClassHandle(value, env2) {
+  this.value = env2.newGlobalRef(value);
+  env2.deleteLocalRef(value);
+  this.refs = 1;
+}
+ClassHandle.prototype.ref = function() {
+  this.refs++;
+  return this;
+};
+ClassHandle.prototype.unref = function(env2) {
+  if (--this.refs === 0) {
+    env2.deleteGlobalRef(this.value);
+  }
+};
+function releaseClassHandle(handle2, env2) {
+  handle2.unref(env2);
+}
+function makeBasicClassHandleGetter(className) {
+  const canonicalClassName = className.replace(/\./g, "/");
+  return function(env2) {
+    const tid = getCurrentThreadId();
+    ignore(tid);
+    try {
+      return env2.findClass(canonicalClassName);
+    } finally {
+      unignore(tid);
+    }
+  };
+}
+function makeLoaderClassHandleGetter(className, usedLoader, callerEnv) {
+  if (cachedLoaderMethod === null) {
+    cachedLoaderInvoke = callerEnv.vaMethod("pointer", ["pointer"]);
+    cachedLoaderMethod = usedLoader.loadClass.overload("java.lang.String").handle;
+  }
+  callerEnv = null;
+  return function(env2) {
+    const classNameValue = env2.newStringUtf(className);
+    const tid = getCurrentThreadId();
+    ignore(tid);
+    try {
+      const result = cachedLoaderInvoke(env2.handle, usedLoader.$h, cachedLoaderMethod, classNameValue);
+      env2.throwIfExceptionPending();
+      return result;
+    } finally {
+      unignore(tid);
+      env2.deleteLocalRef(classNameValue);
+    }
+  };
+}
+function makeSuperHandleGetter(classWrapper) {
+  return function(env2) {
+    const h = classWrapper.$borrowClassHandle(env2);
+    try {
+      return env2.getSuperclass(h.value);
+    } finally {
+      h.unref(env2);
+    }
+  };
+}
+function makeConstructor(classHandle, classWrapper, env2) {
+  const { $n: className, $f: factory } = classWrapper;
+  const methodName = basename(className);
+  const Class = env2.javaLangClass();
+  const Constructor = env2.javaLangReflectConstructor();
+  const invokeObjectMethodNoArgs = env2.vaMethod("pointer", []);
+  const invokeUInt8MethodNoArgs = env2.vaMethod("uint8", []);
+  const jsCtorMethods = [];
+  const jsInitMethods = [];
+  const jsRetType = factory._getType(className, false);
+  const jsVoidType = factory._getType("void", false);
+  const constructors = invokeObjectMethodNoArgs(env2.handle, classHandle, Class.getDeclaredConstructors);
+  try {
+    const n = env2.getArrayLength(constructors);
+    if (n !== 0) {
+      for (let i = 0; i !== n; i++) {
+        let methodId, types3;
+        const constructor = env2.getObjectArrayElement(constructors, i);
+        try {
+          methodId = env2.fromReflectedMethod(constructor);
+          types3 = invokeObjectMethodNoArgs(env2.handle, constructor, Constructor.getGenericParameterTypes);
+        } finally {
+          env2.deleteLocalRef(constructor);
+        }
+        let jsArgTypes;
+        try {
+          jsArgTypes = readTypeNames(env2, types3).map((name) => factory._getType(name));
+        } finally {
+          env2.deleteLocalRef(types3);
+        }
+        jsCtorMethods.push(makeMethod(methodName, classWrapper, CONSTRUCTOR_METHOD, methodId, jsRetType, jsArgTypes, env2));
+        jsInitMethods.push(makeMethod(methodName, classWrapper, INSTANCE_METHOD, methodId, jsVoidType, jsArgTypes, env2));
+      }
+    } else {
+      const isInterface = invokeUInt8MethodNoArgs(env2.handle, classHandle, Class.isInterface);
+      if (isInterface) {
+        throw new Error("cannot instantiate an interface");
+      }
+      const defaultClass = env2.javaLangObject();
+      const defaultConstructor = env2.getMethodId(defaultClass, "<init>", "()V");
+      jsCtorMethods.push(makeMethod(methodName, classWrapper, CONSTRUCTOR_METHOD, defaultConstructor, jsRetType, [], env2));
+      jsInitMethods.push(makeMethod(methodName, classWrapper, INSTANCE_METHOD, defaultConstructor, jsVoidType, [], env2));
+    }
+  } finally {
+    env2.deleteLocalRef(constructors);
+  }
+  if (jsInitMethods.length === 0) {
+    throw new Error("no supported overloads");
+  }
+  return {
+    allocAndInit: makeMethodDispatcher(jsCtorMethods),
+    initOnly: makeMethodDispatcher(jsInitMethods)
+  };
+}
+function makeMember(name, spec, classHandle, classWrapper, env2) {
+  if (spec.startsWith("m")) {
+    return makeMethodFromSpec(name, spec, classHandle, classWrapper, env2);
+  }
+  return makeFieldFromSpec(name, spec, classHandle, classWrapper, env2);
+}
+function makeMethodFromSpec(name, spec, classHandle, classWrapper, env2) {
+  const { $f: factory } = classWrapper;
+  const overloads = spec.split(":").slice(1);
+  const Method = env2.javaLangReflectMethod();
+  const invokeObjectMethodNoArgs = env2.vaMethod("pointer", []);
+  const invokeUInt8MethodNoArgs = env2.vaMethod("uint8", []);
+  const methods = overloads.map((params) => {
+    const type = params[0] === "s" ? STATIC_METHOD : INSTANCE_METHOD;
+    const methodId = ptr(params.substr(1));
+    let jsRetType;
+    const jsArgTypes = [];
+    const handle2 = env2.toReflectedMethod(classHandle, methodId, type === STATIC_METHOD ? 1 : 0);
+    try {
+      const isVarArgs = !!invokeUInt8MethodNoArgs(env2.handle, handle2, Method.isVarArgs);
+      const retType2 = invokeObjectMethodNoArgs(env2.handle, handle2, Method.getGenericReturnType);
+      env2.throwIfExceptionPending();
+      try {
+        jsRetType = factory._getType(env2.getTypeName(retType2));
+      } finally {
+        env2.deleteLocalRef(retType2);
+      }
+      const argTypes2 = invokeObjectMethodNoArgs(env2.handle, handle2, Method.getParameterTypes);
+      try {
+        const n = env2.getArrayLength(argTypes2);
+        for (let i = 0; i !== n; i++) {
+          const t = env2.getObjectArrayElement(argTypes2, i);
+          let argClassName;
+          try {
+            argClassName = isVarArgs && i === n - 1 ? env2.getArrayTypeName(t) : env2.getTypeName(t);
+          } finally {
+            env2.deleteLocalRef(t);
+          }
+          const argType = factory._getType(argClassName);
+          jsArgTypes.push(argType);
+        }
+      } finally {
+        env2.deleteLocalRef(argTypes2);
+      }
+    } catch (e) {
+      return null;
+    } finally {
+      env2.deleteLocalRef(handle2);
+    }
+    return makeMethod(name, classWrapper, type, methodId, jsRetType, jsArgTypes, env2);
+  }).filter((m2) => m2 !== null);
+  if (methods.length === 0) {
+    throw new Error("No supported overloads");
+  }
+  if (name === "valueOf") {
+    ensureDefaultValueOfImplemented(methods);
+  }
+  const result = makeMethodDispatcher(methods);
+  return function(receiver) {
+    return result;
+  };
+}
+function makeMethodDispatcher(overloads) {
+  const m2 = makeMethodDispatcherCallable();
+  Object.setPrototypeOf(m2, dispatcherPrototype);
+  m2._o = overloads;
+  return m2;
+}
+function makeMethodDispatcherCallable() {
+  const m2 = function() {
+    return m2.invoke(this, arguments);
+  };
+  return m2;
+}
+dispatcherPrototype = Object.create(Function.prototype, {
+  overloads: {
+    enumerable: true,
+    get() {
+      return this._o;
+    }
+  },
+  overload: {
+    value(...args) {
+      const overloads = this._o;
+      const numArgs = args.length;
+      const signature2 = args.join(":");
+      for (let i = 0; i !== overloads.length; i++) {
+        const method2 = overloads[i];
+        const { argumentTypes } = method2;
+        if (argumentTypes.length !== numArgs) {
+          continue;
+        }
+        const s = argumentTypes.map((t) => t.className).join(":");
+        if (s === signature2) {
+          return method2;
+        }
+      }
+      throwOverloadError(this.methodName, this.overloads, "specified argument types do not match any of:");
+    }
+  },
+  methodName: {
+    enumerable: true,
+    get() {
+      return this._o[0].methodName;
+    }
+  },
+  holder: {
+    enumerable: true,
+    get() {
+      return this._o[0].holder;
+    }
+  },
+  type: {
+    enumerable: true,
+    get() {
+      return this._o[0].type;
+    }
+  },
+  handle: {
+    enumerable: true,
+    get() {
+      throwIfDispatcherAmbiguous(this);
+      return this._o[0].handle;
+    }
+  },
+  implementation: {
+    enumerable: true,
+    get() {
+      throwIfDispatcherAmbiguous(this);
+      return this._o[0].implementation;
+    },
+    set(fn) {
+      throwIfDispatcherAmbiguous(this);
+      this._o[0].implementation = fn;
+    }
+  },
+  returnType: {
+    enumerable: true,
+    get() {
+      throwIfDispatcherAmbiguous(this);
+      return this._o[0].returnType;
+    }
+  },
+  argumentTypes: {
+    enumerable: true,
+    get() {
+      throwIfDispatcherAmbiguous(this);
+      return this._o[0].argumentTypes;
+    }
+  },
+  canInvokeWith: {
+    enumerable: true,
+    get(args) {
+      throwIfDispatcherAmbiguous(this);
+      return this._o[0].canInvokeWith;
+    }
+  },
+  clone: {
+    enumerable: true,
+    value(options) {
+      throwIfDispatcherAmbiguous(this);
+      return this._o[0].clone(options);
+    }
+  },
+  invoke: {
+    value(receiver, args) {
+      const overloads = this._o;
+      const isInstance = receiver.$h !== null;
+      for (let i = 0; i !== overloads.length; i++) {
+        const method2 = overloads[i];
+        if (!method2.canInvokeWith(args)) {
+          continue;
+        }
+        if (method2.type === INSTANCE_METHOD && !isInstance) {
+          const name = this.methodName;
+          if (name === "toString") {
+            return `<class: ${receiver.$n}>`;
+          }
+          throw new Error(name + ": cannot call instance method without an instance");
+        }
+        return method2.apply(receiver, args);
+      }
+      if (this.methodName === "toString") {
+        return `<class: ${receiver.$n}>`;
+      }
+      throwOverloadError(this.methodName, this.overloads, "argument types do not match any of:");
+    }
+  }
+});
+function makeOverloadId(name, returnType, argumentTypes) {
+  return `${returnType.className} ${name}(${argumentTypes.map((t) => t.className).join(", ")})`;
+}
+function throwIfDispatcherAmbiguous(dispatcher) {
+  const methods = dispatcher._o;
+  if (methods.length > 1) {
+    throwOverloadError(methods[0].methodName, methods, "has more than one overload, use .overload(<signature>) to choose from:");
+  }
+}
+function throwOverloadError(name, methods, message) {
+  const methodsSortedByArity = methods.slice().sort((a, b) => a.argumentTypes.length - b.argumentTypes.length);
+  const overloads = methodsSortedByArity.map((m2) => {
+    const argTypes2 = m2.argumentTypes;
+    if (argTypes2.length > 0) {
+      return ".overload('" + m2.argumentTypes.map((t) => t.className).join("', '") + "')";
+    } else {
+      return ".overload()";
+    }
+  });
+  throw new Error(`${name}(): ${message}
+	${overloads.join("\n	")}`);
+}
+function makeMethod(methodName, classWrapper, type, methodId, retType2, argTypes2, env2, invocationOptions2) {
+  const rawRetType = retType2.type;
+  const rawArgTypes = argTypes2.map((t) => t.type);
+  if (env2 === null) {
+    env2 = vm2.getEnv();
+  }
+  let callVirtually, callDirectly;
+  if (type === INSTANCE_METHOD) {
+    callVirtually = env2.vaMethod(rawRetType, rawArgTypes, invocationOptions2);
+    callDirectly = env2.nonvirtualVaMethod(rawRetType, rawArgTypes, invocationOptions2);
+  } else if (type === STATIC_METHOD) {
+    callVirtually = env2.staticVaMethod(rawRetType, rawArgTypes, invocationOptions2);
+    callDirectly = callVirtually;
+  } else {
+    callVirtually = env2.constructor(rawArgTypes, invocationOptions2);
+    callDirectly = callVirtually;
+  }
+  return makeMethodInstance([methodName, classWrapper, type, methodId, retType2, argTypes2, callVirtually, callDirectly]);
+}
+function makeMethodInstance(params) {
+  const m2 = makeMethodCallable();
+  Object.setPrototypeOf(m2, methodPrototype);
+  m2._p = params;
+  return m2;
+}
+function makeMethodCallable() {
+  const m2 = function() {
+    return m2.invoke(this, arguments);
+  };
+  return m2;
+}
+methodPrototype = Object.create(Function.prototype, {
+  methodName: {
+    enumerable: true,
+    get() {
+      return this._p[0];
+    }
+  },
+  holder: {
+    enumerable: true,
+    get() {
+      return this._p[1];
+    }
+  },
+  type: {
+    enumerable: true,
+    get() {
+      return this._p[2];
+    }
+  },
+  handle: {
+    enumerable: true,
+    get() {
+      return this._p[3];
+    }
+  },
+  implementation: {
+    enumerable: true,
+    get() {
+      const replacement = this._r;
+      return replacement !== void 0 ? replacement : null;
+    },
+    set(fn) {
+      const params = this._p;
+      const holder = params[1];
+      const type = params[2];
+      if (type === CONSTRUCTOR_METHOD) {
+        throw new Error("Reimplementing $new is not possible; replace implementation of $init instead");
+      }
+      const existingReplacement = this._r;
+      if (existingReplacement !== void 0) {
+        holder.$f._patchedMethods.delete(this);
+        const mangler = existingReplacement._m;
+        mangler.revert(vm2);
+        this._r = void 0;
+      }
+      if (fn !== null) {
+        const [methodName, classWrapper, type2, methodId, retType2, argTypes2] = params;
+        const replacement = implement(methodName, classWrapper, type2, retType2, argTypes2, fn, this);
+        const mangler = makeMethodMangler3(methodId);
+        replacement._m = mangler;
+        this._r = replacement;
+        mangler.replace(replacement, type2 === INSTANCE_METHOD, argTypes2, vm2, api2);
+        holder.$f._patchedMethods.add(this);
+      }
+    }
+  },
+  returnType: {
+    enumerable: true,
+    get() {
+      return this._p[4];
+    }
+  },
+  argumentTypes: {
+    enumerable: true,
+    get() {
+      return this._p[5];
+    }
+  },
+  canInvokeWith: {
+    enumerable: true,
+    value(args) {
+      const argTypes2 = this._p[5];
+      if (args.length !== argTypes2.length) {
+        return false;
+      }
+      return argTypes2.every((t, i) => {
+        return t.isCompatible(args[i]);
+      });
+    }
+  },
+  clone: {
+    enumerable: true,
+    value(options) {
+      const params = this._p.slice(0, 6);
+      return makeMethod(...params, null, options);
+    }
+  },
+  invoke: {
+    value(receiver, args) {
+      const env2 = vm2.getEnv();
+      const params = this._p;
+      const type = params[2];
+      const retType2 = params[4];
+      const argTypes2 = params[5];
+      const replacement = this._r;
+      const isInstanceMethod = type === INSTANCE_METHOD;
+      const numArgs = args.length;
+      const frameCapacity = 2 + numArgs;
+      env2.pushLocalFrame(frameCapacity);
+      let borrowedHandle = null;
+      try {
+        let jniThis;
+        if (isInstanceMethod) {
+          jniThis = receiver.$getHandle();
+        } else {
+          borrowedHandle = receiver.$borrowClassHandle(env2);
+          jniThis = borrowedHandle.value;
+        }
+        let methodId;
+        let strategy = receiver.$t;
+        if (replacement === void 0) {
+          methodId = params[3];
+        } else {
+          const mangler = replacement._m;
+          methodId = mangler.resolveTarget(receiver, isInstanceMethod, env2, api2);
+          if (isArtVm) {
+            const pendingCalls = replacement._c;
+            if (pendingCalls.has(getCurrentThreadId())) {
+              strategy = STRATEGY_DIRECT;
+            }
+          }
+        }
+        const jniArgs = [
+          env2.handle,
+          jniThis,
+          methodId
+        ];
+        for (let i = 0; i !== numArgs; i++) {
+          jniArgs.push(argTypes2[i].toJni(args[i], env2));
+        }
+        let jniCall;
+        if (strategy === STRATEGY_VIRTUAL) {
+          jniCall = params[6];
+        } else {
+          jniCall = params[7];
+          if (isInstanceMethod) {
+            jniArgs.splice(2, 0, receiver.$copyClassHandle(env2));
+          }
+        }
+        const jniRetval = jniCall.apply(null, jniArgs);
+        env2.throwIfExceptionPending();
+        return retType2.fromJni(jniRetval, env2, true);
+      } finally {
+        if (borrowedHandle !== null) {
+          borrowedHandle.unref(env2);
+        }
+        env2.popLocalFrame(NULL);
+      }
+    }
+  },
+  toString: {
+    enumerable: true,
+    value() {
+      return `function ${this.methodName}(${this.argumentTypes.map((t) => t.className).join(", ")}): ${this.returnType.className}`;
+    }
+  }
+});
+function implement(methodName, classWrapper, type, retType2, argTypes2, handler, fallback = null) {
+  const pendingCalls = /* @__PURE__ */ new Set();
+  const f2 = makeMethodImplementation([methodName, classWrapper, type, retType2, argTypes2, handler, fallback, pendingCalls]);
+  const impl2 = new NativeCallback(f2, retType2.type, ["pointer", "pointer"].concat(argTypes2.map((t) => t.type)));
+  impl2._c = pendingCalls;
+  return impl2;
+}
+function makeMethodImplementation(params) {
+  return function() {
+    return handleMethodInvocation(arguments, params);
+  };
+}
+function handleMethodInvocation(jniArgs, params) {
+  const env2 = new Env(jniArgs[0], vm2);
+  const [methodName, classWrapper, type, retType2, argTypes2, handler, fallback, pendingCalls] = params;
+  const ownedObjects = [];
+  let self;
+  if (type === INSTANCE_METHOD) {
+    const C = classWrapper.$C;
+    self = new C(jniArgs[1], STRATEGY_VIRTUAL, env2, false);
+  } else {
+    self = classWrapper;
+  }
+  const tid = getCurrentThreadId();
+  env2.pushLocalFrame(3);
+  let haveFrame = true;
+  vm2.link(tid, env2);
+  try {
+    pendingCalls.add(tid);
+    let fn;
+    if (fallback === null || !ignoredThreads.has(tid)) {
+      fn = handler;
+    } else {
+      fn = fallback;
+    }
+    const args = [];
+    const numArgs = jniArgs.length - 2;
+    for (let i = 0; i !== numArgs; i++) {
+      const t = argTypes2[i];
+      const value = t.fromJni(jniArgs[2 + i], env2, false);
+      args.push(value);
+      ownedObjects.push(value);
+    }
+    const retval = fn.apply(self, args);
+    if (!retType2.isCompatible(retval)) {
+      throw new Error(`Implementation for ${methodName} expected return value compatible with ${retType2.className}`);
+    }
+    let jniRetval = retType2.toJni(retval, env2);
+    if (retType2.type === "pointer") {
+      jniRetval = env2.popLocalFrame(jniRetval);
+      haveFrame = false;
+      ownedObjects.push(retval);
+    }
+    return jniRetval;
+  } catch (e) {
+    const jniException = e.$h;
+    if (jniException !== void 0) {
+      env2.throw(jniException);
+    } else {
+      Script.nextTick(() => {
+        throw e;
+      });
+    }
+    return retType2.defaultValue;
+  } finally {
+    vm2.unlink(tid);
+    if (haveFrame) {
+      env2.popLocalFrame(NULL);
+    }
+    pendingCalls.delete(tid);
+    ownedObjects.forEach((obj) => {
+      if (obj === null) {
+        return;
+      }
+      const dispose2 = obj.$dispose;
+      if (dispose2 !== void 0) {
+        dispose2.call(obj);
+      }
+    });
+  }
+}
+function ensureDefaultValueOfImplemented(methods) {
+  const { holder, type } = methods[0];
+  const hasDefaultValueOf = methods.some((m2) => m2.type === type && m2.argumentTypes.length === 0);
+  if (hasDefaultValueOf) {
+    return;
+  }
+  methods.push(makeValueOfMethod([holder, type]));
+}
+function makeValueOfMethod(params) {
+  const m2 = makeValueOfCallable();
+  Object.setPrototypeOf(m2, valueOfPrototype);
+  m2._p = params;
+  return m2;
+}
+function makeValueOfCallable() {
+  const m2 = function() {
+    return this;
+  };
+  return m2;
+}
+valueOfPrototype = Object.create(Function.prototype, {
+  methodName: {
+    enumerable: true,
+    get() {
+      return "valueOf";
+    }
+  },
+  holder: {
+    enumerable: true,
+    get() {
+      return this._p[0];
+    }
+  },
+  type: {
+    enumerable: true,
+    get() {
+      return this._p[1];
+    }
+  },
+  handle: {
+    enumerable: true,
+    get() {
+      return NULL;
+    }
+  },
+  implementation: {
+    enumerable: true,
+    get() {
+      return null;
+    },
+    set(fn) {
+    }
+  },
+  returnType: {
+    enumerable: true,
+    get() {
+      const classWrapper = this.holder;
+      return classWrapper.$f.use(classWrapper.$n);
+    }
+  },
+  argumentTypes: {
+    enumerable: true,
+    get() {
+      return [];
+    }
+  },
+  canInvokeWith: {
+    enumerable: true,
+    value(args) {
+      return args.length === 0;
+    }
+  },
+  clone: {
+    enumerable: true,
+    value(options) {
+      throw new Error("Invalid operation");
+    }
+  }
+});
+function makeFieldFromSpec(name, spec, classHandle, classWrapper, env2) {
+  const type = spec[2] === "s" ? STATIC_FIELD : INSTANCE_FIELD;
+  const id = ptr(spec.substr(3));
+  const { $f: factory } = classWrapper;
+  let fieldType;
+  const field = env2.toReflectedField(classHandle, id, type === STATIC_FIELD ? 1 : 0);
+  try {
+    fieldType = env2.vaMethod("pointer", [])(env2.handle, field, env2.javaLangReflectField().getGenericType);
+    env2.throwIfExceptionPending();
+  } finally {
+    env2.deleteLocalRef(field);
+  }
+  let rtype;
+  try {
+    rtype = factory._getType(env2.getTypeName(fieldType));
+  } finally {
+    env2.deleteLocalRef(fieldType);
+  }
+  let getValue, setValue;
+  const rtypeJni = rtype.type;
+  if (type === STATIC_FIELD) {
+    getValue = env2.getStaticField(rtypeJni);
+    setValue = env2.setStaticField(rtypeJni);
+  } else {
+    getValue = env2.getField(rtypeJni);
+    setValue = env2.setField(rtypeJni);
+  }
+  return makeFieldFromParams([type, rtype, id, getValue, setValue]);
+}
+function makeFieldFromParams(params) {
+  return function(receiver) {
+    return new Field([receiver].concat(params));
+  };
+}
+function Field(params) {
+  this._p = params;
+}
+Object.defineProperties(Field.prototype, {
+  value: {
+    enumerable: true,
+    get() {
+      const [holder, type, rtype, id, getValue] = this._p;
+      const env2 = vm2.getEnv();
+      env2.pushLocalFrame(4);
+      let borrowedHandle = null;
+      try {
+        let jniThis;
+        if (type === INSTANCE_FIELD) {
+          jniThis = holder.$getHandle();
+          if (jniThis === null) {
+            throw new Error("Cannot access an instance field without an instance");
+          }
+        } else {
+          borrowedHandle = holder.$borrowClassHandle(env2);
+          jniThis = borrowedHandle.value;
+        }
+        const jniRetval = getValue(env2.handle, jniThis, id);
+        env2.throwIfExceptionPending();
+        return rtype.fromJni(jniRetval, env2, true);
+      } finally {
+        if (borrowedHandle !== null) {
+          borrowedHandle.unref(env2);
+        }
+        env2.popLocalFrame(NULL);
+      }
+    },
+    set(value) {
+      const [holder, type, rtype, id, , setValue] = this._p;
+      const env2 = vm2.getEnv();
+      env2.pushLocalFrame(4);
+      let borrowedHandle = null;
+      try {
+        let jniThis;
+        if (type === INSTANCE_FIELD) {
+          jniThis = holder.$getHandle();
+          if (jniThis === null) {
+            throw new Error("Cannot access an instance field without an instance");
+          }
+        } else {
+          borrowedHandle = holder.$borrowClassHandle(env2);
+          jniThis = borrowedHandle.value;
+        }
+        if (!rtype.isCompatible(value)) {
+          throw new Error(`Expected value compatible with ${rtype.className}`);
+        }
+        const jniValue = rtype.toJni(value, env2);
+        setValue(env2.handle, jniThis, id, jniValue);
+        env2.throwIfExceptionPending();
+      } finally {
+        if (borrowedHandle !== null) {
+          borrowedHandle.unref(env2);
+        }
+        env2.popLocalFrame(NULL);
+      }
+    }
+  },
+  holder: {
+    enumerable: true,
+    get() {
+      return this._p[0];
+    }
+  },
+  fieldType: {
+    enumerable: true,
+    get() {
+      return this._p[1];
+    }
+  },
+  fieldReturnType: {
+    enumerable: true,
+    get() {
+      return this._p[2];
+    }
+  },
+  toString: {
+    enumerable: true,
+    value() {
+      const inlineString = `Java.Field{holder: ${this.holder}, fieldType: ${this.fieldType}, fieldReturnType: ${this.fieldReturnType}, value: ${this.value}}`;
+      if (inlineString.length < 200) {
+        return inlineString;
+      }
+      const multilineString = `Java.Field{
+	holder: ${this.holder},
+	fieldType: ${this.fieldType},
+	fieldReturnType: ${this.fieldReturnType},
+	value: ${this.value},
+}`;
+      return multilineString.split("\n").map((l) => l.length > 200 ? l.slice(0, l.indexOf(" ") + 1) + "...," : l).join("\n");
+    }
+  }
+});
+var DexFile = class _DexFile {
+  static fromBuffer(buffer, factory) {
+    const fileValue = createTemporaryDex(factory);
+    const filePath = fileValue.getCanonicalPath().toString();
+    const file = new File(filePath, "w");
+    file.write(buffer.buffer);
+    file.close();
+    setReadOnlyDex(filePath, factory);
+    return new _DexFile(filePath, fileValue, factory);
+  }
+  constructor(path, file, factory) {
+    this.path = path;
+    this.file = file;
+    this._factory = factory;
+  }
+  load() {
+    const { _factory: factory } = this;
+    const { codeCacheDir } = factory;
+    const DexClassLoader = factory.use("dalvik.system.DexClassLoader");
+    const JFile = factory.use("java.io.File");
+    let file = this.file;
+    if (file === null) {
+      file = factory.use("java.io.File").$new(this.path);
+    }
+    if (!file.exists()) {
+      throw new Error("File not found");
+    }
+    JFile.$new(codeCacheDir).mkdirs();
+    factory.loader = DexClassLoader.$new(file.getCanonicalPath(), codeCacheDir, null, factory.loader);
+    vm2.preventDetachDueToClassLoader();
+  }
+  getClassNames() {
+    const { _factory: factory } = this;
+    const DexFile2 = factory.use("dalvik.system.DexFile");
+    const optimizedDex = createTemporaryDex(factory);
+    const dx = DexFile2.loadDex(this.path, optimizedDex.getCanonicalPath(), 0);
+    const classNames = [];
+    const enumeratorClassNames = dx.entries();
+    while (enumeratorClassNames.hasMoreElements()) {
+      classNames.push(enumeratorClassNames.nextElement().toString());
+    }
+    return classNames;
+  }
+};
+function createTemporaryDex(factory) {
+  const { cacheDir, tempFileNaming } = factory;
+  const JFile = factory.use("java.io.File");
+  const cacheDirValue = JFile.$new(cacheDir);
+  cacheDirValue.mkdirs();
+  return JFile.createTempFile(tempFileNaming.prefix, tempFileNaming.suffix + ".dex", cacheDirValue);
+}
+function setReadOnlyDex(filePath, factory) {
+  const JFile = factory.use("java.io.File");
+  const file = JFile.$new(filePath);
+  file.setWritable(false, false);
+}
+function getFactoryCache() {
+  switch (factoryCache.state) {
+    case "empty": {
+      factoryCache.state = "pending";
+      const defaultFactory = factoryCache.factories[0];
+      const HashMap = defaultFactory.use("java.util.HashMap");
+      const Integer = defaultFactory.use("java.lang.Integer");
+      factoryCache.loaders = HashMap.$new();
+      factoryCache.Integer = Integer;
+      const loader = defaultFactory.loader;
+      if (loader !== null) {
+        addFactoryToCache(defaultFactory, loader);
+      }
+      factoryCache.state = "ready";
+      return factoryCache;
+    }
+    case "pending":
+      do {
+        Thread.sleep(0.05);
+      } while (factoryCache.state === "pending");
+      return factoryCache;
+    case "ready":
+      return factoryCache;
+  }
+}
+function addFactoryToCache(factory, loader) {
+  const { factories, loaders, Integer } = factoryCache;
+  const index = Integer.$new(factories.indexOf(factory));
+  loaders.put(loader, index);
+  for (let l = loader.getParent(); l !== null; l = l.getParent()) {
+    if (loaders.containsKey(l)) {
+      break;
+    }
+    loaders.put(l, index);
+  }
+}
+function ignore(threadId) {
+  let count = ignoredThreads.get(threadId);
+  if (count === void 0) {
+    count = 0;
+  }
+  count++;
+  ignoredThreads.set(threadId, count);
+}
+function unignore(threadId) {
+  let count = ignoredThreads.get(threadId);
+  if (count === void 0) {
+    throw new Error(`Thread ${threadId} is not ignored`);
+  }
+  count--;
+  if (count === 0) {
+    ignoredThreads.delete(threadId);
+  } else {
+    ignoredThreads.set(threadId, count);
+  }
+}
+function basename(className) {
+  return className.slice(className.lastIndexOf(".") + 1);
+}
+function readTypeNames(env2, types3) {
+  const names = [];
+  const n = env2.getArrayLength(types3);
+  for (let i = 0; i !== n; i++) {
+    const t = env2.getObjectArrayElement(types3, i);
+    try {
+      names.push(env2.getTypeName(t));
+    } finally {
+      env2.deleteLocalRef(t);
+    }
+  }
+  return names;
+}
+function makeSourceFileName(className) {
+  const tokens = className.split(".");
+  return tokens[tokens.length - 1] + ".java";
+}
+
+// node_modules/frida-java-bridge/index.js
+var jsizeSize4 = 4;
+var pointerSize9 = Process.pointerSize;
+var Runtime = class {
+  ACC_PUBLIC = 1;
+  ACC_PRIVATE = 2;
+  ACC_PROTECTED = 4;
+  ACC_STATIC = 8;
+  ACC_FINAL = 16;
+  ACC_SYNCHRONIZED = 32;
+  ACC_BRIDGE = 64;
+  ACC_VARARGS = 128;
+  ACC_NATIVE = 256;
+  ACC_ABSTRACT = 1024;
+  ACC_STRICT = 2048;
+  ACC_SYNTHETIC = 4096;
+  constructor() {
+    this.classFactory = null;
+    this.ClassFactory = ClassFactory;
+    this.vm = null;
+    this.api = null;
+    this._initialized = false;
+    this._apiError = null;
+    this._wakeupHandler = null;
+    this._pollListener = null;
+    this._pendingMainOps = [];
+    this._pendingVmOps = [];
+    this._cachedIsAppProcess = null;
+    try {
+      this._tryInitialize();
+    } catch (e) {
+    }
+  }
+  _tryInitialize() {
+    if (this._initialized) {
+      return true;
+    }
+    if (this._apiError !== null) {
+      throw this._apiError;
+    }
+    let api3;
+    try {
+      api3 = api_default();
+      this.api = api3;
+    } catch (e) {
+      this._apiError = e;
+      throw e;
+    }
+    if (api3 === null) {
+      return false;
+    }
+    const vm3 = new VM(api3);
+    this.vm = vm3;
+    initialize(vm3);
+    ClassFactory._initialize(vm3, api3);
+    this.classFactory = new ClassFactory();
+    this._initialized = true;
+    return true;
+  }
+  _dispose() {
+    if (this.api === null) {
+      return;
+    }
+    const { vm: vm3 } = this;
+    vm3.perform((env2) => {
+      ClassFactory._disposeAll(env2);
+      Env.dispose(env2);
+    });
+    Script.nextTick(() => {
+      VM.dispose(vm3);
+    });
+  }
+  get available() {
+    return this._tryInitialize();
+  }
+  get androidVersion() {
+    return getAndroidVersion();
+  }
+  synchronized(obj, fn) {
+    const { $h: objHandle = obj } = obj;
+    if (!(objHandle instanceof NativePointer)) {
+      throw new Error("Java.synchronized: the first argument `obj` must be either a pointer or a Java instance");
+    }
+    const env2 = this.vm.getEnv();
+    checkJniResult("VM::MonitorEnter", env2.monitorEnter(objHandle));
+    try {
+      fn();
+    } finally {
+      env2.monitorExit(objHandle);
+    }
+  }
+  enumerateLoadedClasses(callbacks) {
+    this._checkAvailable();
+    const { flavor } = this.api;
+    if (flavor === "jvm") {
+      this._enumerateLoadedClassesJvm(callbacks);
+    } else if (flavor === "art") {
+      this._enumerateLoadedClassesArt(callbacks);
+    } else {
+      this._enumerateLoadedClassesDalvik(callbacks);
+    }
+  }
+  enumerateLoadedClassesSync() {
+    const classes = [];
+    this.enumerateLoadedClasses({
+      onMatch(c) {
+        classes.push(c);
+      },
+      onComplete() {
+      }
+    });
+    return classes;
+  }
+  enumerateClassLoaders(callbacks) {
+    this._checkAvailable();
+    const { flavor } = this.api;
+    if (flavor === "jvm") {
+      this._enumerateClassLoadersJvm(callbacks);
+    } else if (flavor === "art") {
+      this._enumerateClassLoadersArt(callbacks);
+    } else {
+      throw new Error("Enumerating class loaders is not supported on Dalvik");
+    }
+  }
+  enumerateClassLoadersSync() {
+    const loaders = [];
+    this.enumerateClassLoaders({
+      onMatch(c) {
+        loaders.push(c);
+      },
+      onComplete() {
+      }
+    });
+    return loaders;
+  }
+  _enumerateLoadedClassesJvm(callbacks) {
+    const { api: api3, vm: vm3 } = this;
+    const { jvmti } = api3;
+    const env2 = vm3.getEnv();
+    const countPtr = Memory.alloc(jsizeSize4);
+    const classesPtr = Memory.alloc(pointerSize9);
+    jvmti.getLoadedClasses(countPtr, classesPtr);
+    const count = countPtr.readS32();
+    const classes = classesPtr.readPointer();
+    const handles = [];
+    for (let i = 0; i !== count; i++) {
+      handles.push(classes.add(i * pointerSize9).readPointer());
+    }
+    jvmti.deallocate(classes);
+    try {
+      for (const handle2 of handles) {
+        const className = env2.getClassName(handle2);
+        callbacks.onMatch(className, handle2);
+      }
+      callbacks.onComplete();
+    } finally {
+      handles.forEach((handle2) => {
+        env2.deleteLocalRef(handle2);
+      });
+    }
+  }
+  _enumerateClassLoadersJvm(callbacks) {
+    this.choose("java.lang.ClassLoader", callbacks);
+  }
+  _enumerateLoadedClassesArt(callbacks) {
+    const { vm: vm3, api: api3 } = this;
+    const env2 = vm3.getEnv();
+    const addGlobalReference = api3["art::JavaVMExt::AddGlobalRef"];
+    const { vm: vmHandle } = api3;
+    withRunnableArtThread(vm3, env2, (thread) => {
+      const collectClassHandles = makeArtClassVisitor((klass) => {
+        const handle2 = addGlobalReference(vmHandle, thread, klass);
+        try {
+          const className = env2.getClassName(handle2);
+          callbacks.onMatch(className, handle2);
+        } finally {
+          env2.deleteGlobalRef(handle2);
+        }
+        return true;
+      });
+      api3["art::ClassLinker::VisitClasses"](api3.artClassLinker.address, collectClassHandles);
+    });
+    callbacks.onComplete();
+  }
+  _enumerateClassLoadersArt(callbacks) {
+    const { classFactory: factory, vm: vm3, api: api3 } = this;
+    const env2 = vm3.getEnv();
+    const visitClassLoaders = api3["art::ClassLinker::VisitClassLoaders"];
+    if (visitClassLoaders === void 0) {
+      throw new Error("This API is only available on Android >= 7.0");
+    }
+    const ClassLoader = factory.use("java.lang.ClassLoader");
+    const loaderHandles = [];
+    const addGlobalReference = api3["art::JavaVMExt::AddGlobalRef"];
+    const { vm: vmHandle } = api3;
+    withRunnableArtThread(vm3, env2, (thread) => {
+      const collectLoaderHandles = makeArtClassLoaderVisitor((loader) => {
+        loaderHandles.push(addGlobalReference(vmHandle, thread, loader));
+        return true;
+      });
+      withAllArtThreadsSuspended(() => {
+        visitClassLoaders(api3.artClassLinker.address, collectLoaderHandles);
+      });
+    });
+    try {
+      loaderHandles.forEach((handle2) => {
+        const loader = factory.cast(handle2, ClassLoader);
+        callbacks.onMatch(loader);
+      });
+    } finally {
+      loaderHandles.forEach((handle2) => {
+        env2.deleteGlobalRef(handle2);
+      });
+    }
+    callbacks.onComplete();
+  }
+  _enumerateLoadedClassesDalvik(callbacks) {
+    const { api: api3 } = this;
+    const HASH_TOMBSTONE = ptr("0xcbcacccd");
+    const loadedClassesOffset = 172;
+    const hashEntrySize = 8;
+    const ptrLoadedClassesHashtable = api3.gDvm.add(loadedClassesOffset);
+    const hashTable = ptrLoadedClassesHashtable.readPointer();
+    const tableSize = hashTable.readS32();
+    const ptrpEntries = hashTable.add(12);
+    const pEntries = ptrpEntries.readPointer();
+    const end = tableSize * hashEntrySize;
+    for (let offset = 0; offset < end; offset += hashEntrySize) {
+      const pEntryPtr = pEntries.add(offset);
+      const dataPtr = pEntryPtr.add(4).readPointer();
+      if (dataPtr.isNull() || dataPtr.equals(HASH_TOMBSTONE)) {
+        continue;
+      }
+      const descriptionPtr = dataPtr.add(24).readPointer();
+      const description = descriptionPtr.readUtf8String();
+      if (description.startsWith("L")) {
+        const name = description.substring(1, description.length - 1).replace(/\//g, ".");
+        callbacks.onMatch(name);
+      }
+    }
+    callbacks.onComplete();
+  }
+  enumerateMethods(query) {
+    const { classFactory: factory } = this;
+    const env2 = this.vm.getEnv();
+    const ClassLoader = factory.use("java.lang.ClassLoader");
+    return Model.enumerateMethods(query, this.api, env2).map((group) => {
+      const handle2 = group.loader;
+      group.loader = handle2 !== null ? factory.wrap(handle2, ClassLoader, env2) : null;
+      return group;
+    });
+  }
+  scheduleOnMainThread(fn) {
+    this.performNow(() => {
+      this._pendingMainOps.push(fn);
+      let { _wakeupHandler: wakeupHandler } = this;
+      if (wakeupHandler === null) {
+        const { classFactory: factory } = this;
+        const Handler = factory.use("android.os.Handler");
+        const Looper = factory.use("android.os.Looper");
+        wakeupHandler = Handler.$new(Looper.getMainLooper());
+        this._wakeupHandler = wakeupHandler;
+      }
+      if (this._pollListener === null) {
+        this._pollListener = Interceptor.attach(Process.getModuleByName("libc.so").getExportByName("epoll_wait"), this._makePollHook());
+        Interceptor.flush();
+      }
+      wakeupHandler.sendEmptyMessage(1);
+    });
+  }
+  _makePollHook() {
+    const mainThreadId = Process.id;
+    const { _pendingMainOps: pending } = this;
+    return function() {
+      if (this.threadId !== mainThreadId) {
+        return;
+      }
+      let fn;
+      while ((fn = pending.shift()) !== void 0) {
+        try {
+          fn();
+        } catch (e) {
+          Script.nextTick(() => {
+            throw e;
+          });
+        }
+      }
+    };
+  }
+  perform(fn) {
+    this._checkAvailable();
+    if (!this._isAppProcess() || this.classFactory.loader !== null) {
+      try {
+        this.vm.perform(fn);
+      } catch (e) {
+        Script.nextTick(() => {
+          throw e;
+        });
+      }
+    } else {
+      this._pendingVmOps.push(fn);
+      if (this._pendingVmOps.length === 1) {
+        this._performPendingVmOpsWhenReady();
+      }
+    }
+  }
+  performNow(fn) {
+    this._checkAvailable();
+    return this.vm.perform(() => {
+      const { classFactory: factory } = this;
+      if (this._isAppProcess() && factory.loader === null) {
+        const ActivityThread = factory.use("android.app.ActivityThread");
+        const app = ActivityThread.currentApplication();
+        if (app !== null) {
+          initFactoryFromApplication(factory, app);
+        }
+      }
+      return fn();
+    });
+  }
+  _performPendingVmOpsWhenReady() {
+    this.vm.perform(() => {
+      const { classFactory: factory } = this;
+      const ActivityThread = factory.use("android.app.ActivityThread");
+      const app = ActivityThread.currentApplication();
+      if (app !== null) {
+        initFactoryFromApplication(factory, app);
+        this._performPendingVmOps();
+        return;
+      }
+      const runtime3 = this;
+      let initialized = false;
+      let hookpoint = "early";
+      const handleBindApplication = ActivityThread.handleBindApplication;
+      handleBindApplication.implementation = function(data) {
+        if (data.instrumentationName.value !== null) {
+          hookpoint = "late";
+          const LoadedApk = factory.use("android.app.LoadedApk");
+          const makeApplication = LoadedApk.makeApplication;
+          makeApplication.implementation = function(forceDefaultAppClass, instrumentation) {
+            if (!initialized) {
+              initialized = true;
+              initFactoryFromLoadedApk(factory, this);
+              runtime3._performPendingVmOps();
+            }
+            return makeApplication.apply(this, arguments);
+          };
+        }
+        handleBindApplication.apply(this, arguments);
+      };
+      const getPackageInfoCandidates = ActivityThread.getPackageInfo.overloads.map((m2) => [m2.argumentTypes.length, m2]).sort(([arityA], [arityB]) => arityB - arityA).map(([_, method2]) => method2);
+      const getPackageInfo = getPackageInfoCandidates[0];
+      getPackageInfo.implementation = function(...args) {
+        const apk = getPackageInfo.call(this, ...args);
+        if (!initialized && hookpoint === "early") {
+          initialized = true;
+          initFactoryFromLoadedApk(factory, apk);
+          runtime3._performPendingVmOps();
+        }
+        return apk;
+      };
+    });
+  }
+  _performPendingVmOps() {
+    const { vm: vm3, _pendingVmOps: pending } = this;
+    let fn;
+    while ((fn = pending.shift()) !== void 0) {
+      try {
+        vm3.perform(fn);
+      } catch (e) {
+        Script.nextTick(() => {
+          throw e;
+        });
+      }
+    }
+  }
+  use(className, options) {
+    return this.classFactory.use(className, options);
+  }
+  openClassFile(filePath) {
+    return this.classFactory.openClassFile(filePath);
+  }
+  choose(specifier, callbacks) {
+    this.classFactory.choose(specifier, callbacks);
+  }
+  retain(obj) {
+    return this.classFactory.retain(obj);
+  }
+  cast(obj, C) {
+    return this.classFactory.cast(obj, C);
+  }
+  array(type, elements) {
+    return this.classFactory.array(type, elements);
+  }
+  backtrace(options) {
+    return backtrace(this.vm, options);
+  }
+  // Reference: http://stackoverflow.com/questions/2848575/how-to-detect-ui-thread-on-android
+  isMainThread() {
+    const Looper = this.classFactory.use("android.os.Looper");
+    const mainLooper = Looper.getMainLooper();
+    const myLooper = Looper.myLooper();
+    if (myLooper === null) {
+      return false;
+    }
+    return mainLooper.$isSameObject(myLooper);
+  }
+  registerClass(spec) {
+    return this.classFactory.registerClass(spec);
+  }
+  deoptimizeEverything() {
+    const { vm: vm3 } = this;
+    return deoptimizeEverything(vm3, vm3.getEnv());
+  }
+  deoptimizeBootImage() {
+    const { vm: vm3 } = this;
+    return deoptimizeBootImage(vm3, vm3.getEnv());
+  }
+  deoptimizeMethod(method2) {
+    const { vm: vm3 } = this;
+    return deoptimizeMethod(vm3, vm3.getEnv(), method2);
+  }
+  _checkAvailable() {
+    if (!this.available) {
+      throw new Error("Java API not available");
+    }
+  }
+  _isAppProcess() {
+    let result = this._cachedIsAppProcess;
+    if (result === null) {
+      if (this.api.flavor === "jvm") {
+        result = false;
+        this._cachedIsAppProcess = result;
+        return result;
+      }
+      const readlink2 = new NativeFunction(Module.getGlobalExportByName("readlink"), "pointer", ["pointer", "pointer", "pointer"], {
+        exceptions: "propagate"
+      });
+      const pathname = Memory.allocUtf8String("/proc/self/exe");
+      const bufferSize = 1024;
+      const buffer = Memory.alloc(bufferSize);
+      const size = readlink2(pathname, buffer, ptr(bufferSize)).toInt32();
+      if (size !== -1) {
+        const exe = buffer.readUtf8String(size);
+        result = /^\/system\/bin\/app_process/.test(exe);
+      } else {
+        result = true;
+      }
+      this._cachedIsAppProcess = result;
+    }
+    return result;
+  }
+};
+function initFactoryFromApplication(factory, app) {
+  const Process2 = factory.use("android.os.Process");
+  factory.loader = app.getClassLoader();
+  if (Process2.myUid() === Process2.SYSTEM_UID.value) {
+    factory.cacheDir = "/data/system";
+    factory.codeCacheDir = "/data/dalvik-cache";
+  } else {
+    if ("getCodeCacheDir" in app) {
+      factory.cacheDir = app.getCacheDir().getCanonicalPath();
+      factory.codeCacheDir = app.getCodeCacheDir().getCanonicalPath();
+    } else {
+      factory.cacheDir = app.getFilesDir().getCanonicalPath();
+      factory.codeCacheDir = app.getCacheDir().getCanonicalPath();
+    }
+  }
+}
+function initFactoryFromLoadedApk(factory, apk) {
+  const JFile = factory.use("java.io.File");
+  factory.loader = apk.getClassLoader();
+  const dataDir = JFile.$new(apk.getDataDir()).getCanonicalPath();
+  factory.cacheDir = dataDir;
+  factory.codeCacheDir = dataDir + "/cache";
+}
+var runtime = new Runtime();
+Script.bindWeak(runtime, () => {
+  runtime._dispose();
+});
+var frida_java_bridge_default = runtime;
+
+// node_modules/frida-objc-bridge/lib/api.js
+var cachedApi3 = null;
+var defaultInvocationOptions = {
+  exceptions: "propagate"
+};
+function getApi4() {
+  if (cachedApi3 !== null) {
+    return cachedApi3;
+  }
+  const temporaryApi = {};
+  const pending = [
+    {
+      module: "libsystem_malloc.dylib",
+      functions: {
+        "free": ["void", ["pointer"]]
+      }
+    },
+    {
+      module: "libobjc.A.dylib",
+      functions: {
+        "objc_msgSend": function(address) {
+          this.objc_msgSend = address;
+        },
+        "objc_msgSend_stret": function(address) {
+          this.objc_msgSend_stret = address;
+        },
+        "objc_msgSend_fpret": function(address) {
+          this.objc_msgSend_fpret = address;
+        },
+        "objc_msgSendSuper": function(address) {
+          this.objc_msgSendSuper = address;
+        },
+        "objc_msgSendSuper_stret": function(address) {
+          this.objc_msgSendSuper_stret = address;
+        },
+        "objc_msgSendSuper_fpret": function(address) {
+          this.objc_msgSendSuper_fpret = address;
+        },
+        "objc_getClassList": ["int", ["pointer", "int"]],
+        "objc_lookUpClass": ["pointer", ["pointer"]],
+        "objc_allocateClassPair": ["pointer", ["pointer", "pointer", "pointer"]],
+        "objc_disposeClassPair": ["void", ["pointer"]],
+        "objc_registerClassPair": ["void", ["pointer"]],
+        "class_isMetaClass": ["bool", ["pointer"]],
+        "class_getName": ["pointer", ["pointer"]],
+        "class_getImageName": ["pointer", ["pointer"]],
+        "class_copyProtocolList": ["pointer", ["pointer", "pointer"]],
+        "class_copyMethodList": ["pointer", ["pointer", "pointer"]],
+        "class_getClassMethod": ["pointer", ["pointer", "pointer"]],
+        "class_getInstanceMethod": ["pointer", ["pointer", "pointer"]],
+        "class_getSuperclass": ["pointer", ["pointer"]],
+        "class_addProtocol": ["bool", ["pointer", "pointer"]],
+        "class_addMethod": ["bool", ["pointer", "pointer", "pointer", "pointer"]],
+        "class_copyIvarList": ["pointer", ["pointer", "pointer"]],
+        "objc_getProtocol": ["pointer", ["pointer"]],
+        "objc_copyProtocolList": ["pointer", ["pointer"]],
+        "objc_allocateProtocol": ["pointer", ["pointer"]],
+        "objc_registerProtocol": ["void", ["pointer"]],
+        "protocol_getName": ["pointer", ["pointer"]],
+        "protocol_copyMethodDescriptionList": ["pointer", ["pointer", "bool", "bool", "pointer"]],
+        "protocol_copyPropertyList": ["pointer", ["pointer", "pointer"]],
+        "protocol_copyProtocolList": ["pointer", ["pointer", "pointer"]],
+        "protocol_addProtocol": ["void", ["pointer", "pointer"]],
+        "protocol_addMethodDescription": ["void", ["pointer", "pointer", "pointer", "bool", "bool"]],
+        "ivar_getName": ["pointer", ["pointer"]],
+        "ivar_getTypeEncoding": ["pointer", ["pointer"]],
+        "ivar_getOffset": ["pointer", ["pointer"]],
+        "object_isClass": ["bool", ["pointer"]],
+        "object_getClass": ["pointer", ["pointer"]],
+        "object_getClassName": ["pointer", ["pointer"]],
+        "method_getName": ["pointer", ["pointer"]],
+        "method_getTypeEncoding": ["pointer", ["pointer"]],
+        "method_getImplementation": ["pointer", ["pointer"]],
+        "method_setImplementation": ["pointer", ["pointer", "pointer"]],
+        "property_getName": ["pointer", ["pointer"]],
+        "property_copyAttributeList": ["pointer", ["pointer", "pointer"]],
+        "sel_getName": ["pointer", ["pointer"]],
+        "sel_registerName": ["pointer", ["pointer"]],
+        "class_getInstanceSize": ["pointer", ["pointer"]]
+      },
+      optionals: {
+        "objc_msgSend_stret": "ABI",
+        "objc_msgSend_fpret": "ABI",
+        "objc_msgSendSuper_stret": "ABI",
+        "objc_msgSendSuper_fpret": "ABI",
+        "object_isClass": "iOS8"
+      }
+    },
+    {
+      module: "libdispatch.dylib",
+      functions: {
+        "dispatch_async_f": ["void", ["pointer", "pointer", "pointer"]]
+      },
+      variables: {
+        "_dispatch_main_q": function(address) {
+          this._dispatch_main_q = address;
+        }
+      }
+    }
+  ];
+  let remaining = 0;
+  pending.forEach(function(api3) {
+    const isObjCApi = api3.module === "libobjc.A.dylib";
+    const functions = api3.functions || {};
+    const variables = api3.variables || {};
+    const optionals = api3.optionals || {};
+    remaining += Object.keys(functions).length + Object.keys(variables).length;
+    const exportByName = (Process.findModuleByName(api3.module)?.enumerateExports() ?? []).reduce(function(result, exp) {
+      result[exp.name] = exp;
+      return result;
+    }, {});
+    Object.keys(functions).forEach(function(name) {
+      const exp = exportByName[name];
+      if (exp !== void 0 && exp.type === "function") {
+        const signature2 = functions[name];
+        if (typeof signature2 === "function") {
+          signature2.call(temporaryApi, exp.address);
+          if (isObjCApi)
+            signature2.call(temporaryApi, exp.address);
+        } else {
+          temporaryApi[name] = new NativeFunction(exp.address, signature2[0], signature2[1], defaultInvocationOptions);
+          if (isObjCApi)
+            temporaryApi[name] = temporaryApi[name];
+        }
+        remaining--;
+      } else {
+        const optional = optionals[name];
+        if (optional)
+          remaining--;
+      }
+    });
+    Object.keys(variables).forEach(function(name) {
+      const exp = exportByName[name];
+      if (exp !== void 0 && exp.type === "variable") {
+        const handler = variables[name];
+        handler.call(temporaryApi, exp.address);
+        remaining--;
+      }
+    });
+  });
+  if (remaining === 0) {
+    if (!temporaryApi.objc_msgSend_stret)
+      temporaryApi.objc_msgSend_stret = temporaryApi.objc_msgSend;
+    if (!temporaryApi.objc_msgSend_fpret)
+      temporaryApi.objc_msgSend_fpret = temporaryApi.objc_msgSend;
+    if (!temporaryApi.objc_msgSendSuper_stret)
+      temporaryApi.objc_msgSendSuper_stret = temporaryApi.objc_msgSendSuper;
+    if (!temporaryApi.objc_msgSendSuper_fpret)
+      temporaryApi.objc_msgSendSuper_fpret = temporaryApi.objc_msgSendSuper;
+    cachedApi3 = temporaryApi;
+  }
+  return cachedApi3;
+}
+
+// node_modules/frida-objc-bridge/lib/fastpaths.js
+var code3 = `#include <glib.h>
+#include <ptrauth.h>
+
+#define KERN_SUCCESS 0
+#define MALLOC_PTR_IN_USE_RANGE_TYPE 1
+#if defined (HAVE_I386) && GLIB_SIZEOF_VOID_P == 8
+# define OBJC_ISA_MASK 0x7ffffffffff8ULL
+#elif defined (HAVE_ARM64)
+# define OBJC_ISA_MASK 0xffffffff8ULL
+#endif
+
+typedef struct _ChooseContext ChooseContext;
+
+typedef struct _malloc_zone_t malloc_zone_t;
+typedef struct _malloc_introspection_t malloc_introspection_t;
+typedef struct _vm_range_t vm_range_t;
+
+typedef gpointer Class;
+typedef int kern_return_t;
+typedef guint mach_port_t;
+typedef mach_port_t task_t;
+typedef guintptr vm_offset_t;
+typedef guintptr vm_size_t;
+typedef vm_offset_t vm_address_t;
+
+struct _ChooseContext
+{
+  GHashTable * classes;
+  GArray * matches;
+};
+
+struct _malloc_zone_t
+{
+  void * reserved1;
+  void * reserved2;
+  size_t (* size) (struct _malloc_zone_t * zone, const void * ptr);
+  void * (* malloc) (struct _malloc_zone_t * zone, size_t size);
+  void * (* calloc) (struct _malloc_zone_t * zone, size_t num_items, size_t size);
+  void * (* valloc) (struct _malloc_zone_t * zone, size_t size);
+  void (* free) (struct _malloc_zone_t * zone, void * ptr);
+  void * (* realloc) (struct _malloc_zone_t * zone, void * ptr, size_t size);
+  void (* destroy) (struct _malloc_zone_t * zone);
+  const char * zone_name;
+
+  unsigned (* batch_malloc) (struct _malloc_zone_t * zone, size_t size, void ** results, unsigned num_requested);
+  void (* batch_free) (struct _malloc_zone_t * zone, void ** to_be_freed, unsigned num_to_be_freed);
+
+  malloc_introspection_t * introspect;
+};
+
+typedef kern_return_t (* memory_reader_t) (task_t remote_task, vm_address_t remote_address, vm_size_t size, void ** local_memory);
+typedef void (* vm_range_recorder_t) (task_t task, void * user_data, unsigned type, vm_range_t * ranges, unsigned count);
+typedef kern_return_t (* enumerator_func) (task_t task, void * user_data, unsigned type_mask, vm_address_t zone_address, memory_reader_t reader,
+      vm_range_recorder_t recorder);
+
+struct _malloc_introspection_t
+{
+  enumerator_func enumerator;
+};
+
+struct _vm_range_t
+{
+  vm_address_t address;
+  vm_size_t size;
+};
+
+extern int objc_getClassList (Class * buffer, int buffer_count);
+extern Class class_getSuperclass (Class cls);
+extern size_t class_getInstanceSize (Class cls);
+extern kern_return_t malloc_get_all_zones (task_t task, memory_reader_t reader, vm_address_t ** addresses, unsigned * count);
+
+static void collect_subclasses (Class klass, GHashTable * result);
+static void collect_matches_in_ranges (task_t task, void * user_data, unsigned type, vm_range_t * ranges, unsigned count);
+static kern_return_t read_local_memory (task_t remote_task, vm_address_t remote_address, vm_size_t size, void ** local_memory);
+
+extern mach_port_t selfTask;
+
+gpointer *
+choose (Class * klass,
+        gboolean consider_subclasses,
+        guint * count)
+{
+  ChooseContext ctx;
+  GHashTable * classes;
+  vm_address_t * malloc_zone_addresses;
+  unsigned malloc_zone_count, i;
+
+  classes = g_hash_table_new_full (NULL, NULL, NULL, NULL);
+  ctx.classes = classes;
+  ctx.matches = g_array_new (FALSE, FALSE, sizeof (gpointer));
+  if (consider_subclasses)
+    collect_subclasses (klass, classes);
+  else
+    g_hash_table_insert (classes, klass, GSIZE_TO_POINTER (class_getInstanceSize (klass)));
+
+  malloc_zone_count = 0;
+  malloc_get_all_zones (selfTask, read_local_memory, &malloc_zone_addresses, &malloc_zone_count);
+
+  for (i = 0; i != malloc_zone_count; i++)
+  {
+    vm_address_t zone_address = malloc_zone_addresses[i];
+    malloc_zone_t * zone = (malloc_zone_t *) zone_address;
+    enumerator_func enumerator;
+
+    if (zone != NULL && zone->introspect != NULL &&
+        (enumerator = (ptrauth_strip (zone->introspect, ptrauth_key_asda))->enumerator) != NULL)
+    {
+      enumerator = ptrauth_sign_unauthenticated (
+          ptrauth_strip (enumerator, ptrauth_key_asia),
+          ptrauth_key_asia, 0);
+
+      enumerator (selfTask, &ctx, MALLOC_PTR_IN_USE_RANGE_TYPE, zone_address, read_local_memory,
+          collect_matches_in_ranges);
+    }
+  }
+
+  g_hash_table_unref (classes);
+
+  *count = ctx.matches->len;
+
+  return (gpointer *) g_array_free (ctx.matches, FALSE);
+}
+
+void
+destroy (gpointer mem)
+{
+  g_free (mem);
+}
+
+static void
+collect_subclasses (Class klass,
+                    GHashTable * result)
+{
+  Class * classes;
+  int count, i;
+
+  count = objc_getClassList (NULL, 0);
+  classes = g_malloc (count * sizeof (gpointer));
+  count = objc_getClassList (classes, count);
+
+  for (i = 0; i != count; i++)
+  {
+    Class candidate = classes[i];
+    Class c;
+
+    c = candidate;
+    do
+    {
+      if (c == klass)
+      {
+        g_hash_table_insert (result, candidate, GSIZE_TO_POINTER (class_getInstanceSize (candidate)));
+        break;
+      }
+
+      c = class_getSuperclass (c);
+    }
+    while (c != NULL);
+  }
+
+  g_free (classes);
+}
+
+static void
+collect_matches_in_ranges (task_t task,
+                           void * user_data,
+                           unsigned type,
+                           vm_range_t * ranges,
+                           unsigned count)
+{
+  ChooseContext * ctx = user_data;
+  GHashTable * classes = ctx->classes;
+  unsigned i;
+
+  for (i = 0; i != count; i++)
+  {
+    const vm_range_t * range = &ranges[i];
+    gconstpointer candidate = GSIZE_TO_POINTER (range->address);
+    gconstpointer isa;
+    guint instance_size;
+
+    isa = *(gconstpointer *) candidate;
+#ifdef OBJC_ISA_MASK
+    isa = GSIZE_TO_POINTER (GPOINTER_TO_SIZE (isa) & OBJC_ISA_MASK);
+#endif
+
+    instance_size = GPOINTER_TO_UINT (g_hash_table_lookup (classes, isa));
+    if (instance_size != 0 && range->size >= instance_size)
+    {
+      g_array_append_val (ctx->matches, candidate);
+    }
+  }
+}
+
+static kern_return_t
+read_local_memory (task_t remote_task,
+                   vm_address_t remote_address,
+                   vm_size_t size,
+                   void ** local_memory)
+{
+  *local_memory = (void *) remote_address;
+
+  return KERN_SUCCESS;
+}
+`;
+var { pointerSize: pointerSize10 } = Process;
+var cachedModule = null;
+function get() {
+  if (cachedModule === null)
+    cachedModule = compileModule2();
+  return cachedModule;
+}
+function compileModule2() {
+  const {
+    objc_getClassList,
+    class_getSuperclass,
+    class_getInstanceSize
+  } = getApi4();
+  const selfTask = Memory.alloc(4);
+  selfTask.writeU32(Module.getGlobalExportByName("mach_task_self_").readU32());
+  const cm2 = new CModule(code3, {
+    objc_getClassList,
+    class_getSuperclass,
+    class_getInstanceSize,
+    malloc_get_all_zones: Process.getModuleByName("/usr/lib/system/libsystem_malloc.dylib").getExportByName("malloc_get_all_zones"),
+    selfTask
+  });
+  const _choose = new NativeFunction(cm2.choose, "pointer", ["pointer", "bool", "pointer"]);
+  const _destroy2 = new NativeFunction(cm2.destroy, "void", ["pointer"]);
+  return {
+    handle: cm2,
+    choose(klass, considerSubclasses) {
+      const result = [];
+      const countPtr = Memory.alloc(4);
+      const matches = _choose(klass, considerSubclasses ? 1 : 0, countPtr);
+      try {
+        const count = countPtr.readU32();
+        for (let i = 0; i !== count; i++)
+          result.push(matches.add(i * pointerSize10).readPointer());
+      } finally {
+        _destroy2(matches);
+      }
+      return result;
+    }
+  };
+}
+
+// node_modules/frida-objc-bridge/index.js
+function Runtime2() {
+  const pointerSize = Process.pointerSize;
+  let api = null;
+  let apiError = null;
+  const realizedClasses = /* @__PURE__ */ new Set();
+  const classRegistry = new ClassRegistry();
+  const protocolRegistry = new ProtocolRegistry();
+  const replacedMethods = /* @__PURE__ */ new Map();
+  const scheduledWork = /* @__PURE__ */ new Map();
+  let nextId = 1;
+  let workCallback = null;
+  let NSAutoreleasePool = null;
+  const bindings = /* @__PURE__ */ new Map();
+  let readObjectIsa = null;
+  const msgSendBySignatureId = /* @__PURE__ */ new Map();
+  const msgSendSuperBySignatureId = /* @__PURE__ */ new Map();
+  let cachedNSString = null;
+  let cachedNSStringCtor = null;
+  let cachedNSNumber = null;
+  let cachedNSNumberCtor = null;
+  let singularTypeById = null;
+  let modifiers = null;
+  try {
+    tryInitialize();
+  } catch (e) {
+  }
+  function tryInitialize() {
+    if (api !== null)
+      return true;
+    if (apiError !== null)
+      throw apiError;
+    try {
+      api = getApi4();
+    } catch (e) {
+      apiError = e;
+      throw e;
+    }
+    return api !== null;
+  }
+  function dispose() {
+    for (const [rawMethodHandle, impls] of replacedMethods.entries()) {
+      const methodHandle = ptr(rawMethodHandle);
+      const [oldImp, newImp] = impls;
+      if (api.method_getImplementation(methodHandle).equals(newImp))
+        api.method_setImplementation(methodHandle, oldImp);
+    }
+    replacedMethods.clear();
+  }
+  Script.bindWeak(this, dispose);
+  Object.defineProperty(this, "available", {
+    enumerable: true,
+    get() {
+      return tryInitialize();
+    }
+  });
+  Object.defineProperty(this, "api", {
+    enumerable: true,
+    get() {
+      return getApi4();
+    }
+  });
+  Object.defineProperty(this, "classes", {
+    enumerable: true,
+    value: classRegistry
+  });
+  Object.defineProperty(this, "protocols", {
+    enumerable: true,
+    value: protocolRegistry
+  });
+  Object.defineProperty(this, "Object", {
+    enumerable: true,
+    value: ObjCObject
+  });
+  Object.defineProperty(this, "Protocol", {
+    enumerable: true,
+    value: ObjCProtocol
+  });
+  Object.defineProperty(this, "Block", {
+    enumerable: true,
+    value: Block
+  });
+  Object.defineProperty(this, "mainQueue", {
+    enumerable: true,
+    get() {
+      return api?._dispatch_main_q ?? null;
+    }
+  });
+  Object.defineProperty(this, "registerProxy", {
+    enumerable: true,
+    value: registerProxy
+  });
+  Object.defineProperty(this, "registerClass", {
+    enumerable: true,
+    value: registerClass
+  });
+  Object.defineProperty(this, "registerProtocol", {
+    enumerable: true,
+    value: registerProtocol
+  });
+  Object.defineProperty(this, "bind", {
+    enumerable: true,
+    value: bind
+  });
+  Object.defineProperty(this, "unbind", {
+    enumerable: true,
+    value: unbind
+  });
+  Object.defineProperty(this, "getBoundData", {
+    enumerable: true,
+    value: getBoundData
+  });
+  Object.defineProperty(this, "enumerateLoadedClasses", {
+    enumerable: true,
+    value: enumerateLoadedClasses
+  });
+  Object.defineProperty(this, "enumerateLoadedClassesSync", {
+    enumerable: true,
+    value: enumerateLoadedClassesSync
+  });
+  Object.defineProperty(this, "choose", {
+    enumerable: true,
+    value: choose
+  });
+  Object.defineProperty(this, "chooseSync", {
+    enumerable: true,
+    value(specifier) {
+      const instances = [];
+      choose(specifier, {
+        onMatch(i) {
+          instances.push(i);
+        },
+        onComplete() {
+        }
+      });
+      return instances;
+    }
+  });
+  this.schedule = function(queue, work) {
+    const id = ptr(nextId++);
+    scheduledWork.set(id.toString(), work);
+    if (workCallback === null) {
+      workCallback = new NativeCallback(performScheduledWorkItem, "void", ["pointer"]);
+    }
+    Script.pin();
+    api.dispatch_async_f(queue, id, workCallback);
+  };
+  function performScheduledWorkItem(rawId) {
+    const id = rawId.toString();
+    const work = scheduledWork.get(id);
+    scheduledWork.delete(id);
+    if (NSAutoreleasePool === null)
+      NSAutoreleasePool = classRegistry.NSAutoreleasePool;
+    const pool = NSAutoreleasePool.alloc().init();
+    let pendingException = null;
+    try {
+      work();
+    } catch (e) {
+      pendingException = e;
+    }
+    pool.release();
+    setImmediate(performScheduledWorkCleanup, pendingException);
+  }
+  function performScheduledWorkCleanup(pendingException) {
+    Script.unpin();
+    if (pendingException !== null) {
+      throw pendingException;
+    }
+  }
+  this.implement = function(method2, fn) {
+    return new NativeCallback(fn, method2.returnType, method2.argumentTypes);
+  };
+  this.selector = selector;
+  this.selectorAsString = selectorAsString;
+  function selector(name) {
+    return api.sel_registerName(Memory.allocUtf8String(name));
+  }
+  function selectorAsString(sel2) {
+    return api.sel_getName(sel2).readUtf8String();
+  }
+  const registryBuiltins = /* @__PURE__ */ new Set([
+    "prototype",
+    "constructor",
+    "hasOwnProperty",
+    "toJSON",
+    "toString",
+    "valueOf"
+  ]);
+  function ClassRegistry() {
+    const cachedClasses = {};
+    let numCachedClasses = 0;
+    const registry = new Proxy(this, {
+      has(target, property) {
+        return hasProperty(property);
+      },
+      get(target, property, receiver) {
+        switch (property) {
+          case "prototype":
+            return target.prototype;
+          case "constructor":
+            return target.constructor;
+          case "hasOwnProperty":
+            return hasProperty;
+          case "toJSON":
+            return toJSON2;
+          case "toString":
+            return toString2;
+          case "valueOf":
+            return valueOf;
+          default:
+            const klass = findClass(property);
+            return klass !== null ? klass : void 0;
+        }
+      },
+      set(target, property, value, receiver) {
+        return false;
+      },
+      ownKeys(target) {
+        if (api === null)
+          return [];
+        let numClasses = api.objc_getClassList(NULL, 0);
+        if (numClasses !== numCachedClasses) {
+          const classHandles = Memory.alloc(numClasses * pointerSize);
+          numClasses = api.objc_getClassList(classHandles, numClasses);
+          for (let i = 0; i !== numClasses; i++) {
+            const handle2 = classHandles.add(i * pointerSize).readPointer();
+            const name = api.class_getName(handle2).readUtf8String();
+            cachedClasses[name] = handle2;
+          }
+          numCachedClasses = numClasses;
+        }
+        return Object.keys(cachedClasses);
+      },
+      getOwnPropertyDescriptor(target, property) {
+        return {
+          writable: false,
+          configurable: true,
+          enumerable: true
+        };
+      }
+    });
+    function hasProperty(name) {
+      if (registryBuiltins.has(name))
+        return true;
+      return findClass(name) !== null;
+    }
+    function getClass(name) {
+      const cls = findClass(name);
+      if (cls === null)
+        throw new Error("Unable to find class '" + name + "'");
+      return cls;
+    }
+    function findClass(name) {
+      let handle2 = cachedClasses[name];
+      if (handle2 === void 0) {
+        handle2 = api.objc_lookUpClass(Memory.allocUtf8String(name));
+        if (handle2.isNull())
+          return null;
+        cachedClasses[name] = handle2;
+        numCachedClasses++;
+      }
+      return new ObjCObject(handle2, void 0, true);
+    }
+    function toJSON2() {
+      return Object.keys(registry).reduce(function(r, name) {
+        r[name] = getClass(name).toJSON();
+        return r;
+      }, {});
+    }
+    function toString2() {
+      return "ClassRegistry";
+    }
+    function valueOf() {
+      return "ClassRegistry";
+    }
+    return registry;
+  }
+  function ProtocolRegistry() {
+    let cachedProtocols = {};
+    let numCachedProtocols = 0;
+    const registry = new Proxy(this, {
+      has(target, property) {
+        return hasProperty(property);
+      },
+      get(target, property, receiver) {
+        switch (property) {
+          case "prototype":
+            return target.prototype;
+          case "constructor":
+            return target.constructor;
+          case "hasOwnProperty":
+            return hasProperty;
+          case "toJSON":
+            return toJSON2;
+          case "toString":
+            return toString2;
+          case "valueOf":
+            return valueOf;
+          default:
+            const proto = findProtocol(property);
+            return proto !== null ? proto : void 0;
+        }
+      },
+      set(target, property, value, receiver) {
+        return false;
+      },
+      ownKeys(target) {
+        if (api === null)
+          return [];
+        const numProtocolsBuf = Memory.alloc(pointerSize);
+        const protocolHandles = api.objc_copyProtocolList(numProtocolsBuf);
+        try {
+          const numProtocols = numProtocolsBuf.readUInt();
+          if (numProtocols !== numCachedProtocols) {
+            cachedProtocols = {};
+            for (let i = 0; i !== numProtocols; i++) {
+              const handle2 = protocolHandles.add(i * pointerSize).readPointer();
+              const name = api.protocol_getName(handle2).readUtf8String();
+              cachedProtocols[name] = handle2;
+            }
+            numCachedProtocols = numProtocols;
+          }
+        } finally {
+          api.free(protocolHandles);
+        }
+        return Object.keys(cachedProtocols);
+      },
+      getOwnPropertyDescriptor(target, property) {
+        return {
+          writable: false,
+          configurable: true,
+          enumerable: true
+        };
+      }
+    });
+    function hasProperty(name) {
+      if (registryBuiltins.has(name))
+        return true;
+      return findProtocol(name) !== null;
+    }
+    function findProtocol(name) {
+      let handle2 = cachedProtocols[name];
+      if (handle2 === void 0) {
+        handle2 = api.objc_getProtocol(Memory.allocUtf8String(name));
+        if (handle2.isNull())
+          return null;
+        cachedProtocols[name] = handle2;
+        numCachedProtocols++;
+      }
+      return new ObjCProtocol(handle2);
+    }
+    function toJSON2() {
+      return Object.keys(registry).reduce(function(r, name) {
+        r[name] = { handle: cachedProtocols[name] };
+        return r;
+      }, {});
+    }
+    function toString2() {
+      return "ProtocolRegistry";
+    }
+    function valueOf() {
+      return "ProtocolRegistry";
+    }
+    return registry;
+  }
+  const objCObjectBuiltins = /* @__PURE__ */ new Set([
+    "prototype",
+    "constructor",
+    "handle",
+    "hasOwnProperty",
+    "toJSON",
+    "toString",
+    "valueOf",
+    "equals",
+    "$kind",
+    "$super",
+    "$superClass",
+    "$class",
+    "$className",
+    "$moduleName",
+    "$protocols",
+    "$methods",
+    "$ownMethods",
+    "$ivars"
+  ]);
+  function ObjCObject(handle2, protocol, cachedIsClass, superSpecifier2) {
+    let cachedClassHandle = null;
+    let cachedKind = null;
+    let cachedSuper = null;
+    let cachedSuperClass = null;
+    let cachedClass = null;
+    let cachedClassName = null;
+    let cachedModuleName = null;
+    let cachedProtocols = null;
+    let cachedMethodNames = null;
+    let cachedProtocolMethods = null;
+    let respondsToSelector = null;
+    const cachedMethods2 = {};
+    let cachedNativeMethodNames = null;
+    let cachedOwnMethodNames = null;
+    let cachedIvars = null;
+    handle2 = getHandle(handle2);
+    if (cachedIsClass === void 0) {
+      const klass = api.object_getClass(handle2);
+      const key = klass.toString();
+      if (!realizedClasses.has(key)) {
+        api.objc_lookUpClass(api.class_getName(klass));
+        realizedClasses.add(key);
+      }
+    }
+    const self = new Proxy(this, {
+      has(target, property) {
+        return hasProperty(property);
+      },
+      get(target, property, receiver) {
+        switch (property) {
+          case "handle":
+            return handle2;
+          case "prototype":
+            return target.prototype;
+          case "constructor":
+            return target.constructor;
+          case "hasOwnProperty":
+            return hasProperty;
+          case "toJSON":
+            return toJSON2;
+          case "toString":
+          case "valueOf":
+            const descriptionImpl = receiver.description;
+            if (descriptionImpl !== void 0) {
+              const description = descriptionImpl.call(receiver);
+              if (description !== null)
+                return description.UTF8String.bind(description);
+            }
+            return function() {
+              return receiver.$className;
+            };
+          case "equals":
+            return equals2;
+          case "$kind":
+            if (cachedKind === null) {
+              if (isClass())
+                cachedKind = api.class_isMetaClass(handle2) ? "meta-class" : "class";
+              else
+                cachedKind = "instance";
+            }
+            return cachedKind;
+          case "$super":
+            if (cachedSuper === null) {
+              const superHandle = api.class_getSuperclass(classHandle());
+              if (!superHandle.isNull()) {
+                const specifier = Memory.alloc(2 * pointerSize);
+                specifier.writePointer(handle2);
+                specifier.add(pointerSize).writePointer(superHandle);
+                cachedSuper = [new ObjCObject(handle2, void 0, cachedIsClass, specifier)];
+              } else {
+                cachedSuper = [null];
+              }
+            }
+            return cachedSuper[0];
+          case "$superClass":
+            if (cachedSuperClass === null) {
+              const superClassHandle = api.class_getSuperclass(classHandle());
+              if (!superClassHandle.isNull()) {
+                cachedSuperClass = [new ObjCObject(superClassHandle)];
+              } else {
+                cachedSuperClass = [null];
+              }
+            }
+            return cachedSuperClass[0];
+          case "$class":
+            if (cachedClass === null)
+              cachedClass = new ObjCObject(api.object_getClass(handle2), void 0, true);
+            return cachedClass;
+          case "$className":
+            if (cachedClassName === null) {
+              if (superSpecifier2)
+                cachedClassName = api.class_getName(superSpecifier2.add(pointerSize).readPointer()).readUtf8String();
+              else if (isClass())
+                cachedClassName = api.class_getName(handle2).readUtf8String();
+              else
+                cachedClassName = api.object_getClassName(handle2).readUtf8String();
+            }
+            return cachedClassName;
+          case "$moduleName":
+            if (cachedModuleName === null) {
+              cachedModuleName = api.class_getImageName(classHandle()).readUtf8String();
+            }
+            return cachedModuleName;
+          case "$protocols":
+            if (cachedProtocols === null) {
+              cachedProtocols = {};
+              const numProtocolsBuf = Memory.alloc(pointerSize);
+              const protocolHandles = api.class_copyProtocolList(classHandle(), numProtocolsBuf);
+              if (!protocolHandles.isNull()) {
+                try {
+                  const numProtocols = numProtocolsBuf.readUInt();
+                  for (let i = 0; i !== numProtocols; i++) {
+                    const protocolHandle = protocolHandles.add(i * pointerSize).readPointer();
+                    const p = new ObjCProtocol(protocolHandle);
+                    cachedProtocols[p.name] = p;
+                  }
+                } finally {
+                  api.free(protocolHandles);
+                }
+              }
+            }
+            return cachedProtocols;
+          case "$methods":
+            if (cachedNativeMethodNames === null) {
+              const klass = superSpecifier2 ? superSpecifier2.add(pointerSize).readPointer() : classHandle();
+              const meta = api.object_getClass(klass);
+              const names = /* @__PURE__ */ new Set();
+              let cur = meta;
+              do {
+                for (let methodName of collectMethodNames(cur, "+ "))
+                  names.add(methodName);
+                cur = api.class_getSuperclass(cur);
+              } while (!cur.isNull());
+              cur = klass;
+              do {
+                for (let methodName of collectMethodNames(cur, "- "))
+                  names.add(methodName);
+                cur = api.class_getSuperclass(cur);
+              } while (!cur.isNull());
+              cachedNativeMethodNames = Array.from(names);
+            }
+            return cachedNativeMethodNames;
+          case "$ownMethods":
+            if (cachedOwnMethodNames === null) {
+              const klass = superSpecifier2 ? superSpecifier2.add(pointerSize).readPointer() : classHandle();
+              const meta = api.object_getClass(klass);
+              const classMethods = collectMethodNames(meta, "+ ");
+              const instanceMethods = collectMethodNames(klass, "- ");
+              cachedOwnMethodNames = classMethods.concat(instanceMethods);
+            }
+            return cachedOwnMethodNames;
+          case "$ivars":
+            if (cachedIvars === null) {
+              if (isClass())
+                cachedIvars = {};
+              else
+                cachedIvars = new ObjCIvars(self, classHandle());
+            }
+            return cachedIvars;
+          default:
+            if (typeof property === "symbol") {
+              return target[property];
+            }
+            if (protocol) {
+              const details = findProtocolMethod(property);
+              if (details === null || !details.implemented)
+                return void 0;
+            }
+            const wrapper = findMethodWrapper(property);
+            if (wrapper === null)
+              return void 0;
+            return wrapper;
+        }
+      },
+      set(target, property, value, receiver) {
+        return false;
+      },
+      ownKeys(target) {
+        if (cachedMethodNames === null) {
+          if (!protocol) {
+            const jsNames = {};
+            const nativeNames = {};
+            let cur = api.object_getClass(handle2);
+            do {
+              const numMethodsBuf = Memory.alloc(pointerSize);
+              const methodHandles = api.class_copyMethodList(cur, numMethodsBuf);
+              const fullNamePrefix = isClass() ? "+ " : "- ";
+              try {
+                const numMethods = numMethodsBuf.readUInt();
+                for (let i = 0; i !== numMethods; i++) {
+                  const methodHandle = methodHandles.add(i * pointerSize).readPointer();
+                  const sel2 = api.method_getName(methodHandle);
+                  const nativeName = api.sel_getName(sel2).readUtf8String();
+                  if (nativeNames[nativeName] !== void 0)
+                    continue;
+                  nativeNames[nativeName] = nativeName;
+                  const jsName = jsMethodName(nativeName);
+                  let serial = 2;
+                  let name = jsName;
+                  while (jsNames[name] !== void 0) {
+                    serial++;
+                    name = jsName + serial;
+                  }
+                  jsNames[name] = true;
+                  const fullName = fullNamePrefix + nativeName;
+                  if (cachedMethods2[fullName] === void 0) {
+                    const details = {
+                      sel: sel2,
+                      handle: methodHandle,
+                      wrapper: null
+                    };
+                    cachedMethods2[fullName] = details;
+                    cachedMethods2[name] = details;
+                  }
+                }
+              } finally {
+                api.free(methodHandles);
+              }
+              cur = api.class_getSuperclass(cur);
+            } while (!cur.isNull());
+            cachedMethodNames = Object.keys(jsNames);
+          } else {
+            const methodNames = [];
+            const protocolMethods = allProtocolMethods();
+            Object.keys(protocolMethods).forEach(function(methodName) {
+              if (methodName[0] !== "+" && methodName[0] !== "-") {
+                const details = protocolMethods[methodName];
+                if (details.implemented) {
+                  methodNames.push(methodName);
+                }
+              }
+            });
+            cachedMethodNames = methodNames;
+          }
+        }
+        return ["handle"].concat(cachedMethodNames);
+      },
+      getOwnPropertyDescriptor(target, property) {
+        return {
+          writable: false,
+          configurable: true,
+          enumerable: true
+        };
+      }
+    });
+    if (protocol) {
+      respondsToSelector = !isClass() ? findMethodWrapper("- respondsToSelector:") : null;
+    }
+    return self;
+    function hasProperty(name) {
+      if (objCObjectBuiltins.has(name))
+        return true;
+      if (protocol) {
+        const details = findProtocolMethod(name);
+        return !!(details !== null && details.implemented);
+      }
+      return findMethod(name) !== null;
+    }
+    function classHandle() {
+      if (cachedClassHandle === null)
+        cachedClassHandle = isClass() ? handle2 : api.object_getClass(handle2);
+      return cachedClassHandle;
+    }
+    function isClass() {
+      if (cachedIsClass === void 0) {
+        if (api.object_isClass)
+          cachedIsClass = !!api.object_isClass(handle2);
+        else
+          cachedIsClass = !!api.class_isMetaClass(api.object_getClass(handle2));
+      }
+      return cachedIsClass;
+    }
+    function findMethod(rawName) {
+      let method2 = cachedMethods2[rawName];
+      if (method2 !== void 0)
+        return method2;
+      const tokens = parseMethodName(rawName);
+      const fullName = tokens[2];
+      method2 = cachedMethods2[fullName];
+      if (method2 !== void 0) {
+        cachedMethods2[rawName] = method2;
+        return method2;
+      }
+      const kind = tokens[0];
+      const name = tokens[1];
+      const sel2 = selector(name);
+      const defaultKind = isClass() ? "+" : "-";
+      if (protocol) {
+        const details = findProtocolMethod(fullName);
+        if (details !== null) {
+          method2 = {
+            sel: sel2,
+            types: details.types,
+            wrapper: null,
+            kind
+          };
+        }
+      }
+      if (method2 === void 0) {
+        const methodHandle = kind === "+" ? api.class_getClassMethod(classHandle(), sel2) : api.class_getInstanceMethod(classHandle(), sel2);
+        if (!methodHandle.isNull()) {
+          method2 = {
+            sel: sel2,
+            handle: methodHandle,
+            wrapper: null,
+            kind
+          };
+        } else {
+          if (isClass() || kind !== "-" || name === "forwardingTargetForSelector:" || name === "methodSignatureForSelector:") {
+            return null;
+          }
+          let target = self;
+          if ("- forwardingTargetForSelector:" in self) {
+            const forwardingTarget = self.forwardingTargetForSelector_(sel2);
+            if (forwardingTarget !== null && forwardingTarget.$kind === "instance") {
+              target = forwardingTarget;
+            } else {
+              return null;
+            }
+          } else {
+            return null;
+          }
+          const methodHandle2 = api.class_getInstanceMethod(api.object_getClass(target.handle), sel2);
+          if (methodHandle2.isNull()) {
+            return null;
+          }
+          let types3 = api.method_getTypeEncoding(methodHandle2).readUtf8String();
+          if (types3 === null || types3 === "") {
+            types3 = stealTypesFromProtocols(target, fullName);
+            if (types3 === null)
+              types3 = stealTypesFromProtocols(self, fullName);
+            if (types3 === null)
+              return null;
+          }
+          method2 = {
+            sel: sel2,
+            types: types3,
+            wrapper: null,
+            kind
+          };
+        }
+      }
+      cachedMethods2[fullName] = method2;
+      cachedMethods2[rawName] = method2;
+      if (kind === defaultKind)
+        cachedMethods2[jsMethodName(name)] = method2;
+      return method2;
+    }
+    function stealTypesFromProtocols(klass, fullName) {
+      const candidates = Object.keys(klass.$protocols).map((protocolName) => flatProtocolMethods({}, klass.$protocols[protocolName])).reduce((allMethods, methods) => {
+        Object.assign(allMethods, methods);
+        return allMethods;
+      }, {});
+      const method2 = candidates[fullName];
+      if (method2 === void 0) {
+        return null;
+      }
+      return method2.types;
+    }
+    function flatProtocolMethods(result, protocol2) {
+      if (protocol2.methods !== void 0) {
+        Object.assign(result, protocol2.methods);
+      }
+      if (protocol2.protocol !== void 0) {
+        flatProtocolMethods(result, protocol2.protocol);
+      }
+      return result;
+    }
+    function findProtocolMethod(rawName) {
+      const protocolMethods = allProtocolMethods();
+      const details = protocolMethods[rawName];
+      return details !== void 0 ? details : null;
+    }
+    function allProtocolMethods() {
+      if (cachedProtocolMethods === null) {
+        const methods = {};
+        const protocols = collectProtocols(protocol);
+        const defaultKind = isClass() ? "+" : "-";
+        Object.keys(protocols).forEach(function(name) {
+          const p = protocols[name];
+          const m2 = p.methods;
+          Object.keys(m2).forEach(function(fullMethodName) {
+            const method2 = m2[fullMethodName];
+            const methodName = fullMethodName.substr(2);
+            const kind = fullMethodName[0];
+            let didCheckImplemented = false;
+            let implemented = false;
+            const details = {
+              types: method2.types
+            };
+            Object.defineProperty(details, "implemented", {
+              get() {
+                if (!didCheckImplemented) {
+                  if (method2.required) {
+                    implemented = true;
+                  } else {
+                    implemented = respondsToSelector !== null && respondsToSelector.call(self, selector(methodName));
+                  }
+                  didCheckImplemented = true;
+                }
+                return implemented;
+              }
+            });
+            methods[fullMethodName] = details;
+            if (kind === defaultKind)
+              methods[jsMethodName(methodName)] = details;
+          });
+        });
+        cachedProtocolMethods = methods;
+      }
+      return cachedProtocolMethods;
+    }
+    function findMethodWrapper(name) {
+      const method2 = findMethod(name);
+      if (method2 === null)
+        return null;
+      let wrapper = method2.wrapper;
+      if (wrapper === null) {
+        wrapper = makeMethodInvocationWrapper(method2, self, superSpecifier2, defaultInvocationOptions);
+        method2.wrapper = wrapper;
+      }
+      return wrapper;
+    }
+    function parseMethodName(rawName) {
+      const match = /([+\-])\s(\S+)/.exec(rawName);
+      let name, kind;
+      if (match === null) {
+        kind = isClass() ? "+" : "-";
+        name = objcMethodName(rawName);
+      } else {
+        kind = match[1];
+        name = match[2];
+      }
+      const fullName = [kind, name].join(" ");
+      return [kind, name, fullName];
+    }
+    function toJSON2() {
+      return {
+        handle: handle2.toString()
+      };
+    }
+    function equals2(ptr2) {
+      return handle2.equals(getHandle(ptr2));
+    }
+  }
+  function getReplacementMethodImplementation(methodHandle) {
+    const existingEntry = replacedMethods.get(methodHandle.toString());
+    if (existingEntry === void 0)
+      return null;
+    const [, newImp] = existingEntry;
+    return newImp;
+  }
+  function replaceMethodImplementation(methodHandle, imp) {
+    const key = methodHandle.toString();
+    let oldImp;
+    const existingEntry = replacedMethods.get(key);
+    if (existingEntry !== void 0)
+      [oldImp] = existingEntry;
+    else
+      oldImp = api.method_getImplementation(methodHandle);
+    if (!imp.equals(oldImp))
+      replacedMethods.set(key, [oldImp, imp]);
+    else
+      replacedMethods.delete(key);
+    api.method_setImplementation(methodHandle, imp);
+  }
+  function collectMethodNames(klass, prefix) {
+    const names = [];
+    const numMethodsBuf = Memory.alloc(pointerSize);
+    const methodHandles = api.class_copyMethodList(klass, numMethodsBuf);
+    try {
+      const numMethods = numMethodsBuf.readUInt();
+      for (let i = 0; i !== numMethods; i++) {
+        const methodHandle = methodHandles.add(i * pointerSize).readPointer();
+        const sel2 = api.method_getName(methodHandle);
+        const nativeName = api.sel_getName(sel2).readUtf8String();
+        names.push(prefix + nativeName);
+      }
+    } finally {
+      api.free(methodHandles);
+    }
+    return names;
+  }
+  function ObjCProtocol(handle2) {
+    let cachedName = null;
+    let cachedProtocols = null;
+    let cachedProperties = null;
+    let cachedMethods2 = null;
+    Object.defineProperty(this, "handle", {
+      value: handle2,
+      enumerable: true
+    });
+    Object.defineProperty(this, "name", {
+      get() {
+        if (cachedName === null)
+          cachedName = api.protocol_getName(handle2).readUtf8String();
+        return cachedName;
+      },
+      enumerable: true
+    });
+    Object.defineProperty(this, "protocols", {
+      get() {
+        if (cachedProtocols === null) {
+          cachedProtocols = {};
+          const numProtocolsBuf = Memory.alloc(pointerSize);
+          const protocolHandles = api.protocol_copyProtocolList(handle2, numProtocolsBuf);
+          if (!protocolHandles.isNull()) {
+            try {
+              const numProtocols = numProtocolsBuf.readUInt();
+              for (let i = 0; i !== numProtocols; i++) {
+                const protocolHandle = protocolHandles.add(i * pointerSize).readPointer();
+                const protocol = new ObjCProtocol(protocolHandle);
+                cachedProtocols[protocol.name] = protocol;
+              }
+            } finally {
+              api.free(protocolHandles);
+            }
+          }
+        }
+        return cachedProtocols;
+      },
+      enumerable: true
+    });
+    Object.defineProperty(this, "properties", {
+      get() {
+        if (cachedProperties === null) {
+          cachedProperties = {};
+          const numBuf = Memory.alloc(pointerSize);
+          const propertyHandles = api.protocol_copyPropertyList(handle2, numBuf);
+          if (!propertyHandles.isNull()) {
+            try {
+              const numProperties = numBuf.readUInt();
+              for (let i = 0; i !== numProperties; i++) {
+                const propertyHandle = propertyHandles.add(i * pointerSize).readPointer();
+                const propName = api.property_getName(propertyHandle).readUtf8String();
+                const attributes = {};
+                const attributeEntries = api.property_copyAttributeList(propertyHandle, numBuf);
+                if (!attributeEntries.isNull()) {
+                  try {
+                    const numAttributeValues = numBuf.readUInt();
+                    for (let j = 0; j !== numAttributeValues; j++) {
+                      const attributeEntry = attributeEntries.add(j * (2 * pointerSize));
+                      const name = attributeEntry.readPointer().readUtf8String();
+                      const value = attributeEntry.add(pointerSize).readPointer().readUtf8String();
+                      attributes[name] = value;
+                    }
+                  } finally {
+                    api.free(attributeEntries);
+                  }
+                }
+                cachedProperties[propName] = attributes;
+              }
+            } finally {
+              api.free(propertyHandles);
+            }
+          }
+        }
+        return cachedProperties;
+      },
+      enumerable: true
+    });
+    Object.defineProperty(this, "methods", {
+      get() {
+        if (cachedMethods2 === null) {
+          cachedMethods2 = {};
+          const numBuf = Memory.alloc(pointerSize);
+          collectMethods(cachedMethods2, numBuf, { required: true, instance: false });
+          collectMethods(cachedMethods2, numBuf, { required: false, instance: false });
+          collectMethods(cachedMethods2, numBuf, { required: true, instance: true });
+          collectMethods(cachedMethods2, numBuf, { required: false, instance: true });
+        }
+        return cachedMethods2;
+      },
+      enumerable: true
+    });
+    function collectMethods(methods, numBuf, spec) {
+      const methodDescValues = api.protocol_copyMethodDescriptionList(handle2, spec.required ? 1 : 0, spec.instance ? 1 : 0, numBuf);
+      if (methodDescValues.isNull())
+        return;
+      try {
+        const numMethodDescValues = numBuf.readUInt();
+        for (let i = 0; i !== numMethodDescValues; i++) {
+          const methodDesc = methodDescValues.add(i * (2 * pointerSize));
+          const name = (spec.instance ? "- " : "+ ") + selectorAsString(methodDesc.readPointer());
+          const types3 = methodDesc.add(pointerSize).readPointer().readUtf8String();
+          methods[name] = {
+            required: spec.required,
+            types: types3
+          };
+        }
+      } finally {
+        api.free(methodDescValues);
+      }
+    }
+  }
+  const objCIvarsBuiltins = /* @__PURE__ */ new Set([
+    "prototype",
+    "constructor",
+    "hasOwnProperty",
+    "toJSON",
+    "toString",
+    "valueOf"
+  ]);
+  function ObjCIvars(instance, classHandle) {
+    const ivars = {};
+    let cachedIvarNames = null;
+    let classHandles = [];
+    let currentClassHandle = classHandle;
+    do {
+      classHandles.unshift(currentClassHandle);
+      currentClassHandle = api.class_getSuperclass(currentClassHandle);
+    } while (!currentClassHandle.isNull());
+    const numIvarsBuf = Memory.alloc(pointerSize);
+    classHandles.forEach((c) => {
+      const ivarHandles = api.class_copyIvarList(c, numIvarsBuf);
+      try {
+        const numIvars = numIvarsBuf.readUInt();
+        for (let i = 0; i !== numIvars; i++) {
+          const handle2 = ivarHandles.add(i * pointerSize).readPointer();
+          const name = api.ivar_getName(handle2).readUtf8String();
+          ivars[name] = [handle2, null];
+        }
+      } finally {
+        api.free(ivarHandles);
+      }
+    });
+    const self = new Proxy(this, {
+      has(target, property) {
+        return hasProperty(property);
+      },
+      get(target, property, receiver) {
+        switch (property) {
+          case "prototype":
+            return target.prototype;
+          case "constructor":
+            return target.constructor;
+          case "hasOwnProperty":
+            return hasProperty;
+          case "toJSON":
+            return toJSON2;
+          case "toString":
+            return toString2;
+          case "valueOf":
+            return valueOf;
+          default:
+            const ivar = findIvar(property);
+            if (ivar === null)
+              return void 0;
+            return ivar.get();
+        }
+      },
+      set(target, property, value, receiver) {
+        const ivar = findIvar(property);
+        if (ivar === null)
+          throw new Error("Unknown ivar");
+        ivar.set(value);
+        return true;
+      },
+      ownKeys(target) {
+        if (cachedIvarNames === null)
+          cachedIvarNames = Object.keys(ivars);
+        return cachedIvarNames;
+      },
+      getOwnPropertyDescriptor(target, property) {
+        return {
+          writable: true,
+          configurable: true,
+          enumerable: true
+        };
+      }
+    });
+    return self;
+    function findIvar(name) {
+      const entry = ivars[name];
+      if (entry === void 0)
+        return null;
+      let impl2 = entry[1];
+      if (impl2 === null) {
+        const ivar = entry[0];
+        const offset = api.ivar_getOffset(ivar).toInt32();
+        const address = instance.handle.add(offset);
+        const type = parseType(api.ivar_getTypeEncoding(ivar).readUtf8String());
+        const fromNative = type.fromNative || identityTransform;
+        const toNative = type.toNative || identityTransform;
+        let read2, write3;
+        if (name === "isa") {
+          read2 = readObjectIsa;
+          write3 = function() {
+            throw new Error("Unable to set the isa instance variable");
+          };
+        } else {
+          read2 = type.read;
+          write3 = type.write;
+        }
+        impl2 = {
+          get() {
+            return fromNative.call(instance, read2(address));
+          },
+          set(value) {
+            write3(address, toNative.call(instance, value));
+          }
+        };
+        entry[1] = impl2;
+      }
+      return impl2;
+    }
+    function hasProperty(name) {
+      if (objCIvarsBuiltins.has(name))
+        return true;
+      return ivars.hasOwnProperty(name);
+    }
+    function toJSON2() {
+      return Object.keys(self).reduce(function(result, name) {
+        result[name] = self[name];
+        return result;
+      }, {});
+    }
+    function toString2() {
+      return "ObjCIvars";
+    }
+    function valueOf() {
+      return "ObjCIvars";
+    }
+  }
+  let blockDescriptorAllocSize, blockDescriptorDeclaredSize, blockDescriptorOffsets;
+  let blockSize, blockOffsets;
+  if (pointerSize === 4) {
+    blockDescriptorAllocSize = 16;
+    blockDescriptorDeclaredSize = 20;
+    blockDescriptorOffsets = {
+      reserved: 0,
+      size: 4,
+      rest: 8
+    };
+    blockSize = 20;
+    blockOffsets = {
+      isa: 0,
+      flags: 4,
+      reserved: 8,
+      invoke: 12,
+      descriptor: 16
+    };
+  } else {
+    blockDescriptorAllocSize = 32;
+    blockDescriptorDeclaredSize = 32;
+    blockDescriptorOffsets = {
+      reserved: 0,
+      size: 8,
+      rest: 16
+    };
+    blockSize = 32;
+    blockOffsets = {
+      isa: 0,
+      flags: 8,
+      reserved: 12,
+      invoke: 16,
+      descriptor: 24
+    };
+  }
+  const BLOCK_HAS_COPY_DISPOSE = 1 << 25;
+  const BLOCK_HAS_CTOR = 1 << 26;
+  const BLOCK_IS_GLOBAL = 1 << 28;
+  const BLOCK_HAS_STRET = 1 << 29;
+  const BLOCK_HAS_SIGNATURE = 1 << 30;
+  function Block(target, options = defaultInvocationOptions) {
+    this._options = options;
+    if (target instanceof NativePointer) {
+      const descriptor = target.add(blockOffsets.descriptor).readPointer();
+      this.handle = target;
+      const flags = target.add(blockOffsets.flags).readU32();
+      if ((flags & BLOCK_HAS_SIGNATURE) !== 0) {
+        const signatureOffset = (flags & BLOCK_HAS_COPY_DISPOSE) !== 0 ? 2 : 0;
+        this.types = descriptor.add(blockDescriptorOffsets.rest + signatureOffset * pointerSize).readPointer().readCString();
+        this._signature = parseSignature(this.types);
+      } else {
+        this._signature = null;
+      }
+    } else {
+      this.declare(target);
+      const descriptor = Memory.alloc(blockDescriptorAllocSize + blockSize);
+      const block2 = descriptor.add(blockDescriptorAllocSize);
+      const typesStr = Memory.allocUtf8String(this.types);
+      descriptor.add(blockDescriptorOffsets.reserved).writeULong(0);
+      descriptor.add(blockDescriptorOffsets.size).writeULong(blockDescriptorDeclaredSize);
+      descriptor.add(blockDescriptorOffsets.rest).writePointer(typesStr);
+      block2.add(blockOffsets.isa).writePointer(classRegistry.__NSGlobalBlock__);
+      block2.add(blockOffsets.flags).writeU32(BLOCK_HAS_SIGNATURE | BLOCK_IS_GLOBAL);
+      block2.add(blockOffsets.reserved).writeU32(0);
+      block2.add(blockOffsets.descriptor).writePointer(descriptor);
+      this.handle = block2;
+      this._storage = [descriptor, typesStr];
+      this.implementation = target.implementation;
+    }
+  }
+  Object.defineProperties(Block.prototype, {
+    implementation: {
+      enumerable: true,
+      get() {
+        const address = this.handle.add(blockOffsets.invoke).readPointer().strip();
+        const signature2 = this._getSignature();
+        return makeBlockInvocationWrapper(this, signature2, new NativeFunction(
+          address.sign(),
+          signature2.retType.type,
+          signature2.argTypes.map(function(arg) {
+            return arg.type;
+          }),
+          this._options
+        ));
+      },
+      set(func) {
+        const signature2 = this._getSignature();
+        const callback = new NativeCallback(
+          makeBlockImplementationWrapper(this, signature2, func),
+          signature2.retType.type,
+          signature2.argTypes.map(function(arg) {
+            return arg.type;
+          })
+        );
+        this._callback = callback;
+        const location = this.handle.add(blockOffsets.invoke);
+        const prot = Memory.queryProtection(location);
+        const writable = prot.includes("w");
+        if (!writable)
+          Memory.protect(location, Process.pointerSize, "rw-");
+        location.writePointer(callback.strip().sign("ia", location));
+        if (!writable)
+          Memory.protect(location, Process.pointerSize, prot);
+      }
+    },
+    declare: {
+      value(signature2) {
+        let types3 = signature2.types;
+        if (types3 === void 0) {
+          types3 = unparseSignature(signature2.retType, ["block"].concat(signature2.argTypes));
+        }
+        this.types = types3;
+        this._signature = parseSignature(types3);
+      }
+    },
+    _getSignature: {
+      value() {
+        const signature2 = this._signature;
+        if (signature2 === null)
+          throw new Error("block is missing signature; call declare()");
+        return signature2;
+      }
+    }
+  });
+  function collectProtocols(p, acc) {
+    acc = acc || {};
+    acc[p.name] = p;
+    const parentProtocols = p.protocols;
+    Object.keys(parentProtocols).forEach(function(name) {
+      collectProtocols(parentProtocols[name], acc);
+    });
+    return acc;
+  }
+  function registerProxy(properties) {
+    const protocols = properties.protocols || [];
+    const methods = properties.methods || {};
+    const events = properties.events || {};
+    const supportedSelectors = new Set(
+      Object.keys(methods).filter((m2) => /([+\-])\s(\S+)/.exec(m2) !== null).map((m2) => m2.split(" ")[1])
+    );
+    const proxyMethods = {
+      "- dealloc": function() {
+        const target = this.data.target;
+        if ("- release" in target)
+          target.release();
+        unbind(this.self);
+        this.super.dealloc();
+        const callback = this.data.events.dealloc;
+        if (callback !== void 0)
+          callback.call(this);
+      },
+      "- respondsToSelector:": function(sel2) {
+        const selector2 = selectorAsString(sel2);
+        if (supportedSelectors.has(selector2))
+          return true;
+        return this.data.target.respondsToSelector_(sel2);
+      },
+      "- forwardingTargetForSelector:": function(sel2) {
+        const callback = this.data.events.forward;
+        if (callback !== void 0)
+          callback.call(this, selectorAsString(sel2));
+        return this.data.target;
+      },
+      "- methodSignatureForSelector:": function(sel2) {
+        return this.data.target.methodSignatureForSelector_(sel2);
+      },
+      "- forwardInvocation:": function(invocation) {
+        invocation.invokeWithTarget_(this.data.target);
+      }
+    };
+    for (var key in methods) {
+      if (methods.hasOwnProperty(key)) {
+        if (proxyMethods.hasOwnProperty(key))
+          throw new Error("The '" + key + "' method is reserved");
+        proxyMethods[key] = methods[key];
+      }
+    }
+    const ProxyClass = registerClass({
+      name: properties.name,
+      super: classRegistry.NSProxy,
+      protocols,
+      methods: proxyMethods
+    });
+    return function(target, data) {
+      target = target instanceof NativePointer ? new ObjCObject(target) : target;
+      data = data || {};
+      const instance = ProxyClass.alloc().autorelease();
+      const boundData = getBoundData(instance);
+      boundData.target = "- retain" in target ? target.retain() : target;
+      boundData.events = events;
+      for (var key2 in data) {
+        if (data.hasOwnProperty(key2)) {
+          if (boundData.hasOwnProperty(key2))
+            throw new Error("The '" + key2 + "' property is reserved");
+          boundData[key2] = data[key2];
+        }
+      }
+      this.handle = instance.handle;
+    };
+  }
+  function registerClass(properties) {
+    let name = properties.name;
+    if (name === void 0)
+      name = makeClassName();
+    const superClass = properties.super !== void 0 ? properties.super : classRegistry.NSObject;
+    const protocols = properties.protocols || [];
+    const methods = properties.methods || {};
+    const methodCallbacks = [];
+    const classHandle = api.objc_allocateClassPair(superClass !== null ? superClass.handle : NULL, Memory.allocUtf8String(name), ptr("0"));
+    if (classHandle.isNull())
+      throw new Error("Unable to register already registered class '" + name + "'");
+    const metaClassHandle = api.object_getClass(classHandle);
+    try {
+      protocols.forEach(function(protocol) {
+        api.class_addProtocol(classHandle, protocol.handle);
+      });
+      Object.keys(methods).forEach(function(rawMethodName) {
+        const match = /([+\-])\s(\S+)/.exec(rawMethodName);
+        if (match === null)
+          throw new Error("Invalid method name");
+        const kind = match[1];
+        const name2 = match[2];
+        let method2;
+        const value = methods[rawMethodName];
+        if (typeof value === "function") {
+          let types4 = null;
+          if (rawMethodName in superClass) {
+            types4 = superClass[rawMethodName].types;
+          } else {
+            for (let protocol of protocols) {
+              const method3 = protocol.methods[rawMethodName];
+              if (method3 !== void 0) {
+                types4 = method3.types;
+                break;
+              }
+            }
+          }
+          if (types4 === null)
+            throw new Error("Unable to find '" + rawMethodName + "' in super-class or any of its protocols");
+          method2 = {
+            types: types4,
+            implementation: value
+          };
+        } else {
+          method2 = value;
+        }
+        const target = kind === "+" ? metaClassHandle : classHandle;
+        let types3 = method2.types;
+        if (types3 === void 0) {
+          types3 = unparseSignature(method2.retType, [kind === "+" ? "class" : "object", "selector"].concat(method2.argTypes));
+        }
+        const signature2 = parseSignature(types3);
+        const implementation2 = new NativeCallback(
+          makeMethodImplementationWrapper(signature2, method2.implementation),
+          signature2.retType.type,
+          signature2.argTypes.map(function(arg) {
+            return arg.type;
+          })
+        );
+        methodCallbacks.push(implementation2);
+        api.class_addMethod(target, selector(name2), implementation2, Memory.allocUtf8String(types3));
+      });
+    } catch (e) {
+      api.objc_disposeClassPair(classHandle);
+      throw e;
+    }
+    api.objc_registerClassPair(classHandle);
+    classHandle._methodCallbacks = methodCallbacks;
+    Script.bindWeak(classHandle, makeClassDestructor(ptr(classHandle)));
+    return new ObjCObject(classHandle);
+  }
+  function makeClassDestructor(classHandle) {
+    return function() {
+      api.objc_disposeClassPair(classHandle);
+    };
+  }
+  function registerProtocol(properties) {
+    let name = properties.name;
+    if (name === void 0)
+      name = makeProtocolName();
+    const protocols = properties.protocols || [];
+    const methods = properties.methods || {};
+    protocols.forEach(function(protocol) {
+      if (!(protocol instanceof ObjCProtocol))
+        throw new Error("Expected protocol");
+    });
+    const methodSpecs = Object.keys(methods).map(function(rawMethodName) {
+      const method2 = methods[rawMethodName];
+      const match = /([+\-])\s(\S+)/.exec(rawMethodName);
+      if (match === null)
+        throw new Error("Invalid method name");
+      const kind = match[1];
+      const name2 = match[2];
+      let types3 = method2.types;
+      if (types3 === void 0) {
+        types3 = unparseSignature(method2.retType, [kind === "+" ? "class" : "object", "selector"].concat(method2.argTypes));
+      }
+      return {
+        kind,
+        name: name2,
+        types: types3,
+        optional: method2.optional
+      };
+    });
+    const handle2 = api.objc_allocateProtocol(Memory.allocUtf8String(name));
+    if (handle2.isNull())
+      throw new Error("Unable to register already registered protocol '" + name + "'");
+    protocols.forEach(function(protocol) {
+      api.protocol_addProtocol(handle2, protocol.handle);
+    });
+    methodSpecs.forEach(function(spec) {
+      const isRequiredMethod = spec.optional ? 0 : 1;
+      const isInstanceMethod = spec.kind === "-" ? 1 : 0;
+      api.protocol_addMethodDescription(handle2, selector(spec.name), Memory.allocUtf8String(spec.types), isRequiredMethod, isInstanceMethod);
+    });
+    api.objc_registerProtocol(handle2);
+    return new ObjCProtocol(handle2);
+  }
+  function getHandle(obj) {
+    if (obj instanceof NativePointer)
+      return obj;
+    else if (typeof obj === "object" && obj.hasOwnProperty("handle"))
+      return obj.handle;
+    else
+      throw new Error("Expected NativePointer or ObjC.Object instance");
+  }
+  function bind(obj, data) {
+    const handle2 = getHandle(obj);
+    const self = obj instanceof ObjCObject ? obj : new ObjCObject(handle2);
+    bindings.set(handle2.toString(), {
+      self,
+      super: self.$super,
+      data
+    });
+  }
+  function unbind(obj) {
+    const handle2 = getHandle(obj);
+    bindings.delete(handle2.toString());
+  }
+  function getBoundData(obj) {
+    return getBinding(obj).data;
+  }
+  function getBinding(obj) {
+    const handle2 = getHandle(obj);
+    const key = handle2.toString();
+    let binding2 = bindings.get(key);
+    if (binding2 === void 0) {
+      const self = obj instanceof ObjCObject ? obj : new ObjCObject(handle2);
+      binding2 = {
+        self,
+        super: self.$super,
+        data: {}
+      };
+      bindings.set(key, binding2);
+    }
+    return binding2;
+  }
+  function enumerateLoadedClasses(...args) {
+    const allModules = new ModuleMap();
+    let unfiltered = false;
+    let callbacks;
+    let modules;
+    if (args.length === 1) {
+      callbacks = args[0];
+    } else {
+      callbacks = args[1];
+      const options = args[0];
+      modules = options.ownedBy;
+    }
+    if (modules === void 0) {
+      modules = allModules;
+      unfiltered = true;
+    }
+    const classGetName = api.class_getName;
+    const onMatch = callbacks.onMatch.bind(callbacks);
+    const swiftNominalTypeDescriptorOffset = (pointerSize === 8 ? 8 : 11) * pointerSize;
+    const numClasses = api.objc_getClassList(NULL, 0);
+    const classHandles = Memory.alloc(numClasses * pointerSize);
+    api.objc_getClassList(classHandles, numClasses);
+    for (let i = 0; i !== numClasses; i++) {
+      const classHandle = classHandles.add(i * pointerSize).readPointer();
+      const rawName = classGetName(classHandle);
+      let name = null;
+      let modulePath = modules.findPath(rawName);
+      const possiblySwift = modulePath === null && (unfiltered || allModules.findPath(rawName) === null);
+      if (possiblySwift) {
+        name = rawName.readCString();
+        const probablySwift = name.indexOf(".") !== -1;
+        if (probablySwift) {
+          const nominalTypeDescriptor = classHandle.add(swiftNominalTypeDescriptorOffset).readPointer();
+          modulePath = modules.findPath(nominalTypeDescriptor);
+        }
+      }
+      if (modulePath !== null) {
+        if (name === null)
+          name = rawName.readUtf8String();
+        onMatch(name, modulePath);
+      }
+    }
+    callbacks.onComplete();
+  }
+  function enumerateLoadedClassesSync(options = {}) {
+    const result = {};
+    enumerateLoadedClasses(options, {
+      onMatch(name, owner2) {
+        let group = result[owner2];
+        if (group === void 0) {
+          group = [];
+          result[owner2] = group;
+        }
+        group.push(name);
+      },
+      onComplete() {
+      }
+    });
+    return result;
+  }
+  function choose(specifier, callbacks) {
+    let cls = specifier;
+    let subclasses = true;
+    if (!(specifier instanceof ObjCObject) && typeof specifier === "object") {
+      cls = specifier.class;
+      if (specifier.hasOwnProperty("subclasses"))
+        subclasses = specifier.subclasses;
+    }
+    if (!(cls instanceof ObjCObject && (cls.$kind === "class" || cls.$kind === "meta-class")))
+      throw new Error("Expected an ObjC.Object for a class or meta-class");
+    const matches = get().choose(cls, subclasses).map((handle2) => new ObjCObject(handle2));
+    for (const match of matches) {
+      const result = callbacks.onMatch(match);
+      if (result === "stop")
+        break;
+    }
+    callbacks.onComplete();
+  }
+  function makeMethodInvocationWrapper(method, owner, superSpecifier, invocationOptions) {
+    const sel = method.sel;
+    let handle = method.handle;
+    let types;
+    if (handle === void 0) {
+      handle = null;
+      types = method.types;
+    } else {
+      types = api.method_getTypeEncoding(handle).readUtf8String();
+    }
+    const signature = parseSignature(types);
+    const retType = signature.retType;
+    const argTypes = signature.argTypes.slice(2);
+    const objc_msgSend = superSpecifier ? getMsgSendSuperImpl(signature, invocationOptions) : getMsgSendImpl(signature, invocationOptions);
+    const argVariableNames = argTypes.map(function(t, i) {
+      return "a" + (i + 1);
+    });
+    const callArgs = [
+      superSpecifier ? "superSpecifier" : "this",
+      "sel"
+    ].concat(argTypes.map(function(t, i) {
+      if (t.toNative) {
+        return "argTypes[" + i + "].toNative.call(this, " + argVariableNames[i] + ")";
+      }
+      return argVariableNames[i];
+    }));
+    let returnCaptureLeft;
+    let returnCaptureRight;
+    if (retType.type === "void") {
+      returnCaptureLeft = "";
+      returnCaptureRight = "";
+    } else if (retType.fromNative) {
+      returnCaptureLeft = "return retType.fromNative.call(this, ";
+      returnCaptureRight = ")";
+    } else {
+      returnCaptureLeft = "return ";
+      returnCaptureRight = "";
+    }
+    const m = eval("var m = function (" + argVariableNames.join(", ") + ") { " + returnCaptureLeft + "objc_msgSend(" + callArgs.join(", ") + ")" + returnCaptureRight + "; }; m;");
+    Object.defineProperty(m, "handle", {
+      enumerable: true,
+      get: getMethodHandle
+    });
+    m.selector = sel;
+    Object.defineProperty(m, "implementation", {
+      enumerable: true,
+      get() {
+        const h = getMethodHandle();
+        const impl2 = new NativeFunction(api.method_getImplementation(h), m.returnType, m.argumentTypes, invocationOptions);
+        const newImp = getReplacementMethodImplementation(h);
+        if (newImp !== null)
+          impl2._callback = newImp;
+        return impl2;
+      },
+      set(imp) {
+        replaceMethodImplementation(getMethodHandle(), imp);
+      }
+    });
+    m.returnType = retType.type;
+    m.argumentTypes = signature.argTypes.map((t) => t.type);
+    m.types = types;
+    Object.defineProperty(m, "symbol", {
+      enumerable: true,
+      get() {
+        return `${method.kind}[${owner.$className} ${selectorAsString(sel)}]`;
+      }
+    });
+    m.clone = function(options) {
+      return makeMethodInvocationWrapper(method, owner, superSpecifier, options);
+    };
+    function getMethodHandle() {
+      if (handle === null) {
+        if (owner.$kind === "instance") {
+          let cur = owner;
+          do {
+            if ("- forwardingTargetForSelector:" in cur) {
+              const target = cur.forwardingTargetForSelector_(sel);
+              if (target === null)
+                break;
+              if (target.$kind !== "instance")
+                break;
+              const h = api.class_getInstanceMethod(target.$class.handle, sel);
+              if (!h.isNull())
+                handle = h;
+              else
+                cur = target;
+            } else {
+              break;
+            }
+          } while (handle === null);
+        }
+        if (handle === null)
+          throw new Error("Unable to find method handle of proxied function");
+      }
+      return handle;
+    }
+    return m;
+  }
+  function makeMethodImplementationWrapper(signature, implementation) {
+    const retType = signature.retType;
+    const argTypes = signature.argTypes;
+    const argVariableNames = argTypes.map(function(t, i) {
+      if (i === 0)
+        return "handle";
+      else if (i === 1)
+        return "sel";
+      else
+        return "a" + (i - 1);
+    });
+    const callArgs = argTypes.slice(2).map(function(t, i) {
+      const argVariableName = argVariableNames[2 + i];
+      if (t.fromNative) {
+        return "argTypes[" + (2 + i) + "].fromNative.call(self, " + argVariableName + ")";
+      }
+      return argVariableName;
+    });
+    let returnCaptureLeft;
+    let returnCaptureRight;
+    if (retType.type === "void") {
+      returnCaptureLeft = "";
+      returnCaptureRight = "";
+    } else if (retType.toNative) {
+      returnCaptureLeft = "return retType.toNative.call(self, ";
+      returnCaptureRight = ")";
+    } else {
+      returnCaptureLeft = "return ";
+      returnCaptureRight = "";
+    }
+    const m = eval("var m = function (" + argVariableNames.join(", ") + ") { var binding = getBinding(handle);var self = binding.self;" + returnCaptureLeft + "implementation.call(binding" + (callArgs.length > 0 ? ", " : "") + callArgs.join(", ") + ")" + returnCaptureRight + "; }; m;");
+    return m;
+  }
+  function makeBlockInvocationWrapper(block, signature, implementation) {
+    const retType = signature.retType;
+    const argTypes = signature.argTypes.slice(1);
+    const argVariableNames = argTypes.map(function(t, i) {
+      return "a" + (i + 1);
+    });
+    const callArgs = argTypes.map(function(t, i) {
+      if (t.toNative) {
+        return "argTypes[" + i + "].toNative.call(this, " + argVariableNames[i] + ")";
+      }
+      return argVariableNames[i];
+    });
+    let returnCaptureLeft;
+    let returnCaptureRight;
+    if (retType.type === "void") {
+      returnCaptureLeft = "";
+      returnCaptureRight = "";
+    } else if (retType.fromNative) {
+      returnCaptureLeft = "return retType.fromNative.call(this, ";
+      returnCaptureRight = ")";
+    } else {
+      returnCaptureLeft = "return ";
+      returnCaptureRight = "";
+    }
+    const f = eval("var f = function (" + argVariableNames.join(", ") + ") { " + returnCaptureLeft + "implementation(this" + (callArgs.length > 0 ? ", " : "") + callArgs.join(", ") + ")" + returnCaptureRight + "; }; f;");
+    return f.bind(block);
+  }
+  function makeBlockImplementationWrapper(block, signature, implementation) {
+    const retType = signature.retType;
+    const argTypes = signature.argTypes;
+    const argVariableNames = argTypes.map(function(t, i) {
+      if (i === 0)
+        return "handle";
+      else
+        return "a" + i;
+    });
+    const callArgs = argTypes.slice(1).map(function(t, i) {
+      const argVariableName = argVariableNames[1 + i];
+      if (t.fromNative) {
+        return "argTypes[" + (1 + i) + "].fromNative.call(this, " + argVariableName + ")";
+      }
+      return argVariableName;
+    });
+    let returnCaptureLeft;
+    let returnCaptureRight;
+    if (retType.type === "void") {
+      returnCaptureLeft = "";
+      returnCaptureRight = "";
+    } else if (retType.toNative) {
+      returnCaptureLeft = "return retType.toNative.call(this, ";
+      returnCaptureRight = ")";
+    } else {
+      returnCaptureLeft = "return ";
+      returnCaptureRight = "";
+    }
+    const f = eval("var f = function (" + argVariableNames.join(", ") + ") { if (!this.handle.equals(handle))this.handle = handle;" + returnCaptureLeft + "implementation.call(block" + (callArgs.length > 0 ? ", " : "") + callArgs.join(", ") + ")" + returnCaptureRight + "; }; f;");
+    return f.bind(block);
+  }
+  function rawFridaType(t) {
+    return t === "object" ? "pointer" : t;
+  }
+  function makeClassName() {
+    for (let i = 1; true; i++) {
+      const name = "FridaAnonymousClass" + i;
+      if (!(name in classRegistry)) {
+        return name;
+      }
+    }
+  }
+  function makeProtocolName() {
+    for (let i = 1; true; i++) {
+      const name = "FridaAnonymousProtocol" + i;
+      if (!(name in protocolRegistry)) {
+        return name;
+      }
+    }
+  }
+  function objcMethodName(name) {
+    return name.replace(/_/g, ":");
+  }
+  function jsMethodName(name) {
+    let result = name.replace(/:/g, "_");
+    if (objCObjectBuiltins.has(result))
+      result += "2";
+    return result;
+  }
+  const isaMasks = {
+    x64: "0x7ffffffffff8",
+    arm64: "0xffffffff8"
+  };
+  const rawMask = isaMasks[Process.arch];
+  if (rawMask !== void 0) {
+    const mask = ptr(rawMask);
+    readObjectIsa = function(p) {
+      return p.readPointer().and(mask);
+    };
+  } else {
+    readObjectIsa = function(p) {
+      return p.readPointer();
+    };
+  }
+  function getMsgSendImpl(signature2, invocationOptions2) {
+    return resolveMsgSendImpl(msgSendBySignatureId, signature2, invocationOptions2, false);
+  }
+  function getMsgSendSuperImpl(signature2, invocationOptions2) {
+    return resolveMsgSendImpl(msgSendSuperBySignatureId, signature2, invocationOptions2, true);
+  }
+  function resolveMsgSendImpl(cache, signature2, invocationOptions2, isSuper) {
+    if (invocationOptions2 !== defaultInvocationOptions)
+      return makeMsgSendImpl(signature2, invocationOptions2, isSuper);
+    const { id } = signature2;
+    let impl2 = cache.get(id);
+    if (impl2 === void 0) {
+      impl2 = makeMsgSendImpl(signature2, invocationOptions2, isSuper);
+      cache.set(id, impl2);
+    }
+    return impl2;
+  }
+  function makeMsgSendImpl(signature2, invocationOptions2, isSuper) {
+    const retType2 = signature2.retType.type;
+    const argTypes2 = signature2.argTypes.map(function(t) {
+      return t.type;
+    });
+    const components = ["objc_msgSend"];
+    if (isSuper)
+      components.push("Super");
+    const returnsStruct = retType2 instanceof Array;
+    if (returnsStruct && !typeFitsInRegisters(retType2))
+      components.push("_stret");
+    else if (retType2 === "float" || retType2 === "double")
+      components.push("_fpret");
+    const name = components.join("");
+    return new NativeFunction(api[name], retType2, argTypes2, invocationOptions2);
+  }
+  function typeFitsInRegisters(type) {
+    if (Process.arch !== "x64")
+      return false;
+    const size = sizeOfTypeOnX64(type);
+    return size <= 16;
+  }
+  function sizeOfTypeOnX64(type) {
+    if (type instanceof Array)
+      return type.reduce((total, field) => total + sizeOfTypeOnX64(field), 0);
+    switch (type) {
+      case "bool":
+      case "char":
+      case "uchar":
+        return 1;
+      case "int16":
+      case "uint16":
+        return 2;
+      case "int":
+      case "int32":
+      case "uint":
+      case "uint32":
+      case "float":
+        return 4;
+      default:
+        return 8;
+    }
+  }
+  function unparseSignature(retType2, argTypes2) {
+    const retTypeId = typeIdFromAlias(retType2);
+    const argTypeIds = argTypes2.map(typeIdFromAlias);
+    const argSizes = argTypeIds.map((id) => singularTypeById[id].size);
+    const frameSize = argSizes.reduce((total, size) => total + size, 0);
+    let frameOffset = 0;
+    return retTypeId + frameSize + argTypeIds.map((id, i) => {
+      const result = id + frameOffset;
+      frameOffset += argSizes[i];
+      return result;
+    }).join("");
+  }
+  function parseSignature(sig) {
+    const cursor = [sig, 0];
+    parseQualifiers(cursor);
+    const retType2 = readType(cursor);
+    readNumber(cursor);
+    const argTypes2 = [];
+    let id = JSON.stringify(retType2.type);
+    while (dataAvailable(cursor)) {
+      parseQualifiers(cursor);
+      const argType = readType(cursor);
+      readNumber(cursor);
+      argTypes2.push(argType);
+      id += JSON.stringify(argType.type);
+    }
+    return {
+      id,
+      retType: retType2,
+      argTypes: argTypes2
+    };
+  }
+  function parseType(type) {
+    const cursor = [type, 0];
+    return readType(cursor);
+  }
+  function readType(cursor) {
+    let id = readChar(cursor);
+    if (id === "@") {
+      let next = peekChar(cursor);
+      if (next === "?") {
+        id += next;
+        skipChar(cursor);
+        if (peekChar(cursor) === "<")
+          skipExtendedBlock(cursor);
+      } else if (next === '"') {
+        skipChar(cursor);
+        readUntil('"', cursor);
+      }
+    } else if (id === "^") {
+      let next = peekChar(cursor);
+      if (next === "@") {
+        id += next;
+        skipChar(cursor);
+      }
+    }
+    const type = singularTypeById[id];
+    if (type !== void 0) {
+      return type;
+    } else if (id === "[") {
+      const length = readNumber(cursor);
+      const elementType = readType(cursor);
+      skipChar(cursor);
+      return arrayType(length, elementType);
+    } else if (id === "{") {
+      if (!tokenExistsAhead("=", "}", cursor)) {
+        readUntil("}", cursor);
+        return structType([]);
+      }
+      readUntil("=", cursor);
+      const structFields = [];
+      let ch;
+      while ((ch = peekChar(cursor)) !== "}") {
+        if (ch === '"') {
+          skipChar(cursor);
+          readUntil('"', cursor);
+        }
+        structFields.push(readType(cursor));
+      }
+      skipChar(cursor);
+      return structType(structFields);
+    } else if (id === "(") {
+      readUntil("=", cursor);
+      const unionFields = [];
+      while (peekChar(cursor) !== ")")
+        unionFields.push(readType(cursor));
+      skipChar(cursor);
+      return unionType(unionFields);
+    } else if (id === "b") {
+      readNumber(cursor);
+      return singularTypeById.i;
+    } else if (id === "^") {
+      readType(cursor);
+      return singularTypeById["?"];
+    } else if (modifiers.has(id)) {
+      return readType(cursor);
+    } else {
+      throw new Error("Unable to handle type " + id);
+    }
+  }
+  function skipExtendedBlock(cursor) {
+    let ch;
+    skipChar(cursor);
+    while ((ch = peekChar(cursor)) !== ">") {
+      if (peekChar(cursor) === "<") {
+        skipExtendedBlock(cursor);
+      } else {
+        skipChar(cursor);
+        if (ch === '"')
+          readUntil('"', cursor);
+      }
+    }
+    skipChar(cursor);
+  }
+  function readNumber(cursor) {
+    let result = "";
+    while (dataAvailable(cursor)) {
+      const c = peekChar(cursor);
+      const v = c.charCodeAt(0);
+      const isDigit = v >= 48 && v <= 57;
+      if (isDigit) {
+        result += c;
+        skipChar(cursor);
+      } else {
+        break;
+      }
+    }
+    return parseInt(result);
+  }
+  function readUntil(token, cursor) {
+    const buffer = cursor[0];
+    const offset = cursor[1];
+    const index = buffer.indexOf(token, offset);
+    if (index === -1)
+      throw new Error("Expected token '" + token + "' not found");
+    const result = buffer.substring(offset, index);
+    cursor[1] = index + 1;
+    return result;
+  }
+  function readChar(cursor) {
+    return cursor[0][cursor[1]++];
+  }
+  function peekChar(cursor) {
+    return cursor[0][cursor[1]];
+  }
+  function tokenExistsAhead(token, terminator, cursor) {
+    const [buffer, offset] = cursor;
+    const tokenIndex = buffer.indexOf(token, offset);
+    if (tokenIndex === -1)
+      return false;
+    const terminatorIndex = buffer.indexOf(terminator, offset);
+    if (terminatorIndex === -1)
+      throw new Error("Expected to find terminator: " + terminator);
+    return tokenIndex < terminatorIndex;
+  }
+  function skipChar(cursor) {
+    cursor[1]++;
+  }
+  function dataAvailable(cursor) {
+    return cursor[1] !== cursor[0].length;
+  }
+  const qualifierById = {
+    "r": "const",
+    "n": "in",
+    "N": "inout",
+    "o": "out",
+    "O": "bycopy",
+    "R": "byref",
+    "V": "oneway"
+  };
+  function parseQualifiers(cursor) {
+    const qualifiers = [];
+    while (true) {
+      const q = qualifierById[peekChar(cursor)];
+      if (q === void 0)
+        break;
+      qualifiers.push(q);
+      skipChar(cursor);
+    }
+    return qualifiers;
+  }
+  const idByAlias = {
+    "char": "c",
+    "int": "i",
+    "int16": "s",
+    "int32": "i",
+    "int64": "q",
+    "uchar": "C",
+    "uint": "I",
+    "uint16": "S",
+    "uint32": "I",
+    "uint64": "Q",
+    "float": "f",
+    "double": "d",
+    "bool": "B",
+    "void": "v",
+    "string": "*",
+    "object": "@",
+    "block": "@?",
+    "class": "#",
+    "selector": ":",
+    "pointer": "^v"
+  };
+  function typeIdFromAlias(alias) {
+    if (typeof alias === "object" && alias !== null)
+      return `@"${alias.type}"`;
+    const id = idByAlias[alias];
+    if (id === void 0)
+      throw new Error("No known encoding for type " + alias);
+    return id;
+  }
+  const fromNativeId = function(h) {
+    if (h.isNull()) {
+      return null;
+    } else if (h.toString(16) === this.handle.toString(16)) {
+      return this;
+    } else {
+      return new ObjCObject(h);
+    }
+  };
+  const toNativeId = function(v) {
+    if (v === null)
+      return NULL;
+    const type = typeof v;
+    if (type === "string") {
+      if (cachedNSStringCtor === null) {
+        cachedNSString = classRegistry.NSString;
+        cachedNSStringCtor = cachedNSString.stringWithUTF8String_;
+      }
+      return cachedNSStringCtor.call(cachedNSString, Memory.allocUtf8String(v));
+    } else if (type === "number") {
+      if (cachedNSNumberCtor === null) {
+        cachedNSNumber = classRegistry.NSNumber;
+        cachedNSNumberCtor = cachedNSNumber.numberWithDouble_;
+      }
+      return cachedNSNumberCtor.call(cachedNSNumber, v);
+    }
+    return v;
+  };
+  const fromNativeBlock = function(h) {
+    if (h.isNull()) {
+      return null;
+    } else if (h.toString(16) === this.handle.toString(16)) {
+      return this;
+    } else {
+      return new Block(h);
+    }
+  };
+  const toNativeBlock = function(v) {
+    return v !== null ? v : NULL;
+  };
+  const toNativeObjectArray = function(v) {
+    if (v instanceof Array) {
+      const length = v.length;
+      const array = Memory.alloc(length * pointerSize);
+      for (let i = 0; i !== length; i++)
+        array.add(i * pointerSize).writePointer(toNativeId(v[i]));
+      return array;
+    }
+    return v;
+  };
+  function arrayType(length, elementType) {
+    return {
+      type: "pointer",
+      read(address) {
+        const result = [];
+        const elementSize = elementType.size;
+        for (let index = 0; index !== length; index++) {
+          result.push(elementType.read(address.add(index * elementSize)));
+        }
+        return result;
+      },
+      write(address, values) {
+        const elementSize = elementType.size;
+        values.forEach((value, index) => {
+          elementType.write(address.add(index * elementSize), value);
+        });
+      }
+    };
+  }
+  function structType(fieldTypes) {
+    let fromNative, toNative;
+    if (fieldTypes.some(function(t) {
+      return !!t.fromNative;
+    })) {
+      const fromTransforms = fieldTypes.map(function(t) {
+        if (t.fromNative)
+          return t.fromNative;
+        else
+          return identityTransform;
+      });
+      fromNative = function(v) {
+        return v.map(function(e, i) {
+          return fromTransforms[i].call(this, e);
+        });
+      };
+    } else {
+      fromNative = identityTransform;
+    }
+    if (fieldTypes.some(function(t) {
+      return !!t.toNative;
+    })) {
+      const toTransforms = fieldTypes.map(function(t) {
+        if (t.toNative)
+          return t.toNative;
+        else
+          return identityTransform;
+      });
+      toNative = function(v) {
+        return v.map(function(e, i) {
+          return toTransforms[i].call(this, e);
+        });
+      };
+    } else {
+      toNative = identityTransform;
+    }
+    const [totalSize, fieldOffsets] = fieldTypes.reduce(function(result, t) {
+      const [previousOffset, offsets] = result;
+      const { size } = t;
+      const offset = align(previousOffset, size);
+      offsets.push(offset);
+      return [offset + size, offsets];
+    }, [0, []]);
+    return {
+      type: fieldTypes.map((t) => t.type),
+      size: totalSize,
+      read(address) {
+        return fieldTypes.map((type, index) => type.read(address.add(fieldOffsets[index])));
+      },
+      write(address, values) {
+        values.forEach((value, index) => {
+          fieldTypes[index].write(address.add(fieldOffsets[index]), value);
+        });
+      },
+      fromNative,
+      toNative
+    };
+  }
+  function unionType(fieldTypes) {
+    const largestType = fieldTypes.reduce(function(largest, t) {
+      if (t.size > largest.size)
+        return t;
+      else
+        return largest;
+    }, fieldTypes[0]);
+    let fromNative, toNative;
+    if (largestType.fromNative) {
+      const fromTransform = largestType.fromNative;
+      fromNative = function(v) {
+        return fromTransform.call(this, v[0]);
+      };
+    } else {
+      fromNative = function(v) {
+        return v[0];
+      };
+    }
+    if (largestType.toNative) {
+      const toTransform = largestType.toNative;
+      toNative = function(v) {
+        return [toTransform.call(this, v)];
+      };
+    } else {
+      toNative = function(v) {
+        return [v];
+      };
+    }
+    return {
+      type: [largestType.type],
+      size: largestType.size,
+      read: largestType.read,
+      write: largestType.write,
+      fromNative,
+      toNative
+    };
+  }
+  const longBits = pointerSize == 8 && Process.platform !== "windows" ? 64 : 32;
+  modifiers = /* @__PURE__ */ new Set([
+    "j",
+    // complex
+    "A",
+    // atomic
+    "r",
+    // const
+    "n",
+    // in
+    "N",
+    // inout
+    "o",
+    // out
+    "O",
+    // by copy
+    "R",
+    // by ref
+    "V",
+    // one way
+    "+"
+    // GNU register
+  ]);
+  singularTypeById = {
+    "c": {
+      type: "char",
+      size: 1,
+      read: (address) => address.readS8(),
+      write: (address, value) => {
+        address.writeS8(value);
+      },
+      toNative(v) {
+        if (typeof v === "boolean") {
+          return v ? 1 : 0;
+        }
+        return v;
+      }
+    },
+    "i": {
+      type: "int",
+      size: 4,
+      read: (address) => address.readInt(),
+      write: (address, value) => {
+        address.writeInt(value);
+      }
+    },
+    "s": {
+      type: "int16",
+      size: 2,
+      read: (address) => address.readS16(),
+      write: (address, value) => {
+        address.writeS16(value);
+      }
+    },
+    "l": {
+      type: "int32",
+      size: 4,
+      read: (address) => address.readS32(),
+      write: (address, value) => {
+        address.writeS32(value);
+      }
+    },
+    "q": {
+      type: "int64",
+      size: 8,
+      read: (address) => address.readS64(),
+      write: (address, value) => {
+        address.writeS64(value);
+      }
+    },
+    "C": {
+      type: "uchar",
+      size: 1,
+      read: (address) => address.readU8(),
+      write: (address, value) => {
+        address.writeU8(value);
+      }
+    },
+    "I": {
+      type: "uint",
+      size: 4,
+      read: (address) => address.readUInt(),
+      write: (address, value) => {
+        address.writeUInt(value);
+      }
+    },
+    "S": {
+      type: "uint16",
+      size: 2,
+      read: (address) => address.readU16(),
+      write: (address, value) => {
+        address.writeU16(value);
+      }
+    },
+    "L": {
+      type: "uint" + longBits,
+      size: longBits / 8,
+      read: (address) => address.readULong(),
+      write: (address, value) => {
+        address.writeULong(value);
+      }
+    },
+    "Q": {
+      type: "uint64",
+      size: 8,
+      read: (address) => address.readU64(),
+      write: (address, value) => {
+        address.writeU64(value);
+      }
+    },
+    "f": {
+      type: "float",
+      size: 4,
+      read: (address) => address.readFloat(),
+      write: (address, value) => {
+        address.writeFloat(value);
+      }
+    },
+    "d": {
+      type: "double",
+      size: 8,
+      read: (address) => address.readDouble(),
+      write: (address, value) => {
+        address.writeDouble(value);
+      }
+    },
+    "B": {
+      type: "bool",
+      size: 1,
+      read: (address) => address.readU8(),
+      write: (address, value) => {
+        address.writeU8(value);
+      },
+      fromNative(v) {
+        return v ? true : false;
+      },
+      toNative(v) {
+        return v ? 1 : 0;
+      }
+    },
+    "v": {
+      type: "void",
+      size: 0
+    },
+    "*": {
+      type: "pointer",
+      size: pointerSize,
+      read: (address) => address.readPointer(),
+      write: (address, value) => {
+        address.writePointer(value);
+      },
+      fromNative(h) {
+        return h.readUtf8String();
+      }
+    },
+    "@": {
+      type: "pointer",
+      size: pointerSize,
+      read: (address) => address.readPointer(),
+      write: (address, value) => {
+        address.writePointer(value);
+      },
+      fromNative: fromNativeId,
+      toNative: toNativeId
+    },
+    "@?": {
+      type: "pointer",
+      size: pointerSize,
+      read: (address) => address.readPointer(),
+      write: (address, value) => {
+        address.writePointer(value);
+      },
+      fromNative: fromNativeBlock,
+      toNative: toNativeBlock
+    },
+    "^@": {
+      type: "pointer",
+      size: pointerSize,
+      read: (address) => address.readPointer(),
+      write: (address, value) => {
+        address.writePointer(value);
+      },
+      toNative: toNativeObjectArray
+    },
+    "^v": {
+      type: "pointer",
+      size: pointerSize,
+      read: (address) => address.readPointer(),
+      write: (address, value) => {
+        address.writePointer(value);
+      }
+    },
+    "#": {
+      type: "pointer",
+      size: pointerSize,
+      read: (address) => address.readPointer(),
+      write: (address, value) => {
+        address.writePointer(value);
+      },
+      fromNative: fromNativeId,
+      toNative: toNativeId
+    },
+    ":": {
+      type: "pointer",
+      size: pointerSize,
+      read: (address) => address.readPointer(),
+      write: (address, value) => {
+        address.writePointer(value);
+      }
+    },
+    "?": {
+      type: "pointer",
+      size: pointerSize,
+      read: (address) => address.readPointer(),
+      write: (address, value) => {
+        address.writePointer(value);
+      }
+    }
+  };
+  function identityTransform(v) {
+    return v;
+  }
+  function align(value, boundary) {
+    const remainder = value % boundary;
+    return remainder === 0 ? value : value + (boundary - remainder);
+  }
+}
+var runtime2 = new Runtime2();
+var frida_objc_bridge_default = runtime2;
+
+// agent/Utils/Debugger.ts
+var Debugger = class _Debugger {
+  static Colors = {
+    RESET: "\x1B[0m",
+    INFO: "\x1B[96;1m",
+    WARN: "\x1B[93;1m",
+    ERROR: "\x1B[91;1m",
+    DEBUG: "\x1B[95;1m"
+  };
+  static Format(level, ...messages2) {
+    const color = _Debugger.Colors[level];
+    const reset = _Debugger.Colors.RESET;
+    return `${color}[${level}] ${messages2.map((m2) => typeof m2 === "string" ? m2 : JSON.stringify(m2, null, 2)).join(" ")}${reset}`;
+  }
+  static Log(level, ...messages2) {
+    const fn = console[level.toLowerCase()];
+    fn(_Debugger.Format(level, ...messages2));
+  }
+  static Info(...messages2) {
+    _Debugger.Log("INFO", ...messages2);
+  }
+  static Warn(...messages2) {
+    _Debugger.Log("WARN", ...messages2);
+  }
+  static Error(...messages2) {
+    _Debugger.Log("ERROR", ...messages2);
+  }
+  static Debug(...messages2) {
+    _Debugger.Log("DEBUG", ...messages2);
+  }
+};
+var Debugger_default = Debugger;
+
 // agent/Environement/Environment.ts
 var Environment = class _Environment {
   static script_version = "1.0.0";
@@ -1808,6 +16125,13 @@ var Environment = class _Environment {
   static LaserBase;
   static LaserBaseSize;
   static Init() {
+    if (frida_java_bridge_default.available) {
+      _Environment.platform = "Android";
+    } else if (frida_objc_bridge_default.available) {
+      _Environment.platform = "iOS";
+    } else {
+      Debugger_default.Error("wrong way ever to check if a device is ios or android but ngl im lazy bruh");
+    }
     if (_Environment.platform == "iOS") {
       _Environment.FindModuleByName("NullsBrawl");
       _Environment.FindBaseAddress();
@@ -1863,6 +16187,7 @@ var Addresses = class _Addresses {
   static MovieClip_setText;
   static GameButtonCtor;
   static MovieClipHelper_setTextFieldVerticallyCentered;
+  static MovieClipHelper_setTextAndScaleIfNecessary;
   static ServerConnectionUpdate;
   static State;
   static HasConnectFailed;
@@ -1924,6 +16249,7 @@ var Addresses = class _Addresses {
     _Addresses.MovieClip_setText = Environment_default.LaserBase.add(10125460);
     _Addresses.GameButtonCtor = Environment_default.LaserBase.add(684784);
     _Addresses.MovieClipHelper_setTextFieldVerticallyCentered = Environment_default.LaserBase.add(3688800);
+    _Addresses.MovieClipHelper_setTextAndScaleIfNecessary = Environment_default.LaserBase.add(3689652);
     _Addresses.ServerConnectionUpdate = Environment_default.LaserBase.add(2338352);
     _Addresses.State = ptr(Process.pointerSize * 4);
     _Addresses.HasConnectFailed = ptr(Process.pointerSize);
@@ -1960,65 +16286,6 @@ var Addresses = class _Addresses {
 };
 var Addresses_default = Addresses;
 
-// agent/Protocol/PiranhaMessage/PiranhaMessage.ts
-var PiranhaMessage = class {
-  static Encode(Message) {
-    return new NativeFunction(Message.readPointer().add(16).readPointer(), "int", ["pointer"])(Message);
-  }
-  static Decode(Message) {
-    return new NativeFunction(Message.readPointer().add(24).readPointer(), "int", ["pointer"])(Message);
-  }
-  static GetServiceNodeType(Message) {
-    return new NativeFunction(Message.readPointer().add(32).readPointer(), "int", ["pointer"])(Message);
-  }
-  static GetMessageType(Message) {
-    return new NativeFunction(Message.readPointer().add(40).readPointer(), "int", ["pointer"])(Message);
-  }
-  static GetMessageTypeName(Message) {
-    return new NativeFunction(Message.readPointer().add(48).readPointer(), "pointer", ["pointer"])(Message);
-  }
-  static Destruct(Message) {
-    return new NativeFunction(Message.readPointer().add(56).readPointer(), "int", ["pointer"])(Message);
-  }
-  static GetByteStream(Message) {
-    return Message.add(8);
-  }
-};
-var PiranhaMessage_default = PiranhaMessage;
-
-// agent/Utils/Debugger.ts
-var Debugger = class _Debugger {
-  static Colors = {
-    RESET: "\x1B[0m",
-    INFO: "\x1B[96;1m",
-    WARN: "\x1B[93;1m",
-    ERROR: "\x1B[91;1m",
-    DEBUG: "\x1B[95;1m"
-  };
-  static Format(level, ...messages2) {
-    const color = _Debugger.Colors[level];
-    const reset = _Debugger.Colors.RESET;
-    return `${color}[${level}] ${messages2.map((m) => typeof m === "string" ? m : JSON.stringify(m, null, 2)).join(" ")}${reset}`;
-  }
-  static Log(level, ...messages2) {
-    const fn = console[level.toLowerCase()];
-    fn(_Debugger.Format(level, ...messages2));
-  }
-  static Info(...messages2) {
-    _Debugger.Log("INFO", ...messages2);
-  }
-  static Warn(...messages2) {
-    _Debugger.Log("WARN", ...messages2);
-  }
-  static Error(...messages2) {
-    _Debugger.Log("ERROR", ...messages2);
-  }
-  static Debug(...messages2) {
-    _Debugger.Log("DEBUG", ...messages2);
-  }
-};
-var Debugger_default = Debugger;
-
 // agent/Manager/Functions.ts
 var Functions = class _Functions {
   static GUI = class {
@@ -2053,6 +16320,7 @@ var Functions = class _Functions {
   };
   static MovieClipHelper = class {
     static SetTextFieldVerticallyCentered;
+    static SetTextAndScaleIfNecessary;
   };
   static Sprite = class {
     static Sprite;
@@ -2126,6 +16394,7 @@ var Functions = class _Functions {
     _Functions.ScrollArea.Update = new NativeFunction(Addresses_default.ScrollArea_update, "void", ["pointer", "int"]);
     _Functions.ScrollArea.AddContent = new NativeFunction(Addresses_default.ScrollArea_addContent, "void", ["pointer", "pointer"]);
     _Functions.GameButton.GameButton = new NativeFunction(Addresses_default.GameButtonCtor, "void", ["pointer"]);
+    _Functions.MovieClipHelper.SetTextAndScaleIfNecessary = new NativeFunction(Addresses_default.MovieClipHelper_setTextAndScaleIfNecessary, "void", ["pointer", "pointer", "int", "int"]);
     _Functions.Imports.Malloc = new NativeFunction(Addresses_default.Imports.Malloc, "pointer", ["uint"]);
     _Functions.Imports.Free = new NativeFunction(LibSystem.findExportByName("free"), "int", ["pointer"]);
     _Functions.Imports.Open = new NativeFunction(LibSystem.findExportByName("open"), "int", ["pointer", "int", "int"]);
@@ -2142,6 +16411,32 @@ var Functions = class _Functions {
   }
 };
 var Functions_default = Functions;
+
+// agent/Protocol/PiranhaMessage/PiranhaMessage.ts
+var PiranhaMessage = class {
+  static Encode(Message) {
+    return new NativeFunction(Message.readPointer().add(16).readPointer(), "int", ["pointer"])(Message);
+  }
+  static Decode(Message) {
+    return new NativeFunction(Message.readPointer().add(24).readPointer(), "int", ["pointer"])(Message);
+  }
+  static GetServiceNodeType(Message) {
+    return new NativeFunction(Message.readPointer().add(32).readPointer(), "int", ["pointer"])(Message);
+  }
+  static GetMessageType(Message) {
+    return new NativeFunction(Message.readPointer().add(40).readPointer(), "int", ["pointer"])(Message);
+  }
+  static GetMessageTypeName(Message) {
+    return new NativeFunction(Message.readPointer().add(48).readPointer(), "pointer", ["pointer"])(Message);
+  }
+  static Destruct(Message) {
+    return new NativeFunction(Message.readPointer().add(56).readPointer(), "int", ["pointer"])(Message);
+  }
+  static GetByteStream(Message) {
+    return Message.add(8);
+  }
+};
+var PiranhaMessage_default = PiranhaMessage;
 
 // agent/Protocol/Messaging/Messaging.ts
 var Messaging = class {
@@ -7204,7 +21499,7 @@ var LogicBattleModeServer = class {
   static Spectators = 0;
   static IsBrawlTV = false;
   static PlayerCount = 1;
-  //LogicGameModeUtil.GetPlayerCount();
+  // LogicGameModeUtil.GetPlayerCount();
   static PlayerIndex = 0;
   static TeamIndex = 0;
   static ModifiersCount = 0;
@@ -8223,12 +22518,11 @@ var Hooks = class {
       }
       return StringTable__getString(a1);
     }, "pointer", ["pointer"]));
-    Interceptor.attach(Environment_default.LaserBase.add(3696528), {
+    Interceptor.attach(Environment_default.LaserBase.add(3291584), {
       onEnter: function(args) {
-        let StringPtr = StringHelper_default.ReadSCPtr(args[1]);
-        if (StringPtr == "cleared_txt") {
-          args[1].writePointer(StringHelper_default.scptr("players_online_debug_txt"));
-        }
+        let HomePageInstance = args[0];
+        let TextField = Functions_default.MovieClip.GetTextFieldByName(HomePageInstance.add(112), StringHelper_default.ptr("players_online_txt"));
+        Functions_default.MovieClip.SetText(HomePageInstance.add(112), StringHelper_default.ptr("players_online_debug_txt"), StringHelper_default.scptr("hiiiiiiii"));
       }
     });
   }
@@ -9201,29 +23495,29 @@ var CHAR_BACKWARD_SLASH = 92;
 var CHAR_COLON = 58;
 var CHAR_QUESTION_MARK = 63;
 var platformIsWin32 = process_default.platform === "win32";
-function isPathSeparator(code2) {
-  return code2 === CHAR_FORWARD_SLASH || code2 === CHAR_BACKWARD_SLASH;
+function isPathSeparator(code4) {
+  return code4 === CHAR_FORWARD_SLASH || code4 === CHAR_BACKWARD_SLASH;
 }
-function isPosixPathSeparator(code2) {
-  return code2 === CHAR_FORWARD_SLASH;
+function isPosixPathSeparator(code4) {
+  return code4 === CHAR_FORWARD_SLASH;
 }
-function isWindowsDeviceRoot(code2) {
-  return code2 >= CHAR_UPPERCASE_A && code2 <= CHAR_UPPERCASE_Z || code2 >= CHAR_LOWERCASE_A && code2 <= CHAR_LOWERCASE_Z;
+function isWindowsDeviceRoot(code4) {
+  return code4 >= CHAR_UPPERCASE_A && code4 <= CHAR_UPPERCASE_Z || code4 >= CHAR_LOWERCASE_A && code4 <= CHAR_LOWERCASE_Z;
 }
 function normalizeString(path, allowAboveRoot, separator, isPathSeparator2) {
   let res = "";
   let lastSegmentLength = 0;
   let lastSlash = -1;
   let dots = 0;
-  let code2 = 0;
+  let code4 = 0;
   for (let i = 0; i <= path.length; ++i) {
     if (i < path.length)
-      code2 = path.charCodeAt(i);
-    else if (isPathSeparator2(code2))
+      code4 = path.charCodeAt(i);
+    else if (isPathSeparator2(code4))
       break;
     else
-      code2 = CHAR_FORWARD_SLASH;
-    if (isPathSeparator2(code2)) {
+      code4 = CHAR_FORWARD_SLASH;
+    if (isPathSeparator2(code4)) {
       if (lastSlash === i - 1 || dots === 1) {
       } else if (dots === 2) {
         if (res.length < 2 || lastSegmentLength !== 2 || res.charCodeAt(res.length - 1) !== CHAR_DOT || res.charCodeAt(res.length - 2) !== CHAR_DOT) {
@@ -9260,7 +23554,7 @@ function normalizeString(path, allowAboveRoot, separator, isPathSeparator2) {
       }
       lastSlash = i;
       dots = 0;
-    } else if (code2 === CHAR_DOT && dots !== -1) {
+    } else if (code4 === CHAR_DOT && dots !== -1) {
       ++dots;
     } else {
       dots = -1;
@@ -9305,13 +23599,13 @@ var _win32 = {
       let rootEnd = 0;
       let device = "";
       let isAbsolute2 = false;
-      const code2 = path.charCodeAt(0);
+      const code4 = path.charCodeAt(0);
       if (len === 1) {
-        if (isPathSeparator(code2)) {
+        if (isPathSeparator(code4)) {
           rootEnd = 1;
           isAbsolute2 = true;
         }
-      } else if (isPathSeparator(code2)) {
+      } else if (isPathSeparator(code4)) {
         isAbsolute2 = true;
         if (isPathSeparator(path.charCodeAt(1))) {
           let j = 2;
@@ -9339,7 +23633,7 @@ var _win32 = {
         } else {
           rootEnd = 1;
         }
-      } else if (isWindowsDeviceRoot(code2) && path.charCodeAt(1) === CHAR_COLON) {
+      } else if (isWindowsDeviceRoot(code4) && path.charCodeAt(1) === CHAR_COLON) {
         device = path.slice(0, 2);
         rootEnd = 2;
         if (len > 2 && isPathSeparator(path.charCodeAt(2))) {
@@ -9385,11 +23679,11 @@ var _win32 = {
     let rootEnd = 0;
     let device;
     let isAbsolute2 = false;
-    const code2 = path.charCodeAt(0);
+    const code4 = path.charCodeAt(0);
     if (len === 1) {
-      return isPosixPathSeparator(code2) ? "\\" : path;
+      return isPosixPathSeparator(code4) ? "\\" : path;
     }
-    if (isPathSeparator(code2)) {
+    if (isPathSeparator(code4)) {
       isAbsolute2 = true;
       if (isPathSeparator(path.charCodeAt(1))) {
         let j = 2;
@@ -9420,7 +23714,7 @@ var _win32 = {
       } else {
         rootEnd = 1;
       }
-    } else if (isWindowsDeviceRoot(code2) && path.charCodeAt(1) === CHAR_COLON) {
+    } else if (isWindowsDeviceRoot(code4) && path.charCodeAt(1) === CHAR_COLON) {
       device = path.slice(0, 2);
       rootEnd = 2;
       if (len > 2 && isPathSeparator(path.charCodeAt(2))) {
@@ -9451,9 +23745,9 @@ var _win32 = {
     const len = path.length;
     if (len === 0)
       return false;
-    const code2 = path.charCodeAt(0);
-    return isPathSeparator(code2) || // Possible device root
-    len > 2 && isWindowsDeviceRoot(code2) && path.charCodeAt(1) === CHAR_COLON && isPathSeparator(path.charCodeAt(2));
+    const code4 = path.charCodeAt(0);
+    return isPathSeparator(code4) || // Possible device root
+    len > 2 && isWindowsDeviceRoot(code4) && path.charCodeAt(1) === CHAR_COLON && isPathSeparator(path.charCodeAt(2));
   },
   /**
    * @param {...string} args
@@ -9595,8 +23889,8 @@ var _win32 = {
       return path;
     if (resolvedPath.charCodeAt(0) === CHAR_BACKWARD_SLASH) {
       if (resolvedPath.charCodeAt(1) === CHAR_BACKWARD_SLASH) {
-        const code2 = resolvedPath.charCodeAt(2);
-        if (code2 !== CHAR_QUESTION_MARK && code2 !== CHAR_DOT) {
+        const code4 = resolvedPath.charCodeAt(2);
+        if (code4 !== CHAR_QUESTION_MARK && code4 !== CHAR_DOT) {
           return `\\\\?\\UNC\\${resolvedPath.slice(2)}`;
         }
       }
@@ -9615,11 +23909,11 @@ var _win32 = {
       return ".";
     let rootEnd = -1;
     let offset = 0;
-    const code2 = path.charCodeAt(0);
+    const code4 = path.charCodeAt(0);
     if (len === 1) {
-      return isPathSeparator(code2) ? path : ".";
+      return isPathSeparator(code4) ? path : ".";
     }
-    if (isPathSeparator(code2)) {
+    if (isPathSeparator(code4)) {
       rootEnd = offset = 1;
       if (isPathSeparator(path.charCodeAt(1))) {
         let j = 2;
@@ -9646,7 +23940,7 @@ var _win32 = {
           }
         }
       }
-    } else if (isWindowsDeviceRoot(code2) && path.charCodeAt(1) === CHAR_COLON) {
+    } else if (isWindowsDeviceRoot(code4) && path.charCodeAt(1) === CHAR_COLON) {
       rootEnd = len > 2 && isPathSeparator(path.charCodeAt(2)) ? 3 : 2;
       offset = rootEnd;
     }
@@ -9687,8 +23981,8 @@ var _win32 = {
       let extIdx = ext.length - 1;
       let firstNonSlashEnd = -1;
       for (let i = path.length - 1; i >= start; --i) {
-        const code2 = path.charCodeAt(i);
-        if (isPathSeparator(code2)) {
+        const code4 = path.charCodeAt(i);
+        if (isPathSeparator(code4)) {
           if (!matchedSlash) {
             start = i + 1;
             break;
@@ -9699,7 +23993,7 @@ var _win32 = {
             firstNonSlashEnd = i + 1;
           }
           if (extIdx >= 0) {
-            if (code2 === ext.charCodeAt(extIdx)) {
+            if (code4 === ext.charCodeAt(extIdx)) {
               if (--extIdx === -1) {
                 end = i;
               }
@@ -9746,8 +24040,8 @@ var _win32 = {
       start = startPart = 2;
     }
     for (let i = path.length - 1; i >= start; --i) {
-      const code2 = path.charCodeAt(i);
-      if (isPathSeparator(code2)) {
+      const code4 = path.charCodeAt(i);
+      if (isPathSeparator(code4)) {
         if (!matchedSlash) {
           startPart = i + 1;
           break;
@@ -9758,7 +24052,7 @@ var _win32 = {
         matchedSlash = false;
         end = i + 1;
       }
-      if (code2 === CHAR_DOT) {
+      if (code4 === CHAR_DOT) {
         if (startDot === -1)
           startDot = i;
         else if (preDotState !== 1)
@@ -9791,16 +24085,16 @@ var _win32 = {
       return ret;
     const len = path.length;
     let rootEnd = 0;
-    let code2 = path.charCodeAt(0);
+    let code4 = path.charCodeAt(0);
     if (len === 1) {
-      if (isPathSeparator(code2)) {
+      if (isPathSeparator(code4)) {
         ret.root = ret.dir = path;
         return ret;
       }
       ret.base = ret.name = path;
       return ret;
     }
-    if (isPathSeparator(code2)) {
+    if (isPathSeparator(code4)) {
       rootEnd = 1;
       if (isPathSeparator(path.charCodeAt(1))) {
         let j = 2;
@@ -9826,7 +24120,7 @@ var _win32 = {
           }
         }
       }
-    } else if (isWindowsDeviceRoot(code2) && path.charCodeAt(1) === CHAR_COLON) {
+    } else if (isWindowsDeviceRoot(code4) && path.charCodeAt(1) === CHAR_COLON) {
       if (len <= 2) {
         ret.root = ret.dir = path;
         return ret;
@@ -9849,8 +24143,8 @@ var _win32 = {
     let i = path.length - 1;
     let preDotState = 0;
     for (; i >= rootEnd; --i) {
-      code2 = path.charCodeAt(i);
-      if (isPathSeparator(code2)) {
+      code4 = path.charCodeAt(i);
+      if (isPathSeparator(code4)) {
         if (!matchedSlash) {
           startPart = i + 1;
           break;
@@ -9861,7 +24155,7 @@ var _win32 = {
         matchedSlash = false;
         end = i + 1;
       }
-      if (code2 === CHAR_DOT) {
+      if (code4 === CHAR_DOT) {
         if (startDot === -1)
           startDot = i;
         else if (preDotState !== 1)
@@ -10076,8 +24370,8 @@ var _posix = {
       let extIdx = ext.length - 1;
       let firstNonSlashEnd = -1;
       for (let i = path.length - 1; i >= 0; --i) {
-        const code2 = path.charCodeAt(i);
-        if (code2 === CHAR_FORWARD_SLASH) {
+        const code4 = path.charCodeAt(i);
+        if (code4 === CHAR_FORWARD_SLASH) {
           if (!matchedSlash) {
             start = i + 1;
             break;
@@ -10088,7 +24382,7 @@ var _posix = {
             firstNonSlashEnd = i + 1;
           }
           if (extIdx >= 0) {
-            if (code2 === ext.charCodeAt(extIdx)) {
+            if (code4 === ext.charCodeAt(extIdx)) {
               if (--extIdx === -1) {
                 end = i;
               }
@@ -10131,8 +24425,8 @@ var _posix = {
     let matchedSlash = true;
     let preDotState = 0;
     for (let i = path.length - 1; i >= 0; --i) {
-      const code2 = path.charCodeAt(i);
-      if (code2 === CHAR_FORWARD_SLASH) {
+      const code4 = path.charCodeAt(i);
+      if (code4 === CHAR_FORWARD_SLASH) {
         if (!matchedSlash) {
           startPart = i + 1;
           break;
@@ -10143,7 +24437,7 @@ var _posix = {
         matchedSlash = false;
         end = i + 1;
       }
-      if (code2 === CHAR_DOT) {
+      if (code4 === CHAR_DOT) {
         if (startDot === -1)
           startDot = i;
         else if (preDotState !== 1)
@@ -10189,8 +24483,8 @@ var _posix = {
     let i = path.length - 1;
     let preDotState = 0;
     for (; i >= start; --i) {
-      const code2 = path.charCodeAt(i);
-      if (code2 === CHAR_FORWARD_SLASH) {
+      const code4 = path.charCodeAt(i);
+      if (code4 === CHAR_FORWARD_SLASH) {
         if (!matchedSlash) {
           startPart = i + 1;
           break;
@@ -10201,7 +24495,7 @@ var _posix = {
         matchedSlash = false;
         end = i + 1;
       }
-      if (code2 === CHAR_DOT) {
+      if (code4 === CHAR_DOT) {
         if (startDot === -1)
           startDot = i;
         else if (preDotState !== 1)
@@ -10245,7 +24539,7 @@ var {
   relative,
   toNamespacedPath,
   dirname,
-  basename,
+  basename: basename2,
   extname,
   format,
   parse,
@@ -10434,23 +24728,23 @@ function isExternal(value) {
 function isModuleNamespaceObject(value) {
   throwNotSupported("isModuleNamespaceObject");
 }
-function throwNotSupported(method) {
-  throw new Error(`${method} is not supported in userland`);
+function throwNotSupported(method2) {
+  throw new Error(`${method2} is not supported in userland`);
 }
-function uncurryThis(f) {
-  return f.call.bind(f);
+function uncurryThis(f2) {
+  return f2.call.bind(f2);
 }
 
 // frida-shim:node_modules/@frida/util/util.js
-var types = {
+var types2 = {
   ...types_exports,
   isRegExp,
   isDate,
   isNativeError: isError
 };
 var formatRegExp = /%[sdj%]/g;
-function format2(f) {
-  if (!isString(f)) {
+function format2(f2) {
+  if (!isString(f2)) {
     const objects = [];
     for (let i2 = 0; i2 < arguments.length; i2++) {
       objects.push(inspect2(arguments[i2]));
@@ -10460,7 +24754,7 @@ function format2(f) {
   let i = 1;
   const args = arguments;
   const len = args.length;
-  let str = String(f).replace(formatRegExp, function(x) {
+  let str = String(f2).replace(formatRegExp, function(x) {
     if (x === "%%") return "%";
     if (i >= len) return x;
     switch (x) {
@@ -11621,8 +25915,8 @@ function _addListener(target, type, listener, prepend) {
     } else {
       existing.push(listener);
     }
-    const m = _getMaxListeners(target);
-    if (m > 0 && existing.length > m && !existing.warned) {
+    const m2 = _getMaxListeners(target);
+    if (m2 > 0 && existing.length > m2 && !existing.warned) {
       existing.warned = true;
       const w = new Error("Possible EventEmitter memory leak detected. " + existing.length + " " + String(type) + " listeners added. Use emitter.setMaxListeners() to increase limit");
       w.name = "MaxListenersExceededWarning";
@@ -11746,7 +26040,7 @@ EventEmitter.prototype.removeAllListeners = function removeAllListeners2(type) {
   }
   return this;
 };
-function _listeners(target, type, unwrap) {
+function _listeners(target, type, unwrap2) {
   const events = target._events;
   if (events === void 0)
     return [];
@@ -11754,8 +26048,8 @@ function _listeners(target, type, unwrap) {
   if (evlistener === void 0)
     return [];
   if (typeof evlistener === "function")
-    return unwrap ? [evlistener.listener || evlistener] : [evlistener];
-  return unwrap ? unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
+    return unwrap2 ? [evlistener.listener || evlistener] : [evlistener];
+  return unwrap2 ? unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
 }
 EventEmitter.prototype.listeners = function listeners2(type) {
   return _listeners(this, type, true);
@@ -14519,9 +28813,9 @@ var {
 Object.setPrototypeOf(Duplex.prototype, readable_default.prototype);
 Object.setPrototypeOf(Duplex, readable_default);
 {
-  for (const method of Object.keys(writable_default.prototype)) {
-    if (!Duplex.prototype[method])
-      Duplex.prototype[method] = writable_default.prototype[method];
+  for (const method2 of Object.keys(writable_default.prototype)) {
+    if (!Duplex.prototype[method2])
+      Duplex.prototype[method2] = writable_default.prototype[method2];
   }
 }
 function Duplex(options) {
@@ -15448,17 +29742,17 @@ Object.defineProperty(eos, promisify.custom, {
   }
 });
 Stream.Stream = Stream;
-Stream._isUint8Array = types.isUint8Array;
+Stream._isUint8Array = types2.isUint8Array;
 Stream._uint8ArrayToBuffer = Buffer2.from;
 
 // frida-shim:node_modules/@frida/stream/index.js
 var stream_default = Stream;
 
 // frida-shim:node_modules/frida-fs/dist/index.js
-var getWindowsApi = memoize(_getWindowsApi);
-var getPosixApi = memoize(_getPosixApi);
+var getWindowsApi = memoize2(_getWindowsApi);
+var getPosixApi = memoize2(_getPosixApi);
 var platform2 = Process.platform;
-var pointerSize = Process.pointerSize;
+var pointerSize11 = Process.pointerSize;
 var isWindows = platform2 === "windows";
 var S_IFMT = 61440;
 var S_IFREG = 32768;
@@ -15566,19 +29860,19 @@ var ReadStream = class extends stream_default.Readable {
       highWaterMark: 4 * 1024 * 1024
     });
     if (isWindows) {
-      const api = getWindowsApi();
-      const result = api.CreateFileW(Memory.allocUtf16String(path), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
-      const handle = result.value;
-      if (handle.equals(INVALID_HANDLE_VALUE)) {
+      const api3 = getWindowsApi();
+      const result = api3.CreateFileW(Memory.allocUtf16String(path), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
+      const handle2 = result.value;
+      if (handle2.equals(INVALID_HANDLE_VALUE)) {
         process_default.nextTick(() => {
           this.destroy(makeWindowsError(result.lastError));
         });
         return;
       }
-      this.#input = new Win32InputStream(handle, { autoClose: true });
+      this.#input = new Win32InputStream(handle2, { autoClose: true });
     } else {
-      const api = getPosixApi();
-      const result = api.open(Memory.allocUtf8String(path), constants.O_RDONLY, 0);
+      const api3 = getPosixApi();
+      const result = api3.open(Memory.allocUtf8String(path), constants.O_RDONLY, 0);
       const fd = result.value;
       if (fd === -1) {
         process_default.nextTick(() => {
@@ -15619,22 +29913,22 @@ var WriteStream = class extends stream_default.Writable {
       highWaterMark: 4 * 1024 * 1024
     });
     if (isWindows) {
-      const api = getWindowsApi();
-      const result = api.CreateFileW(Memory.allocUtf16String(path), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
-      const handle = result.value;
-      if (handle.equals(INVALID_HANDLE_VALUE)) {
+      const api3 = getWindowsApi();
+      const result = api3.CreateFileW(Memory.allocUtf16String(path), GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
+      const handle2 = result.value;
+      if (handle2.equals(INVALID_HANDLE_VALUE)) {
         process_default.nextTick(() => {
           this.destroy(makeWindowsError(result.lastError));
         });
         return;
       }
-      this.#output = new Win32OutputStream(handle, { autoClose: true });
+      this.#output = new Win32OutputStream(handle2, { autoClose: true });
     } else {
-      const api = getPosixApi();
+      const api3 = getPosixApi();
       const pathStr = Memory.allocUtf8String(path);
       const flags = constants.O_WRONLY | constants.O_CREAT | constants.O_TRUNC;
       const mode = constants.S_IRUSR | constants.S_IWUSR | constants.S_IRGRP | constants.S_IROTH;
-      const result = api.open(pathStr, flags, mode);
+      const result = api3.open(pathStr, flags, mode);
       const fd = result.value;
       if (fd === -1) {
         process_default.nextTick(() => {
@@ -15672,19 +29966,19 @@ var windowsBackend = {
     const { encoding = null } = options;
     const { CreateFileW, GetFileSizeEx, ReadFile, CloseHandle } = getWindowsApi();
     const createRes = CreateFileW(Memory.allocUtf16String(path), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
-    const handle = createRes.value;
-    if (handle.equals(INVALID_HANDLE_VALUE))
+    const handle2 = createRes.value;
+    if (handle2.equals(INVALID_HANDLE_VALUE))
       throwWindowsError(createRes.lastError);
     try {
       const scratchBuf = Memory.alloc(8);
       const fileSizeBuf = scratchBuf;
-      const getRes = GetFileSizeEx(handle, fileSizeBuf);
+      const getRes = GetFileSizeEx(handle2, fileSizeBuf);
       if (getRes.value === 0)
         throwWindowsError(getRes.lastError);
       const fileSize = fileSizeBuf.readU64().valueOf();
       const buf = Memory.alloc(fileSize);
       const numBytesReadBuf = scratchBuf;
-      const readRes = ReadFile(handle, buf, fileSize, numBytesReadBuf, NULL);
+      const readRes = ReadFile(handle2, buf, fileSize, numBytesReadBuf, NULL);
       if (readRes.value === 0)
         throwWindowsError(readRes.lastError);
       const n = numBytesReadBuf.readU32();
@@ -15692,20 +29986,20 @@ var windowsBackend = {
         throw new Error("Short read");
       return parseReadFileResult(buf, fileSize, encoding);
     } finally {
-      CloseHandle(handle);
+      CloseHandle(handle2);
     }
   },
   readlinkSync(path) {
     const { CreateFileW, GetFinalPathNameByHandleW, CloseHandle } = getWindowsApi();
     const createRes = CreateFileW(Memory.allocUtf16String(path), 0, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
-    const handle = createRes.value;
-    if (handle.equals(INVALID_HANDLE_VALUE))
+    const handle2 = createRes.value;
+    if (handle2.equals(INVALID_HANDLE_VALUE))
       throwWindowsError(createRes.lastError);
     try {
       let maxLength = 256;
       while (true) {
         const buf = Memory.alloc(maxLength * 2);
-        const { value, lastError } = GetFinalPathNameByHandleW(handle, buf, maxLength, 0);
+        const { value, lastError } = GetFinalPathNameByHandleW(handle2, buf, maxLength, 0);
         if (value === 0)
           throwWindowsError(lastError);
         if (lastError === ERROR_NOT_ENOUGH_MEMORY) {
@@ -15715,7 +30009,7 @@ var windowsBackend = {
         return buf.readUtf16String().substring(4);
       }
     } finally {
-      CloseHandle(handle);
+      CloseHandle(handle2);
     }
   },
   rmdirSync(path) {
@@ -15756,15 +30050,15 @@ function enumerateWindowsDirectoryEntriesMatching(filename, callback) {
   const { FindFirstFileW, FindNextFileW, FindClose } = getWindowsApi();
   const data = Memory.alloc(592);
   const result = FindFirstFileW(Memory.allocUtf16String(filename), data);
-  const handle = result.value;
-  if (handle.equals(INVALID_HANDLE_VALUE))
+  const handle2 = result.value;
+  if (handle2.equals(INVALID_HANDLE_VALUE))
     throwWindowsError(result.lastError);
   try {
     do {
       callback(data);
-    } while (FindNextFileW(handle, data) !== 0);
+    } while (FindNextFileW(handle2, data) !== 0);
   } finally {
-    FindClose(handle);
+    FindClose(handle2);
   }
 }
 var posixBackend = {
@@ -15906,7 +30200,7 @@ var direntSpecs = {
     "d_type": [20, "U8"]
   }
 };
-var direntSpec = isWindows ? direntSpecs.windows : direntSpecs[`${platform2}-${pointerSize * 8}`];
+var direntSpec = isWindows ? direntSpecs.windows : direntSpecs[`${platform2}-${pointerSize11 * 8}`];
 function readdirSync(path) {
   const entries = [];
   enumerateDirectoryEntries(path, (entry) => {
@@ -15922,8 +30216,8 @@ function list(path) {
     const name = readDirentField(entry, "d_name");
     const type = readDirentField(entry, "d_type", path_default.join(path, name));
     const extras = {};
-    for (const f of extraFieldNames)
-      extras[f] = readDirentField(entry, f);
+    for (const f2 of extraFieldNames)
+      extras[f2] = readDirentField(entry, f2);
     entries.push({
       name,
       type,
@@ -16129,22 +30423,22 @@ function getStatSpec() {
   if (isWindows) {
     statSpec = statSpecs.windows;
   } else {
-    const api = getPosixApi();
-    const stat64Impl = api.stat64 ?? api.__xstat64;
+    const api3 = getPosixApi();
+    const stat64Impl = api3.stat64 ?? api3.__xstat64;
     let platformId;
     if (platform2 === "darwin") {
-      platformId = `darwin-${pointerSize * 8}`;
+      platformId = `darwin-${pointerSize11 * 8}`;
     } else {
       platformId = `${platform2}-${Process.arch}`;
-      if (pointerSize === 4 && stat64Impl !== void 0) {
+      if (pointerSize11 === 4 && stat64Impl !== void 0) {
         platformId += "-stat64";
       }
     }
     statSpec = statSpecs[platformId];
     if (statSpec === void 0)
       throw new Error("Current OS/arch combo is not yet supported; please open a PR");
-    statSpec._stat = stat64Impl ?? api.stat;
-    statSpec._lstat = api.lstat64 ?? api.__lxstat64 ?? api.lstat;
+    statSpec._stat = stat64Impl ?? api3.stat;
+    statSpec._lstat = api3.lstat64 ?? api3.__lxstat64 ?? api3.lstat;
   }
   cachedStatSpec = statSpec;
   return statSpec;
@@ -16343,9 +30637,9 @@ function callbackify(original) {
     });
   };
 }
-var ssizeType = pointerSize === 8 ? "int64" : "int32";
+var ssizeType = pointerSize11 === 8 ? "int64" : "int32";
 var sizeType = "u" + ssizeType;
-var offsetType = platform2 === "darwin" || pointerSize === 8 ? "int64" : "int32";
+var offsetType = platform2 === "darwin" || pointerSize11 === 8 ? "int64" : "int32";
 function _getWindowsApi() {
   const SF = SystemFunction;
   const NF = NativeFunction;
@@ -16393,28 +30687,28 @@ function invokeXstat(impl2, path, buf) {
   return impl2(STAT_VER_LINUX, path, buf);
 }
 function makeApi(spec) {
-  return spec.reduce((api, entry) => {
-    addApiPlaceholder(api, entry);
-    return api;
+  return spec.reduce((api3, entry) => {
+    addApiPlaceholder(api3, entry);
+    return api3;
   }, {});
 }
 var kernel32 = null;
-var nativeOpts = isWindows && pointerSize === 4 ? { abi: "stdcall" } : {};
-function addApiPlaceholder(api, entry) {
+var nativeOpts = isWindows && pointerSize11 === 4 ? { abi: "stdcall" } : {};
+function addApiPlaceholder(api3, entry) {
   const [name] = entry;
-  Object.defineProperty(api, name, {
+  Object.defineProperty(api3, name, {
     configurable: true,
     get() {
-      const [, Ctor, retType, argTypes, wrapper] = entry;
+      const [, Ctor, retType2, argTypes2, wrapper] = entry;
       if (isWindows && kernel32 === null)
         kernel32 = Process.getModuleByName("kernel32.dll");
       let impl2 = null;
       const address = isWindows ? kernel32.findExportByName(name) : Module.findGlobalExportByName(name);
       if (address !== null)
-        impl2 = new Ctor(address, retType, argTypes, nativeOpts);
+        impl2 = new Ctor(address, retType2, argTypes2, nativeOpts);
       if (wrapper !== void 0)
         impl2 = wrapper.bind(null, impl2);
-      Object.defineProperty(api, name, { value: impl2 });
+      Object.defineProperty(api3, name, { value: impl2 });
       return impl2;
     }
   });
@@ -16433,7 +30727,7 @@ var rmdir = callbackify(rmdirSync);
 var unlink = callbackify(unlinkSync);
 var stat = callbackify(statSync);
 var lstat = callbackify(lstatSync);
-function memoize(compute) {
+function memoize2(compute) {
   let value;
   let computed = false;
   return function(...args) {
@@ -16542,18 +30836,16 @@ var DebugMenuBase = class _DebugMenuBase {
     Functions_default.ScrollArea.EnableHorizontalDrag(v18, 0);
     Functions_default.ScrollArea.SetAlignment(v18, 4);
     Functions_default.DisplayObject.SetPixelSnappedXY(v18, 730, 113);
-    _DebugMenuBase.CreateMiniCategory("", null);
-    _DebugMenuBase.CreateMiniCategory("Pops", () => _DebugMenuBase.ToggleDebugMenuCategory("Popups"));
-    _DebugMenuBase.CreateMiniCategory("Dump", () => _DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
-    _DebugMenuBase.CreateDebugMenuItem("Reload Game", ReloadGame_default.Execute, null);
-    let RandomFeatures = _DebugMenuBase.CreateDebugMenuCategory("Battles", () => _DebugMenuBase.ToggleDebugMenuCategory("Random Features"));
-    _DebugMenuBase.CreateDebugMenuItem("Infinite Ulti", Popups_default.ShowFamePopup, "Random Features", RandomFeatures);
-    let PopupInstance = _DebugMenuBase.CreateDebugMenuCategory("Popups", () => _DebugMenuBase.ToggleDebugMenuCategory("Popups"));
-    _DebugMenuBase.CreateDebugMenuItem("Show Fame Popup", Popups_default.ShowFamePopup, "Popups", PopupInstance);
-    _DebugMenuBase.CreateDebugMenuItem("Show Latency Test Popup", Popups_default.ShowLatencyTestPopup, "Popups", PopupInstance);
+    _DebugMenuBase.CreateMiniCategory("", _DebugMenuBase.CloseAllCategories);
+    _DebugMenuBase.CreateMiniCategory("Battles", () => _DebugMenuBase.ToggleDebugMenuCategory("Battles"));
+    _DebugMenuBase.CreateMiniCategory("Dumper", () => _DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
+    _DebugMenuBase.CreateDebugMenuItem("Reload Game", "Name11", ReloadGame_default.Execute, null);
+    _DebugMenuBase.CreateDebugMenuItem("Join Telegram", "Name11", ReloadGame_default.Execute, null);
+    let BattlesInstance = _DebugMenuBase.CreateDebugMenuCategory("Battles", () => _DebugMenuBase.ToggleDebugMenuCategory("Battles"));
+    _DebugMenuBase.CreateDebugMenuItem("Infinite Ulti", "Name4", Popups_default.ShowFamePopup, "Battles", BattlesInstance);
     let DumperInstance = _DebugMenuBase.CreateDebugMenuCategory("Dumper", () => _DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
-    _DebugMenuBase.CreateDebugMenuItem("Dump OHD", Dumper_default.DumpOHD, "Dumper", DumperInstance);
-    _DebugMenuBase.CreateDebugMenuItem("Dump Battle Struct", Dumper_default.DumpBattles, "Dumper", DumperInstance);
+    _DebugMenuBase.CreateDebugMenuItem("Dump OHD", "Name4", Dumper_default.DumpOHD, "Dumper", DumperInstance);
+    _DebugMenuBase.CreateDebugMenuItem("Dump Battle Struct", "Name4", Dumper_default.DumpBattles, "Dumper", DumperInstance);
     _DebugMenuBase.updateLayout();
   }
   static update(ScrollArea, FramePer) {
@@ -16588,6 +30880,7 @@ var DebugMenuBase = class _DebugMenuBase {
     let MovieClip = Functions_default.ResourceManager.GetMovieClip(StringHelper_default.ptr("sc/debug.sc"), StringHelper_default.ptr("debug_menu_category_mini"));
     new NativeFunction(ButtonInstance.readPointer().add(352).readPointer(), "void", ["pointer", "pointer", "bool"])(ButtonInstance, MovieClip, 1);
     let TextField = Functions_default.MovieClip.GetTextFieldByName(MovieClip, StringHelper_default.ptr("Text"));
+    Functions_default.MovieClipHelper.SetTextAndScaleIfNecessary(TextField, StringHelper_default.scptr(Text), 1, 0);
     Functions_default.MovieClip.SetText(MovieClip, StringHelper_default.ptr("Text"), StringHelper_default.scptr(Text));
     Functions_default.DisplayObject.SetPixelSnappedXY(ButtonInstance, 20 + _DebugMenuBase.MiniCategorysX, 20);
     _DebugMenuBase.MiniCategorysX += 45;
@@ -16601,15 +30894,18 @@ var DebugMenuBase = class _DebugMenuBase {
     });
     return ButtonInstance;
   }
-  static CreateDebugMenuItem(Text, Callback, CategoryName, CategoryButton = null) {
+  static CreateDebugMenuItem(Text, ColorGradient, Callback, CategoryName, CategoryButton = null) {
     let ButtonInstance = Functions_default.Imports.Malloc(1e3);
     let GameButton = Functions_default.GameButton.GameButton(ButtonInstance);
     let MovieClip = Functions_default.ResourceManager.GetMovieClip(StringHelper_default.ptr("sc/debug.sc"), StringHelper_default.ptr("debug_menu_item"));
     new NativeFunction(ButtonInstance.readPointer().add(352).readPointer(), "void", ["pointer", "pointer", "bool"])(ButtonInstance, MovieClip, 1);
     let TextField = Functions_default.MovieClip.GetTextFieldByName(MovieClip, StringHelper_default.ptr("Text"));
+    let ColorGradientByName2 = Functions_default.LogicDataTables.GetColorGradientByName(StringHelper_default.scptr(ColorGradient), 1);
+    Functions_default.MovieClipHelper.SetTextAndScaleIfNecessary(TextField, StringHelper_default.scptr(Text), 1, 0);
+    Functions_default.DecoratedTextField.SetupDecoratedText(TextField, StringHelper_default.scptr(Text), ColorGradientByName2);
     Functions_default.MovieClip.SetText(MovieClip, StringHelper_default.ptr("Text"), StringHelper_default.scptr(Text));
-    Functions_default.ScrollArea.AddContent(_DebugMenuBase.ScrollArea, ButtonInstance);
     Functions_default.MovieClipHelper.SetTextFieldVerticallyCentered(TextField);
+    Functions_default.ScrollArea.AddContent(_DebugMenuBase.ScrollArea, ButtonInstance);
     Interceptor.attach(Addresses_default.CustomButton_buttonPressed, {
       onEnter(args) {
         if (ButtonInstance.toInt32() === args[0].toInt32()) {
@@ -16634,6 +30930,8 @@ var DebugMenuBase = class _DebugMenuBase {
     let MovieClip = Functions_default.ResourceManager.GetMovieClip(StringHelper_default.ptr("sc/debug.sc"), StringHelper_default.ptr("debug_menu_category"));
     new NativeFunction(ButtonInstance.readPointer().add(352).readPointer(), "void", ["pointer", "pointer", "bool"])(ButtonInstance, MovieClip, 1);
     let TextField = Functions_default.MovieClip.GetTextFieldByName(MovieClip, StringHelper_default.ptr("Text"));
+    let ColorGradientByName2 = Functions_default.LogicDataTables.GetColorGradientByName(StringHelper_default.scptr("Name11"), 1);
+    Functions_default.DecoratedTextField.SetupDecoratedText(TextField, StringHelper_default.scptr(Text), ColorGradientByName2);
     Functions_default.MovieClip.SetText(MovieClip, StringHelper_default.ptr("Text"), StringHelper_default.scptr("+ " + Text));
     Functions_default.MovieClipHelper.SetTextFieldVerticallyCentered(TextField);
     ButtonInstance.Text = Text;
@@ -16650,6 +30948,16 @@ var DebugMenuBase = class _DebugMenuBase {
       }
     });
     return ButtonInstance;
+  }
+  static CloseAllCategories() {
+    _DebugMenuBase.Categorys.forEach((category) => {
+      if (category.isExpanded) {
+        category.isExpanded = false;
+        const movieClip = category.MovieClip;
+        Functions_default.MovieClip.SetText(movieClip, StringHelper_default.ptr("Text"), StringHelper_default.scptr("+ " + category.Text));
+      }
+    });
+    _DebugMenuBase.updateLayout();
   }
   static ToggleDebugMenuCategory(CategoryName) {
     const categoryButton = _DebugMenuBase.Categorys.find((btn) => btn.Text === CategoryName);
@@ -16676,7 +30984,7 @@ var DebugMenu = class _DebugMenu {
     Functions_default.Stage.AddChild(Functions_default.Stage.sm_instance.readPointer(), DebugMenuBase_default.TabScrollArea);
     Functions_default.Stage.AddChild(Functions_default.Stage.sm_instance.readPointer(), DebugMenuBase_default.ScrollArea);
     Interceptor.attach(Environment_default.LaserBase.add(671924), {
-      onEnter() {
+      onLeave() {
         DebugMenuBase_default.update(DebugMenuBase_default.TabScrollArea, 20);
         DebugMenuBase_default.update(DebugMenuBase_default.ScrollArea, 20);
       }
@@ -16756,7 +31064,7 @@ var ResourceListener = class {
         Debugger_default.Info("[Loader::LoadDebugSC] Loaded debug.sc!");
         setTimeout(() => {
           DebugButton_default.LoadDebugButton();
-        }, 120);
+        }, 3e3);
         SCLoader.detach();
       }
     });

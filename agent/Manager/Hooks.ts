@@ -97,7 +97,7 @@ class Hooks {
             if (value === "TID_EDIT_MOVEMENT") {
                 return StringTable__getString((Memory as any).allocUtf8String("testing"));
             }
-            if (value === "TID_ABOUT") { // Changing about text to credits
+            if (value === "TID_ABOUT") {
                 return StringTable__getString((Memory as any).allocUtf8String("<cfe0e00>[<cfe1c00>+<cfe2a00>]<cfe3800>[<cfd4600>S<cfd5500>h<cfd6300>a<cfd7100>d<cfd7f00>o<cfc8d00>w<cfc9b00>B<cfcaa00>r<cfcb800>a<cfbc600>w<cfbd400>l<cfbe200>O<cfbf000>f<cfaff00>f<cfbff00>l<cfbf00b>i<cfbe216>n<cfbd421>e<cfbc62c>:<cfcb837>:<cfca942>C<cfc9b4d>o<cfc8d58>n<cfd7f64>n<cfd716f>e<cfd637a>c<cfd5485>t<cfd4690>i<cfe389b>n<cfe2aa6>g<cfe1cb1>]</c>"));
             }
 
@@ -154,12 +154,12 @@ class Hooks {
 
         DumpStructure();*/
 
-        Interceptor.attach(Environment.LaserBase.add(0x386790), {
+        Interceptor.attach(Environment.LaserBase.add(0x3239C0), {
             onEnter: function(args) {
-                let StringPtr = StringHelper.ReadSCPtr(args[1]);
-                if (StringPtr == "cleared_txt") {
-                    args[1].writePointer(StringHelper.scptr("players_online_debug_txt"))
-                }
+                let HomePageInstance = args[0];
+                let TextField = Functions.MovieClip.GetTextFieldByName(HomePageInstance.add(112), StringHelper.ptr("players_online_txt"));
+
+                Functions.MovieClip.SetText(HomePageInstance.add(112), StringHelper.ptr("players_online_debug_txt"), StringHelper.scptr("hiiiiiiii"));
             }
         });
     }

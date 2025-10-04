@@ -1,5 +1,5 @@
 {
-  "name": "BS-Offline v63",
+  "name": "Shadow-Brawl-Offline-v63",
   "version": "1.0.0",
   "description": "An offline version of Brawl Stars made for version v63",
   "private": true,
@@ -17,6 +17,11 @@
   },
   "dependencies": {
     "bindings": "^1.5.0",
+    "frida-amiga-bridge": "^2.0.0",
+    "frida-load": "^1.0.0",
+    "frida-objc-bridge": "^8.0.5",
+    "frida-process": "^3.0.1",
+    "frida-swift-bridge": "^3.0.2",
     "lodash": "^4.17.21",
     "random": "^5.4.1"
   }

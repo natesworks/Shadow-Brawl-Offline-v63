@@ -71,25 +71,21 @@ class DebugMenuBase {
         Functions.ScrollArea.SetAlignment(v18, 4);
         Functions.DisplayObject.SetPixelSnappedXY(v18, 730, 113);
         
-        DebugMenuBase.CreateMiniCategory("", null);
-        DebugMenuBase.CreateMiniCategory("Pops", () => DebugMenuBase.ToggleDebugMenuCategory("Popups"));
-        DebugMenuBase.CreateMiniCategory("Dump", () => DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
+        DebugMenuBase.CreateMiniCategory("", DebugMenuBase.CloseAllCategories);
+        DebugMenuBase.CreateMiniCategory("Battles", () => DebugMenuBase.ToggleDebugMenuCategory("Battles"));
+        DebugMenuBase.CreateMiniCategory("Dumper", () => DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
 
-        DebugMenuBase.CreateDebugMenuItem("Reload Game", ReloadGame.Execute, null);
+        DebugMenuBase.CreateDebugMenuItem("Reload Game", "Name11", ReloadGame.Execute, null);
+        DebugMenuBase.CreateDebugMenuItem("Join Telegram", "Name11", ReloadGame.Execute, null);
 
-        let RandomFeatures = DebugMenuBase.CreateDebugMenuCategory("Battles", () => DebugMenuBase.ToggleDebugMenuCategory("Random Features"));
+        let BattlesInstance = DebugMenuBase.CreateDebugMenuCategory("Battles", () => DebugMenuBase.ToggleDebugMenuCategory("Battles"));
 
-        DebugMenuBase.CreateDebugMenuItem("Infinite Ulti", Popups.ShowFamePopup, "Random Features", RandomFeatures);
-
-        let PopupInstance = DebugMenuBase.CreateDebugMenuCategory("Popups", () => DebugMenuBase.ToggleDebugMenuCategory("Popups"));
-        
-        DebugMenuBase.CreateDebugMenuItem("Show Fame Popup", Popups.ShowFamePopup, "Popups", PopupInstance);
-		DebugMenuBase.CreateDebugMenuItem("Show Latency Test Popup", Popups.ShowLatencyTestPopup, "Popups", PopupInstance);
+        DebugMenuBase.CreateDebugMenuItem("Infinite Ulti", "Name4", Popups.ShowFamePopup, "Battles", BattlesInstance);
 
         let DumperInstance = DebugMenuBase.CreateDebugMenuCategory("Dumper", () => DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
 
-        DebugMenuBase.CreateDebugMenuItem("Dump OHD", Dumper.DumpOHD, "Dumper", DumperInstance);
-        DebugMenuBase.CreateDebugMenuItem("Dump Battle Struct", Dumper.DumpBattles, "Dumper", DumperInstance);
+        DebugMenuBase.CreateDebugMenuItem("Dump OHD", "Name4", Dumper.DumpOHD, "Dumper", DumperInstance);
+        DebugMenuBase.CreateDebugMenuItem("Dump Battle Struct", "Name4", Dumper.DumpBattles, "Dumper", DumperInstance);
         
         DebugMenuBase.updateLayout();
     }
@@ -131,6 +127,7 @@ class DebugMenuBase {
         let MovieClip = Functions.ResourceManager.GetMovieClip(StringHelper.ptr('sc/debug.sc'), StringHelper.ptr('debug_menu_category_mini'));
         new NativeFunction(ButtonInstance.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(ButtonInstance, MovieClip, 1);
         let TextField = Functions.MovieClip.GetTextFieldByName(MovieClip, StringHelper.ptr("Text"));
+        Functions.MovieClipHelper.SetTextAndScaleIfNecessary(TextField, StringHelper.scptr(Text), 1, 0)
         Functions.MovieClip.SetText(MovieClip, StringHelper.ptr("Text"), StringHelper.scptr(Text));
         Functions.DisplayObject.SetPixelSnappedXY(ButtonInstance, 20 + DebugMenuBase.MiniCategorysX, 20);
         DebugMenuBase.MiniCategorysX += 45;
@@ -147,17 +144,20 @@ class DebugMenuBase {
         return ButtonInstance;
     }
 
-    static CreateDebugMenuItem(Text: string, Callback: any, CategoryName: any, CategoryButton: any = null) {
+    static CreateDebugMenuItem(Text: string, ColorGradient: string, Callback: any, CategoryName: any, CategoryButton: any = null) {
         let ButtonInstance = Functions.Imports.Malloc(1000);
         let GameButton = Functions.GameButton.GameButton(ButtonInstance);
         let MovieClip = Functions.ResourceManager.GetMovieClip(StringHelper.ptr('sc/debug.sc'), StringHelper.ptr('debug_menu_item'));
         new NativeFunction(ButtonInstance.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(ButtonInstance, MovieClip, 1);
         let TextField = Functions.MovieClip.GetTextFieldByName(MovieClip, StringHelper.ptr("Text"));
+
+        let ColorGradientByName2 = Functions.LogicDataTables.GetColorGradientByName(StringHelper.scptr(ColorGradient), 1);
+        Functions.MovieClipHelper.SetTextAndScaleIfNecessary(TextField, StringHelper.scptr(Text), 1, 0)
+        Functions.DecoratedTextField.SetupDecoratedText(TextField, StringHelper.scptr(Text), ColorGradientByName2);
         Functions.MovieClip.SetText(MovieClip, StringHelper.ptr("Text"), StringHelper.scptr(Text));
-        
-        Functions.ScrollArea.AddContent(DebugMenuBase.ScrollArea, ButtonInstance);
-        
         Functions.MovieClipHelper.SetTextFieldVerticallyCentered(TextField);
+
+        Functions.ScrollArea.AddContent(DebugMenuBase.ScrollArea, ButtonInstance);
 
         Interceptor.attach(Addresses.CustomButton_buttonPressed, {
             onEnter(args) {
@@ -187,6 +187,9 @@ class DebugMenuBase {
         let MovieClip = Functions.ResourceManager.GetMovieClip(StringHelper.ptr('sc/debug.sc'), StringHelper.ptr('debug_menu_category'));
         new NativeFunction(ButtonInstance.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(ButtonInstance, MovieClip, 1);
         let TextField = Functions.MovieClip.GetTextFieldByName(MovieClip, StringHelper.ptr("Text"));
+
+        let ColorGradientByName2 = Functions.LogicDataTables.GetColorGradientByName(StringHelper.scptr("Name11"), 1);
+        Functions.DecoratedTextField.SetupDecoratedText(TextField, StringHelper.scptr(Text), ColorGradientByName2);
         Functions.MovieClip.SetText(MovieClip, StringHelper.ptr("Text"), StringHelper.scptr("+ " + Text));
         
         Functions.MovieClipHelper.SetTextFieldVerticallyCentered(TextField);
@@ -208,6 +211,17 @@ class DebugMenuBase {
         return ButtonInstance;
     }
 
+    static CloseAllCategories() {
+        DebugMenuBase.Categorys.forEach((category: any) => {
+            if (category.isExpanded) {
+                category.isExpanded = false;
+                const movieClip = category.MovieClip;
+                Functions.MovieClip.SetText(movieClip, StringHelper.ptr("Text"), StringHelper.scptr("+ " + category.Text));
+            }
+        });
+        DebugMenuBase.updateLayout();
+    }
+    
     static ToggleDebugMenuCategory(CategoryName: string) {
         const categoryButton = DebugMenuBase.Categorys.find((btn: any) => btn.Text === CategoryName);
         if (!categoryButton) return;
