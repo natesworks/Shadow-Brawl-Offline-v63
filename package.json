@@ -1,0 +1,23 @@
+{
+  "name": "BS-Offline v63",
+  "version": "1.0.0",
+  "description": "An offline version of Brawl Stars made for version v63",
+  "private": true,
+  "main": "agent/index.ts",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "frida-compile agent/index.ts -o _agent.js",
+    "watch": "frida-compile agent/index.ts -o _agent.js -w"
+  },
+  "devDependencies": {
+    "@types/frida-gum": "^19.0.0",
+    "@types/node": "^18.19.111",
+    "frida-compile": "^19.0.4",
+    "frida-java-bridge": "^7.0.1"
+  },
+  "dependencies": {
+    "bindings": "^1.5.0",
+    "lodash": "^4.17.21",
+    "random": "^5.4.1"
+  }
+}
