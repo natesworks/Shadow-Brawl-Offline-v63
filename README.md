@@ -10,9 +10,7 @@
 ## Disclamers
 The Project Is **NOT** Finished
 If you use this, please credit me and **DO NOT** claim you made it yourself.
-
 If you have issues or suggestions for features, **please** open an issue.
-
 If you’re a developer, feel free to submit a pull request.
 
 ## Contact
