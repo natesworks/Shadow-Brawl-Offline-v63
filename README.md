@@ -8,10 +8,10 @@
 4. You’re good to go!
 
 ## Disclamers
-The Project Is **NOT** Finished.
-If you use this, please credit me and **DO NOT** claim you made it yourself.
-If you have issues or suggestions for features, **please** open an issue.
-if you're a developer, feel free to submit a pull request.
+1. The Project Is **NOT** Finished.
+2. If you use this, please credit me and **DO NOT** claim you made it yourself.
+3. If you have issues or suggestions for features, **please** open an issue.
+4. if you're a developer, feel free to submit a pull request.
 
 ## Contact
 You can contact me on Discord or on Telegram
