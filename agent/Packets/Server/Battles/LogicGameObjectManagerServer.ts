@@ -80,7 +80,7 @@ class LogicGameObjectManagerServer {
         {
             Stream.WritePositiveIntMax127(16); // Type : Brawler
             Stream.WritePositiveVIntMax65535(1); // CSV ID : Colt
-            Stream.WriteBoolean(false);
+            Stream.WriteBoolean(true);
             
             LogicCharacterServer.Encode(Stream);
         }
