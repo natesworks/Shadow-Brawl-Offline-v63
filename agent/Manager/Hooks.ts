@@ -154,25 +154,27 @@ class Hooks {
 
         DumpStructure();*/
 
-        
-        Interceptor.attach(Environment.LaserBase.add(0x31D454), { //HomePage::HomePage
+        // Credits to gud
+        Interceptor.attach(Environment.LaserBase.add(0x31D454), { // HomePage::HomePage
             onEnter: function(args) {
                 this.x = args[0];
             },
             onLeave: function(retval) {
-                let HomePageInstance = this.x.add(0xe * 8).readPointer();
+                let HomePageInstance = this.x.add(112).readPointer();
 
                 let TextPtr = Functions.Imports.Malloc(524);
                 let MovieClip = Functions.ResourceManager.GetMovieClip(StringHelper.ptr("sc/debug.sc"), StringHelper.ptr("debug_menu_text"))
-                console.log(MovieClip);
+
                 Functions.Sprite.Sprite(TextPtr, 1);
                 Functions.GUIContainer.SetMovieClip(TextPtr, MovieClip);
-                Functions.DisplayObject.SetXY(TextPtr, 120, 90);
+                Functions.DisplayObject.SetXY(TextPtr, 145, 90);
 
-                TextPtr.add(16).writeFloat(1.2); //height
-                TextPtr.add(28).writeFloat(1.2); //width
+                TextPtr.add(16).writeFloat(1.5); // height
+                TextPtr.add(28).writeFloat(1.5); // width
 
-                Functions.MovieClip.SetText(MovieClip, StringHelper.ptr("Text"), StringHelper.scptr("hello lobby info\n-gud 🐳"));
+                let ColorGradientByName2 = Functions.LogicDataTables.GetColorGradientByName(StringHelper.scptr("Name6"), 1);
+                let version = Functions.MovieClip.GetTextFieldByName(MovieClip, StringHelper.ptr("Text"));
+                Functions.DecoratedTextField.SetupDecoratedText(version, StringHelper.scptr("Shadow Brawl Offline - v63.265\nBy @soufgamev2"), ColorGradientByName2);
 
                 Functions.Sprite.AddChild(HomePageInstance, TextPtr)
             }
