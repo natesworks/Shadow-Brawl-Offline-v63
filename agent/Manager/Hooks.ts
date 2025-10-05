@@ -154,12 +154,27 @@ class Hooks {
 
         DumpStructure();*/
 
-        Interceptor.attach(Environment.LaserBase.add(0x3239C0), { // tried lobby info but never finished it ill do it later ig
+        
+        Interceptor.attach(Environment.LaserBase.add(0x31D454), { //HomePage::HomePage
             onEnter: function(args) {
-                let HomePageInstance = args[0];
-                let TextField = Functions.MovieClip.GetTextFieldByName(HomePageInstance.add(112), StringHelper.ptr("players_online_txt"));
+                this.x = args[0];
+            },
+            onLeave: function(retval) {
+                let HomePageInstance = this.x.add(0xe * 8).readPointer();
 
-                Functions.MovieClip.SetText(HomePageInstance.add(112), StringHelper.ptr("players_online_debug_txt"), StringHelper.scptr("hiiiiiiii"));
+                let TextPtr = Functions.Imports.Malloc(524);
+                let MovieClip = Functions.ResourceManager.GetMovieClip(StringHelper.ptr("sc/debug.sc"), StringHelper.ptr("debug_menu_text"))
+                console.log(MovieClip);
+                Functions.Sprite.Sprite(TextPtr, 1);
+                Functions.GUIContainer.SetMovieClip(TextPtr, MovieClip);
+                Functions.DisplayObject.SetXY(TextPtr, 120, 90);
+
+                TextPtr.add(16).writeFloat(1.2); //height
+                TextPtr.add(28).writeFloat(1.2); //width
+
+                Functions.MovieClip.SetText(MovieClip, StringHelper.ptr("Text"), StringHelper.scptr("hello lobby info\n-gud 🐳"));
+
+                Functions.Sprite.AddChild(HomePageInstance, TextPtr)
             }
         });
     }
