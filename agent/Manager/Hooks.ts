@@ -84,20 +84,20 @@ class Hooks {
             }
         });*/
 
-        const StringTable__getString = new NativeFunction(Environment.LaserBase.add(0x3703C4), 'pointer', ['pointer']);
+        const StringTable__getString = new NativeFunction(Environment.LaserBase.add(0x3703C4), 'pointer', ['pointer']); // ill make it function from the func class later
 
         Interceptor.replace(StringTable__getString, new NativeCallback(function(a1) {
             let value = (Memory as any).readUtf8String(a1);
-            if (value === "TID_CONNECTING_TO_SERVER") { // Changing connecting to server text to credits
+            if (value === "TID_CONNECTING_TO_SERVER") { // we cant even see it lol the game is loadikg too fast
                 return StringTable__getString((Memory as any).allocUtf8String("<cfe0e00>[<cfe1c00>+<cfe2a00>]<cfe3800>[<cfd4600>S<cfd5500>h<cfd6300>a<cfd7100>d<cfd7f00>o<cfc8d00>w<cfc9b00>B<cfcaa00>r<cfcb800>a<cfbc600>w<cfbd400>l<cfbe200>O<cfbf000>f<cfaff00>f<cfbff00>l<cfbf00b>i<cfbe216>n<cfbd421>e<cfbc62c>:<cfcb837>:<cfca942>C<cfc9b4d>o<cfc8d58>n<cfd7f64>n<cfd716f>e<cfd637a>c<cfd5485>t<cfd4690>i<cfe389b>n<cfe2aa6>g<cfe1cb1>]</c>"));
             }
-            if (value === "TID_EDIT_CONTROLS") {
+            if (value === "TID_EDIT_CONTROLS") { // i tried making mod menu but it only works when youre not in battles
                 return StringTable__getString((Memory as any).allocUtf8String("Battle Settings"));
             }
-            if (value === "TID_EDIT_MOVEMENT") {
+            if (value === "TID_EDIT_MOVEMENT") { // uhhhhh.. dw
                 return StringTable__getString((Memory as any).allocUtf8String("testing"));
             }
-            if (value === "TID_ABOUT") {
+            if (value === "TID_ABOUT") { // forgot to finish that lol
                 return StringTable__getString((Memory as any).allocUtf8String("<cfe0e00>[<cfe1c00>+<cfe2a00>]<cfe3800>[<cfd4600>S<cfd5500>h<cfd6300>a<cfd7100>d<cfd7f00>o<cfc8d00>w<cfc9b00>B<cfcaa00>r<cfcb800>a<cfbc600>w<cfbd400>l<cfbe200>O<cfbf000>f<cfaff00>f<cfbff00>l<cfbf00b>i<cfbe216>n<cfbd421>e<cfbc62c>:<cfcb837>:<cfca942>C<cfc9b4d>o<cfc8d58>n<cfd7f64>n<cfd716f>e<cfd637a>c<cfd5485>t<cfd4690>i<cfe389b>n<cfe2aa6>g<cfe1cb1>]</c>"));
             }
 
@@ -154,7 +154,7 @@ class Hooks {
 
         DumpStructure();*/
 
-        Interceptor.attach(Environment.LaserBase.add(0x3239C0), {
+        Interceptor.attach(Environment.LaserBase.add(0x3239C0), { // tried lobby info but never finished it ill do it later ig
             onEnter: function(args) {
                 let HomePageInstance = args[0];
                 let TextField = Functions.MovieClip.GetTextFieldByName(HomePageInstance.add(112), StringHelper.ptr("players_online_txt"));
