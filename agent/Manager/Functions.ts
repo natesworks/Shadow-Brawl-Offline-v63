@@ -47,6 +47,7 @@ class Functions {
 
     static Sprite = class {
         static Sprite: any;
+        static AddChild: any;
     }
 
     static String = class {
@@ -118,6 +119,7 @@ class Functions {
         Functions.MovieClipHelper.SetTextFieldVerticallyCentered = new NativeFunction(Addresses.MovieClipHelper_setTextFieldVerticallyCentered, 'void', ['pointer']);
         Functions.Sprite.Sprite = new NativeFunction(Addresses.SpriteCtor, 'void', ['pointer', 'int']);
         Functions.String.StringCtor = new NativeFunction(Addresses.StringCtor, 'void', ['pointer', 'pointer']);
+        Functions.Sprite.AddChild = new NativeFunction(Addresses.Sprite_addChild, 'pointer', ['pointer', 'pointer']);
         Functions.ResourceListenner.AddFile = new NativeFunction(Addresses.AddFile, 'int', ['pointer', 'pointer', 'int', 'int', 'int', 'int', 'int']);
         Functions.Stage.AddChild = new NativeFunction(Addresses.StageAddChild, 'pointer', ['pointer', 'pointer']);
         Functions.Stage.sm_instance = Environment.LaserBase.add(0xF026A8);
