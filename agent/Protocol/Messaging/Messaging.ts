@@ -7,6 +7,7 @@ import PiranhaMessage from "../PiranhaMessage/PiranhaMessage.js";
 import Debugger from "../../Utils/Debugger.js";
 import VisionUpdateMessage from "../../Packets/Server/Battles/VisionUpdateMessage.js";
 
+// Credit to nates for sendoff mess
 class Messaging {
     static SendOfflineMessage(Id: number, Payload: number[]): NativePointer {
         let Version = Id === 20104 ? 1 : 0;
