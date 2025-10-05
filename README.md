@@ -15,5 +15,5 @@
 
 ## Contact
 You can contact me on Discord or on Telegram
-> Discord : ``soufgame__`` 
-> Telegram : ``@soufgamev2``
+> 1. Discord : ``soufgame__`` 
+> 2. Telegram : ``@soufgamev2``
