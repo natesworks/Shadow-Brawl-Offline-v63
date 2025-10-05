@@ -4,7 +4,7 @@ class LogicPlayerRecordsData {
         stream.WriteVInt(0); // Array
         stream.WriteVInt(0);
         stream.WriteVInt(0); // Records Points
-        stream.WriteVInt(0); // Array
+        stream.WriteVInt(1); // Array
         {
             stream.WriteVInt(13); // Records Rank
         }
