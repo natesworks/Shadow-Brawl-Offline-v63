@@ -4,7 +4,7 @@ import Addresses from "../Manager/Addresses";
 import Functions from "../Manager/Functions";
 
 class EnvironmentManager {
-    static InitEnvironment() {
+    static InitEnvironment() { // hmm before this was fetching script from server and addng prots but tbh adding prots is useless gatekeepijg is bad
         Addresses.Init();
         Functions.Init()
     }
