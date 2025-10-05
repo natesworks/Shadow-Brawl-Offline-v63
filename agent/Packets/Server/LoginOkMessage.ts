@@ -3,8 +3,8 @@ import ByteStream from "../../DataStream/ByteStream.js"
 class LoginOkMessage {
     static Encode(): number[] {
         let stream = new ByteStream([]);
-        stream.WriteLong(0, 0);
-        stream.WriteLong(0, 0);
+        stream.WriteLong(0, 256617006);
+        stream.WriteLong(0, 256617006);
         stream.WriteString("");
         stream.WriteString("");
         stream.WriteString("");

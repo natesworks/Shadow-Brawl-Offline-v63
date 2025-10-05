@@ -198,7 +198,6 @@ export class ByteStream {
 
 
     WriteShort(Value: number) {
-        //console.log("writeShort:", value);
         this.BitOffset = 0;
         this.Payload.push((Value >> 8) & 0xFF);
         this.Payload.push(Value & 0xFF);
@@ -206,7 +205,6 @@ export class ByteStream {
     }
 
     WriteInt(Value: number) {
-        //console.log("writeInt:", value);
         this.BitOffset = 0;
         this.Payload.push((Value >> 24) & 0xFF);
         this.Payload.push((Value >> 16) & 0xFF);
@@ -216,14 +214,12 @@ export class ByteStream {
     }
 
     WriteLong(High: number, Low: number) {
-        //console.log("writeLong: high:", high, "low:", low);
         this.BitOffset = 0;
         this.WriteInt(High);
         this.WriteInt(Low);
     }
 
     WriteString(Str: string) {
-        //console.log("writeString:", str);
         this.BitOffset = 0;
         let Bytes = ByteStreamHelper.StringToUtf8Array(Str);
         this.WriteInt(Bytes.length);
@@ -248,7 +244,6 @@ export class ByteStream {
     }
 
     WriteVInt(Value: number) {
-        //console.log("writeVint:", value);
         this.BitOffset = 0;
         if (Value < 0) {
             if (Value >= -63) {
@@ -317,14 +312,12 @@ export class ByteStream {
     }
 
     WriteVLong(High: number, Low: number) {
-        //console.log("WriteVLong: high:", high, "low:", low);
         this.BitOffset = 0;
         this.WriteVInt(High);
         this.WriteVInt(Low);
     }
 
     WriteBoolean(Value: boolean) {
-        //console.log("writeBoolean:", value);
         if (this.BitOffset == 0) {
             this.Payload.push(0)
             this.Offset++
@@ -339,7 +332,6 @@ export class ByteStream {
     }
 
     WriteDataReference(High: number, Low = -1) {
-        //console.log("writeDataReference: high:", high, "low:", low);
         this.BitOffset = 0;
         this.WriteVInt(High);
         if (High != 0) this.WriteVInt(Low);
