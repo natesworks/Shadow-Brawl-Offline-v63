@@ -4,11 +4,11 @@ import Functions from "../../Manager/Functions";
 import StringHelper from "./StringHelper"
 
 class ShowFloaterText {
-    static ShowFloaterTextAtDefaultPos(Text: string, Color: number, Speed: number) {
-	    Functions.GUI.ShowFloaterTextAtDefaultPos(Addresses.GUIInstance.readPointer(), StringHelper.scptr(Text), Color, Speed)
+    static ShowFloaterTextAtDefaultPos(Text: string, Speed: number, Color: number) {
+	    Functions.GUI.ShowFloaterTextAtDefaultPos(Addresses.GUIInstance.readPointer(), StringHelper.scptr(Text), Speed, Color)
     }
     static Execute(Text: string) {
-        ShowFloaterText.ShowFloaterTextAtDefaultPos(Text, -1, 0.0);
+        ShowFloaterText.ShowFloaterTextAtDefaultPos(Text, 0.0, 0xFFFFFFFF);
     }
 }
 
