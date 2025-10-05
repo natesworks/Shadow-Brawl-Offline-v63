@@ -1,3 +1,5 @@
+// credit to ??? this has been used so much times i dont even know whos the original that made that code but its from python
+// and also credit to gpt for python to typescript :trolled:
 class BitStream {
     private BitOffset: number = 0;
     private MessagePayload: Uint8Array;
