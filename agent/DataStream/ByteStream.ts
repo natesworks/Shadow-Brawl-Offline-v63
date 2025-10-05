@@ -1,3 +1,4 @@
+// credit to nutsworks, i still edited it kinda but base is from him so ill credit ig
 class ByteStreamHelper {
     static Utf8ArrayToString(Array: Uint8Array): string {
         let Out = '';
