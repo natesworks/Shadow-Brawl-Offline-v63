@@ -75,17 +75,17 @@ class DebugMenuBase {
         DebugMenuBase.CreateMiniCategory("Battles", () => DebugMenuBase.ToggleDebugMenuCategory("Battles"));
         DebugMenuBase.CreateMiniCategory("Dumper", () => DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
 
-        DebugMenuBase.CreateDebugMenuItem("Reload Game", "Name11", ReloadGame.Execute, null);
+        DebugMenuBase.CreateDebugMenuItem("Reload Game", "Plus", ReloadGame.Execute, null);
         DebugMenuBase.CreateDebugMenuItem("Join Telegram", "Name11", ReloadGame.Execute, null);
 
-        let BattlesInstance = DebugMenuBase.CreateDebugMenuCategory("Battles", () => DebugMenuBase.ToggleDebugMenuCategory("Battles"));
+        let BattlesInstance = DebugMenuBase.CreateDebugMenuCategory("Battles", "Name6", () => DebugMenuBase.ToggleDebugMenuCategory("Battles"));
 
-        DebugMenuBase.CreateDebugMenuItem("Infinite Ulti", "Name4", Popups.ShowFamePopup, "Battles", BattlesInstance);
+        DebugMenuBase.CreateDebugMenuItem("Infinite Ulti", "Name6", Popups.ShowFamePopup, "Battles", BattlesInstance);
 
-        let DumperInstance = DebugMenuBase.CreateDebugMenuCategory("Dumper", () => DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
+        let DumperInstance = DebugMenuBase.CreateDebugMenuCategory("Dumper", "Name9", () => DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
 
-        DebugMenuBase.CreateDebugMenuItem("Dump OHD", "Name4", Dumper.DumpOHD, "Dumper", DumperInstance);
-        DebugMenuBase.CreateDebugMenuItem("Dump Battle Struct", "Name4", Dumper.DumpBattles, "Dumper", DumperInstance);
+        DebugMenuBase.CreateDebugMenuItem("Dump OHD", "Name9", Dumper.DumpOHD, "Dumper", DumperInstance);
+        DebugMenuBase.CreateDebugMenuItem("Dump Battle Struct", "Name9", Dumper.DumpBattles, "Dumper", DumperInstance);
         
         DebugMenuBase.updateLayout();
     }
@@ -181,14 +181,14 @@ class DebugMenuBase {
         return ButtonInstance;
     }
 
-    static CreateDebugMenuCategory(Text: string, Callback: any) {
+    static CreateDebugMenuCategory(Text: string, ColorGradient: string, Callback: any) {
         let ButtonInstance = Functions.Imports.Malloc(1000);
         let GameButton = Functions.GameButton.GameButton(ButtonInstance);
         let MovieClip = Functions.ResourceManager.GetMovieClip(StringHelper.ptr('sc/debug.sc'), StringHelper.ptr('debug_menu_category'));
         new NativeFunction(ButtonInstance.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(ButtonInstance, MovieClip, 1);
         let TextField = Functions.MovieClip.GetTextFieldByName(MovieClip, StringHelper.ptr("Text"));
 
-        let ColorGradientByName2 = Functions.LogicDataTables.GetColorGradientByName(StringHelper.scptr("Name11"), 1);
+        let ColorGradientByName2 = Functions.LogicDataTables.GetColorGradientByName(StringHelper.scptr(ColorGradient), 1);
         Functions.DecoratedTextField.SetupDecoratedText(TextField, StringHelper.scptr(Text), ColorGradientByName2);
         Functions.MovieClip.SetText(MovieClip, StringHelper.ptr("Text"), StringHelper.scptr("+ " + Text));
         
