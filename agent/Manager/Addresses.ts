@@ -15,6 +15,7 @@ class Addresses {
     static GUIContainer: NativePointer;
     static GUIContainer_setMovieClip: NativePointer;
     static SpriteCtor: NativePointer;
+    static Sprite_addChild: NativePointer;
     static DisplayObject_setPixelSnappedXY: NativePointer;
     static DisplayObject_setXY: NativePointer;
     static LogicDataTables_getColorGradientByName: NativePointer;
@@ -81,6 +82,8 @@ class Addresses {
         Addresses.GUIContainer = Environment.LaserBase.add(0x0A8070);
         Addresses.GUIContainer_setMovieClip = Environment.LaserBase.add(0x0A8454);
         Addresses.SpriteCtor = Environment.LaserBase.add(0x9B7BA4);
+        Addresses.Sprite_addChild = Environment.LaserBase.add(0x9B7E20);
+        new NativeFunction(Environment.LaserBase.add(0x9B7E20), 'pointer', ['pointer', 'pointer']);
         Addresses.DisplayObject_setPixelSnappedXY = Environment.LaserBase.add(0x9A24EC);
         Addresses.DisplayObject_setXY = Environment.LaserBase.add(0x9A24D0);
         Addresses.LogicDataTables_getColorGradientByName = Environment.LaserBase.add(0x3EED64);
