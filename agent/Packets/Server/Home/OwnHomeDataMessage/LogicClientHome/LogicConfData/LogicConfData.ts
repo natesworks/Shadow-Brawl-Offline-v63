@@ -3,6 +3,7 @@ import IntValueEntry from "./Arrays/IntValueEntry";
 import EventData from "./Arrays/EventData";
 import ReleaseEntry from "./Arrays/ReleaseEntry";
 import TimedIntValueEntry from "./Arrays/TimedIntValueEntry";
+import NewsInboxLinkEntry from "./Arrays/NewsInboxLinkEntry";
 
 class LogicConfData {
     static Encode(stream: any): void {
@@ -21,9 +22,9 @@ class LogicConfData {
         stream.WriteVInt(0); // EventData::encode
         stream.WriteVInt(0); // EventData::encode
 
-        LogicConfData.EncodeIntList(stream, [0]);
-        LogicConfData.EncodeIntList(stream, [0]);
-        LogicConfData.EncodeIntList(stream, [0]);
+        LogicConfData.EncodeIntList(stream, [20, 35, 75, 140, 290, 480, 800, 1250, 1875, 2800]);
+        LogicConfData.EncodeIntList(stream, [69, 67, 69, 67]); // Shop Coins Price
+        LogicConfData.EncodeIntList(stream, [67, 69, 67, 69]); // Shop Coins Amount
 
         stream.WriteVInt(1); // ReleaseEntry::encode
         {
@@ -50,13 +51,20 @@ class LogicConfData {
         stream.WriteVInt(0); // Array
         stream.WriteVInt(0); // Array
         LogicConfData.EncodeIntList(stream, [0]);
-        stream.WriteVInt(0); // NewsInboxLinkEntry::encode
+        stream.WriteVInt(1); // NewsInboxLinkEntry::encode
+        {
+            NewsInboxLinkEntry.Encode(stream);
+        }
         stream.WriteVInt(0); // Array
         stream.WriteVInt(0); // Array
     }
 
     static EncodeIntList(stream: any, IntList: number[]) {
-        stream.WriteVInt(IntList[0]); // No Logic Yet
+        stream.WriteVInt(IntList.length);
+
+        for (const Int of IntList) {
+            stream.WriteVInt(Int);
+        }
     }
 }
 
