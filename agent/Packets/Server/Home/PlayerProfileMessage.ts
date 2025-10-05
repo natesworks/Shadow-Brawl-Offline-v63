@@ -4,7 +4,7 @@ class PlayerProfileMessage {
     static Encode(): number[] {
         let Stream = new ByteStream([]);
 
-        Stream.WriteVLong(0, 254842734);
+        Stream.WriteVLong(0, 256617006);
         Stream.WriteDataReference(16, 0);
         Stream.WriteDataReference(0);
 
@@ -19,7 +19,7 @@ class PlayerProfileMessage {
             Stream.WriteVInt(0);
         }
 
-        Stream.WriteVInt(28);
+        Stream.WriteVInt(27);
         {
             Stream.WriteDataReference(1, 99) // 3v3 Wins
             Stream.WriteDataReference(3, 97) // Trophies
