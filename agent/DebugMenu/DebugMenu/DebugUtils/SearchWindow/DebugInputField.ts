@@ -3,3 +3,5 @@ class DebugInputField {
         // im gonna do logic later bc rn im on phone
     }
 }
+
+export default DebugInputField
