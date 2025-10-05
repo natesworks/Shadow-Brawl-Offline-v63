@@ -1,3 +1,4 @@
+// thx gpt (used it bc i was lazy lol)
 interface Brawler {
     CardID: number;
     Trophies: number;
