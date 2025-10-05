@@ -1,67 +1,77 @@
 import LogicGemOffer from "../../Arrays/LogicGemOffer";
+import CurrentShopOffers from "../../../../../../../Static/ShopOffers";
+import ChronosTextEntry from "../../../../../../../Utils/Chronos/ChronosTextEntry";
 
 class LogicOfferBundle {
     static Encode(stream: any): void {
-        stream.WriteVInt(1);
+        stream.WriteVInt(CurrentShopOffers.Offers.length); // Shop Offers Count
 
-        stream.WriteVInt(1); // Rewards Count
-        {
-            LogicGemOffer.Encode(stream, 74, 1337, 0, 0, 0);
+        for (const Offer of CurrentShopOffers.Offers) {
+            stream.WriteVInt(Offer.Rewards.length) // Rewards Count
+            for (const Rewards of Offer.Rewards) {
+                LogicGemOffer.Encode(stream, Rewards.ItemType, Rewards.Amount, Rewards.CsvID[0], Rewards.CsvID[1], Rewards.SkinID);
+            }
+
+            stream.WriteVInt(Offer.Rewards.length) // Rewards Count
+            for (const Rewards of Offer.Rewards) {
+                LogicGemOffer.Encode(stream, Rewards.ItemType, Rewards.Amount, Rewards.CsvID[0], Rewards.CsvID[1], Rewards.SkinID);
+            }
+
+            stream.WriteVInt(Offer.Currency); // 0 => gems, 1 => gold
+			stream.WriteVInt(Offer.Cost); // Price
+			stream.WriteVInt(Offer.Time); // Offer time
+
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteBoolean(Offer.IsClaim);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+
+			stream.WriteBoolean(Offer.DailyOffer);
+			stream.WriteVInt(Offer.OldPrice);
+
+            ChronosTextEntry.Encode(stream, Offer.Text, 0);
+			stream.WriteBoolean(Offer.ShowAtLaunch);
+            ChronosTextEntry.Encode(stream, Offer.Background, 0);
+
+			stream.WriteBoolean(Offer.Processed);
+			stream.WriteVInt(Offer.TypeBenefit);
+			stream.WriteVInt(Offer.Benefit);
+
+			stream.WriteString(Offer.Text);
+			stream.WriteBoolean(Offer.OneTimeOffer);
+			stream.WriteBoolean(Offer.IsClaimed);
+
+			stream.WriteDataReference(Offer.ShopStyle[0], Offer.ShopStyle[1]);
+			stream.WriteDataReference(Offer.ShopStyle[0], Offer.ShopStyle[1]);
+			stream.WriteDataReference(Offer.ShopStyle[0], Offer.ShopStyle[1]);
+            
+			stream.WriteBoolean(false);
+			stream.WriteBoolean(false);
+			stream.WriteBoolean(false);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteBoolean(false);
+			stream.WriteBoolean(false);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteBoolean(false);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteVInt(0);
+			stream.WriteBoolean(false);
+			stream.WriteBoolean(false);
+			stream.WriteBoolean(false);
+			stream.WriteVInt(0);
+			stream.WriteDataReference(0, 0);
+			stream.WriteVInt(0);
+            stream.WriteBoolean(false);
         }
-
-        stream.WriteVInt(1); // Rewards Count
-        {
-            LogicGemOffer.Encode(stream, 74, 1337, 0, 0, 0);
-        }
-
-        stream.WriteVInt(1); // Currency -> 0 => gems & 1 => gold
-        stream.WriteVInt(1337); // Price
-        stream.WriteVInt(1337); // Offer Time
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteBoolean(false);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteBoolean(false); // Daily Offer
-        stream.WriteVInt(0);
-        stream.WriteString("H*lloween Boxes!"); // Offer Text
-        stream.WriteVInt(0);
-        stream.WriteBoolean(false);
-        stream.WriteString("offer_bgr_street"); // Offer Background
-        stream.WriteVInt(0);
-        stream.WriteBoolean(false); // This purchase is already being processed
-        stream.WriteVInt(0); // Type Benefit
-        stream.WriteVInt(0); // Benefit
-        stream.WriteString("");
-        stream.WriteBoolean(false); // One time offer
-        stream.WriteBoolean(false); // Claimed
-        stream.WriteDataReference(0, 0);
-        stream.WriteDataReference(0, 0);
-        stream.WriteDataReference(0, 0);
-        stream.WriteBoolean(false);
-        stream.WriteBoolean(false);
-        stream.WriteBoolean(false);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteBoolean(false);
-        stream.WriteBoolean(false);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteBoolean(false);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteBoolean(false);
-        stream.WriteBoolean(false);
-        stream.WriteBoolean(false);
-        stream.WriteVInt(0);
-        stream.WriteDataReference(0, 0);
-        stream.WriteVInt(0);
     }
 }
 

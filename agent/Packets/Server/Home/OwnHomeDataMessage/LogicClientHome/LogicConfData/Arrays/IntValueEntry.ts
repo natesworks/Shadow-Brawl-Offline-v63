@@ -25,15 +25,16 @@ class IntValueEntry {
     */
 
     static Encode(stream: any): void {
-        stream.WriteVInt(8);
+        stream.WriteVInt(9);
         stream.WriteDataReference(41000000 + IntValueEntry.ThemesID[Math.floor(Math.random() * IntValueEntry.ThemesID.length)], 1); 
         stream.WriteDataReference(89, 6);
         stream.WriteDataReference(22, 0);
         stream.WriteDataReference(36, 1);
         stream.WriteDataReference(73, 1);
         stream.WriteDataReference(16, 5);
-        stream.WriteDataReference(10056, 1);
-        stream.WriteDataReference(10057, 1);
+        stream.WriteDataReference(1, 10056);
+        stream.WriteDataReference(1, 10057);
+        stream.WriteDataReference(1000, 10063);
     }
 }
 

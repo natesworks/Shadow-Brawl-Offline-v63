@@ -5,6 +5,9 @@ import Debugger from "../Utils/Debugger.js";
 import LogicLaserMessageFactory from "../Protocol/Messaging/LogicLaserMessageFactory.js";
 import StringHelper from "../Utils/Game/StringHelper.js";
 import Environment from "../Environement/Environment.js";
+import Messaging from "../Protocol/Messaging/Messaging.js";
+
+import ObjC from "frida-objc-bridge";
 
 class Hooks {
     static InstallHooks() {
@@ -62,6 +65,11 @@ class Hooks {
                 if (Type != 24109) {
                     Debugger.Info("[Messaging::SendMessage] Type: " + Type);
                 }
+
+                if (Type === 14102) {
+                    PiranhaMessage.Decode(Message);
+                    return 0;
+                }
                 
                 LogicLaserMessageFactory.CreateMessageByType(Type);
                 PiranhaMessage.Destruct(Message);
@@ -83,6 +91,18 @@ class Hooks {
                 // args[8] = ptr(1); // Accessorys enabled/disabled
             }
         });
+
+        /*Interceptor.attach(Environment.LaserBase.add(0x496B1C), {
+            onEnter: function(args) {
+                let Tick = args[0].add(152).readInt();
+                let Checksum = args[0].add(156).readInt();
+                let CommandsCount = args[0].add(144).readInt();
+
+                Debugger.Debug("[EndClientTurnMessage::decode] Tick: " + Tick);
+                Debugger.Debug("[EndClientTurnMessage::decode] Checksum: " + Checksum);
+                Debugger.Debug("[EndClientTurnMessage::decode] CommandsCount: " + CommandsCount);
+            }
+        })*/
 
         const StringTable__getString = new NativeFunction(Environment.LaserBase.add(0x3703C4), 'pointer', ['pointer']); // ill make it function from the func class later
 
@@ -184,18 +204,32 @@ Version: ${Environment.script_version}
                 let TextPtr = Functions.Imports.Malloc(524);
                 let MovieClip = Functions.ResourceManager.GetMovieClip(StringHelper.ptr("sc/debug.sc"), StringHelper.ptr("debug_menu_text"))
 
-                Functions.Sprite.Sprite(TextPtr, 1);
-                Functions.GUIContainer.SetMovieClip(TextPtr, MovieClip);
-                Functions.DisplayObject.SetXY(TextPtr, 145, 90);
+                Functions.GameButton.GameButton(TextPtr);
+                new NativeFunction(TextPtr.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(TextPtr, MovieClip, 1);
+                Functions.DisplayObject.SetXY(TextPtr, 140, 90);
 
-                TextPtr.add(16).writeFloat(1.5); // height
-                TextPtr.add(28).writeFloat(1.5); // width
+                TextPtr.add(16).writeFloat(1.65); // height
+                TextPtr.add(28).writeFloat(1.65); // width
 
                 let ColorGradientByName2 = Functions.LogicDataTables.GetColorGradientByName(StringHelper.scptr("Name6"), 1);
                 let version = Functions.MovieClip.GetTextFieldByName(MovieClip, StringHelper.ptr("Text"));
                 Functions.DecoratedTextField.SetupDecoratedText(version, StringHelper.scptr("Shadow Brawl Offline - v63.265\nBy @soufgamev2"), ColorGradientByName2);
 
                 Functions.Sprite.AddChild(HomePageInstance, TextPtr)
+
+                Interceptor.attach(Addresses.CustomButton_buttonPressed, {
+			        onEnter(args) {
+				        if (TextPtr.toInt32() === (args[0] as NativePointer).toInt32()) {
+                            const NSURL = ObjC.classes.NSURL;
+                            const NSWorkspace = ObjC.classes.NSWorkspace;
+
+                            const Url = NSURL.URLWithString_("https://t.me/laserx_framework");
+                            const Workspace = NSWorkspace.sharedWorkspace();
+
+                            Workspace.openURL_(Url);
+                        }
+			        }
+		        });
             }
         });
     }
