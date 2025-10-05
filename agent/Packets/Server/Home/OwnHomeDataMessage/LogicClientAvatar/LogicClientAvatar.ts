@@ -46,7 +46,7 @@ class LogicClientAvatar {
 
         stream.WriteDataReference(5, 25);
         stream.WriteVInt(-1);
-        stream.WriteVInt(67);
+        stream.WriteVInt(67); // Daily Streak Count
         
         stream.WriteVInt(OwnedBrawlersCount);
         for (const CardId of Object.keys(LogicPlayerData.OwnedBrawlers).map(id => parseInt(id))) {
@@ -76,17 +76,13 @@ class LogicClientAvatar {
             stream.WriteVInt(3000);
         }
 
-        stream.WriteVInt(OwnedBrawlersCount);
+        stream.WriteVInt(OwnedBrawlersCount); // Power Level
         for (const CardId of Object.keys(LogicPlayerData.OwnedBrawlers).map(id => parseInt(id))) {
             stream.WriteDataReference(16, CardId);
             stream.WriteVInt(-1);
             stream.WriteVInt(11 - 1);
         }
 
-        stream.WriteVInt(0); // hero star power gadget and hypercharge
-
-        stream.WriteVInt(0)
-
         stream.WriteVInt(0); // Array
         stream.WriteVInt(0); // Array
         stream.WriteVInt(0); // Array
@@ -96,17 +92,19 @@ class LogicClientAvatar {
         stream.WriteVInt(0); // Array
         stream.WriteVInt(0); // Array
         stream.WriteVInt(0); // Array
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
-        stream.WriteVInt(0);
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
+        stream.WriteVInt(0); // Array
 
         stream.WriteVInt(1000000);
         stream.WriteVInt(1000000);
