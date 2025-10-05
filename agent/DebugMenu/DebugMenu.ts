@@ -1,10 +1,10 @@
-import Environment from "../../Environement/Environment";
+import Environment from "../Environement/Environment";
 
-import Addresses from "../../Manager/Addresses";
-import Functions from "../../Manager/Functions";
+import Addresses from "../Manager/Addresses";
+import Functions from "../Manager/Functions";
 
 import DebugMenuBase from "./DebugMenuBase";
-import StringHelper from "../../Utils/Game/StringHelper";
+import StringHelper from "../Utils/Game/StringHelper";
 
 
 class DebugMenu {

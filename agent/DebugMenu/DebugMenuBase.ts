@@ -1,16 +1,15 @@
-import Environment from "../../Environement/Environment";
+import Environment from "../Environement/Environment";
 
-import Addresses from "../../Manager/Addresses";
-import Functions from "../../Manager/Functions";
+import Addresses from "../Manager/Addresses";
+import Functions from "../Manager/Functions";
 
-import StringHelper from "../../Utils/Game/StringHelper";
-
+import StringHelper from "../Utils/Game/StringHelper";
 
 import Annoucement from "./DebugUtils/MainButtons/Annoucement";
-import ReloadGame from "../../Utils/Game/ReloadGame";
+import ReloadGame from "../Utils/Game/ReloadGame";
 import Popups from "./DebugUtils/Popups/Popups";
 import Dumper from "./DebugUtils/Dumper/Dumper";
-import Debugger from "../../Utils/Debugger";
+import Debugger from "../Utils/Debugger";
 
 class DebugMenuBase {
     static TabScrollArea: any
@@ -72,15 +71,22 @@ class DebugMenuBase {
         Functions.DisplayObject.SetPixelSnappedXY(v18, 730, 113);
         
         DebugMenuBase.CreateMiniCategory("", DebugMenuBase.CloseAllCategories);
+        DebugMenuBase.CreateMiniCategory("Misc", () => DebugMenuBase.ToggleDebugMenuCategory("Misc"));
         DebugMenuBase.CreateMiniCategory("Battles", () => DebugMenuBase.ToggleDebugMenuCategory("Battles"));
         DebugMenuBase.CreateMiniCategory("Dumper", () => DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
 
         DebugMenuBase.CreateDebugMenuItem("Reload Game", "Plus", ReloadGame.Execute, null);
         DebugMenuBase.CreateDebugMenuItem("Join Telegram", "Name11", ReloadGame.Execute, null);
 
+        let Misc = DebugMenuBase.CreateDebugMenuCategory("Misc", "Name1", () => DebugMenuBase.ToggleDebugMenuCategory("Misc"));
+
+        DebugMenuBase.CreateDebugMenuItem("Enable China Version", "Name1", Popups.ShowFamePopup, "Misc", Misc);
+
         let BattlesInstance = DebugMenuBase.CreateDebugMenuCategory("Battles", "Name6", () => DebugMenuBase.ToggleDebugMenuCategory("Battles"));
 
         DebugMenuBase.CreateDebugMenuItem("Infinite Ulti", "Name6", Popups.ShowFamePopup, "Battles", BattlesInstance);
+        DebugMenuBase.CreateDebugMenuItem("No AI", "Name6", Popups.ShowFamePopup, "Battles", BattlesInstance);
+        DebugMenuBase.CreateDebugMenuItem("Infinite Ammos", "Name6", Popups.ShowFamePopup, "Battles", BattlesInstance);
 
         let DumperInstance = DebugMenuBase.CreateDebugMenuCategory("Dumper", "Name9", () => DebugMenuBase.ToggleDebugMenuCategory("Dumper"));
 

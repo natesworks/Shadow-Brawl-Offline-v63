@@ -1,7 +1,7 @@
-import Environment from "../../../../Environement/Environment";
+import Environment from "../../../Environement/Environment";
 
-import Addresses from "../../../../Manager/Addresses";
-import Functions from "../../../../Manager/Functions";
+import Addresses from "../../../Manager/Addresses";
+import Functions from "../../../Manager/Functions";
 
 class Popups {
     static ShowFamePopup() {

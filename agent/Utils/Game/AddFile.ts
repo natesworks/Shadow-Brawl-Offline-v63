@@ -4,7 +4,7 @@ import Functions from "../../Manager/Functions";
 import StringHelper from "././StringHelper"
 import Debugger from "./../Debugger";
 
-import DebugButton from "../../DebugMenu/DebugMenu/DebugButton";
+import DebugButton from "../../DebugMenu/DebugButton";
 
 class ResourceListener {
     static AddFile(SCFile: string) {

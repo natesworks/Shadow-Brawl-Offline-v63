@@ -1,13 +1,13 @@
-import Environment from "../../Environement/Environment";
+import Environment from "../Environement/Environment";
 
-import Addresses from "../../Manager/Addresses";
-import Functions from "../../Manager/Functions";
+import Addresses from "../Manager/Addresses";
+import Functions from "../Manager/Functions";
 
 import DebugMenuBase from "./DebugMenuBase";
 import DebugMenu from "./DebugMenu";
-import StringHelper from "../../Utils/Game/StringHelper";
-import Debugger from "../../Utils/Debugger";
-import ShowFloaterText from "../../Utils/Game/ShowFloaterText";
+import StringHelper from "../Utils/Game/StringHelper";
+import Debugger from "../Utils/Debugger";
+import ShowFloaterText from "../Utils/Game/ShowFloaterText";
 
 class DebugButton {
     static IsDebugMenuOpenned: boolean = false;
