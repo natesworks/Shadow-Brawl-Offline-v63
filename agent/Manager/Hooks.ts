@@ -76,13 +76,13 @@ class Hooks {
 
         // Misc Hooks
 
-        /*Interceptor.attach(Environment.LaserBase.add(0x325900), {
+        Interceptor.attach(Environment.LaserBase.add(0x325900), {
             onEnter: function (args) {
                 args[3] = ptr(3); // Offline Battles
                 // args[6] = ptr(1); // Maxed Brawlers
-                args[8] = ptr(1); // Accessorys enabled/disabled
+                // args[8] = ptr(1); // Accessorys enabled/disabled
             }
-        });*/
+        });
 
         const StringTable__getString = new NativeFunction(Environment.LaserBase.add(0x3703C4), 'pointer', ['pointer']); // ill make it function from the func class later
 

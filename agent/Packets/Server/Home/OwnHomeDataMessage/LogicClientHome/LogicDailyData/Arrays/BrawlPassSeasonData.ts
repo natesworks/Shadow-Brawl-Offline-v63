@@ -3,7 +3,7 @@ class BrawlPassSeasonData {
         stream.WriteVInt(1); // Seasons Count
         {
             stream.WriteVInt(43 - 1) // Current Season
-            stream.WriteVInt(10000) // BP Tokens
+            stream.WriteVInt(100000) // BP Tokens
             stream.WriteBoolean(true) // Brawl Pass State
             stream.WriteVInt(0)
             stream.WriteBoolean(false)
