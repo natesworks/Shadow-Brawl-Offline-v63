@@ -106,8 +106,8 @@ class LogicClientAvatar {
         stream.WriteVInt(0); // Array
         stream.WriteVInt(0); // Array
 
-        stream.WriteVInt(1000000);
-        stream.WriteVInt(1000000);
+        stream.WriteVInt(6777777);
+        stream.WriteVInt(6777777);
         stream.WriteVInt(10);
         stream.WriteVInt(0);
         stream.WriteVInt(0);
