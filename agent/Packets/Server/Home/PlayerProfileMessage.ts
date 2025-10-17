@@ -1,4 +1,5 @@
 import ByteStream from "../../../DataStream/ByteStream";
+import LogicPlayerData from "../../../Configuration/LogicPlayerData";
 
 class PlayerProfileMessage {
     static Encode(): number[] {
@@ -19,25 +20,25 @@ class PlayerProfileMessage {
             Stream.WriteVInt(0);
         }
 
-        Stream.WriteVInt(26);
+        Stream.WriteVInt(27);
         {
             Stream.WriteDataReference(1, 99) // 3v3 Wins
-            Stream.WriteDataReference(3, 97) // Trophies
-            Stream.WriteDataReference(4, 96) // Highest Trophies
+            Stream.WriteDataReference(3, LogicPlayerData.GetMiscData().Trophies) // Trophies
+            Stream.WriteDataReference(4, LogicPlayerData.GetMiscData().HighestTrophies) // Highest Trophies
             Stream.WriteDataReference(8, 92) // Showdown Wins
             Stream.WriteDataReference(10, 90) // Robots à Gogo
             Stream.WriteDataReference(11, 89) // Duo Wins
-            Stream.WriteDataReference(12, 88) // 3v3 Wins
+            Stream.WriteDataReference(12, 88) // ?
             Stream.WriteDataReference(13, 87) // Combat De Boss
-            Stream.WriteDataReference(14, 86) // 3v3 Wins
+            Stream.WriteDataReference(14, 86) // ?
             Stream.WriteDataReference(15, 85) // Victory In Challenges
-            Stream.WriteDataReference(16, 84) // 3v3 Wins
+            Stream.WriteDataReference(16, 84) // ?
             Stream.WriteDataReference(17, 83) // Power League Team Wins
             Stream.WriteDataReference(18, 82) // Power League Solo Wins
             Stream.WriteDataReference(19, 81) // Club League Wins
-            Stream.WriteDataReference(21, 80) // 3v3 Wins
-            Stream.WriteDataReference(22, 79) // 3v3 Wins
-            Stream.WriteDataReference(23, 78) // 3v3 Wins
+            Stream.WriteDataReference(21, 80) // ?
+            Stream.WriteDataReference(22, 79) // ?
+            Stream.WriteDataReference(23, 78) // ?
             Stream.WriteDataReference(26, 77) // Number in Leaderboard
             Stream.WriteDataReference(28, 76) // Old Rank 35s
             Stream.WriteDataReference(20, 300000); // Fame Credits
@@ -51,11 +52,11 @@ class PlayerProfileMessage {
         }
 
         {
-            Stream.WriteString("@soufgamev2");
-            Stream.WriteVInt(100);
-            Stream.WriteVInt(28000000);
-            Stream.WriteVInt(43000006);
-            Stream.WriteVInt(43000006);
+            Stream.WriteString(LogicPlayerData.GetPlayerName());
+            Stream.WriteVInt(LogicPlayerData.GetMiscData().ExperienceLevel);
+            Stream.WriteVInt(28000000 + LogicPlayerData.GetMiscData().Thumbnail);
+            Stream.WriteVInt(43000000 + LogicPlayerData.GetMiscData().NameColor);
+            Stream.WriteVInt(43000000 + LogicPlayerData.GetMiscData().NameColor);
         }
 
         Stream.WriteBoolean(false);
@@ -73,7 +74,7 @@ class PlayerProfileMessage {
         Stream.WriteBoolean(false);
 
         Stream.WriteDataReference(25, 0);
-        Stream.WriteVInt(1);
+        Stream.WriteVInt(0);
 
         return Stream.Payload;
     }

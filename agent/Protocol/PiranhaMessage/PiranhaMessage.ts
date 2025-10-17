@@ -5,8 +5,8 @@ class PiranhaMessage {
         return (new NativeFunction(Message.readPointer().add(16).readPointer(), "int", ["pointer"]))(Message); 
     }
 
-    static Decode(Message: NativePointer): number { 
-        return (new NativeFunction(Message.readPointer().add(24).readPointer(), "int", ["pointer"]))(Message); 
+    static Decode(Message: NativePointer): NativePointer { 
+        return (new NativeFunction(Message.readPointer().add(24).readPointer(), "pointer", ["pointer"]))(Message); 
     }
 
     static GetServiceNodeType(Message: NativePointer): number { 

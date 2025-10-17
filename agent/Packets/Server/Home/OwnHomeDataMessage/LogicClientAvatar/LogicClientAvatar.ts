@@ -2,19 +2,21 @@ import LogicPlayerData from "../../../../../Configuration/LogicPlayerData";
 
 class LogicClientAvatar {
     static Encode(stream: any): void {
-        stream.WriteVLong(0, 254842734);
-        stream.WriteVLong(0, 254842734);
+        stream.WriteVLong(0, 256617006);
+        stream.WriteVLong(0, 256617006);
         stream.WriteVLong(0, 0);
 
-        stream.WriteString("@soufgamev2");
+        stream.WriteString(LogicPlayerData.GetPlayerName());
         stream.WriteBoolean(true);
         stream.WriteInt(-1);
 
         stream.WriteVInt(28);
 
-        let OwnedBrawlersCount = Object.values(LogicPlayerData.OwnedBrawlers).length
-        stream.WriteVInt(Object.values(LogicPlayerData.OwnedBrawlers).map(brawler => brawler.CardID).length + 7);
-        for (const CardId of Object.values(LogicPlayerData.OwnedBrawlers).map(brawler => brawler.CardID)) {
+        let OwnedBrawlers = LogicPlayerData.GetOwnedBrawlers();
+        let OwnedBrawlersCount = Object.values(OwnedBrawlers).length;
+        
+        stream.WriteVInt(Object.values(OwnedBrawlers).map(brawler => brawler.CardID).length + 7);
+        for (const CardId of Object.values(OwnedBrawlers).map(brawler => brawler.CardID)) {
             stream.WriteDataReference(23, CardId);
             stream.WriteVInt(-1);
             stream.WriteVInt(1);
@@ -49,35 +51,35 @@ class LogicClientAvatar {
         stream.WriteVInt(67); // Daily Streak Count
         
         stream.WriteVInt(OwnedBrawlersCount);
-        for (const CardId of Object.keys(LogicPlayerData.OwnedBrawlers).map(id => parseInt(id))) {
+        for (const CardId of Object.keys(OwnedBrawlers).map(id => parseInt(id))) {
             stream.WriteDataReference(16, CardId);
             stream.WriteVInt(-1);
             stream.WriteVInt(3000);
         }
 
         stream.WriteVInt(OwnedBrawlersCount);
-        for (const CardId of Object.keys(LogicPlayerData.OwnedBrawlers).map(id => parseInt(id))) {
+        for (const CardId of Object.keys(OwnedBrawlers).map(id => parseInt(id))) {
             stream.WriteDataReference(16, CardId);
             stream.WriteVInt(-1);
             stream.WriteVInt(3000);
         }
 
         stream.WriteVInt(OwnedBrawlersCount);
-        for (const CardId of Object.keys(LogicPlayerData.OwnedBrawlers).map(id => parseInt(id))) {
+        for (const CardId of Object.keys(OwnedBrawlers).map(id => parseInt(id))) {
             stream.WriteDataReference(16, CardId);
             stream.WriteVInt(-1);
             stream.WriteVInt(0);
         }
 
         stream.WriteVInt(OwnedBrawlersCount);
-        for (const CardId of Object.keys(LogicPlayerData.OwnedBrawlers).map(id => parseInt(id))) {
+        for (const CardId of Object.keys(OwnedBrawlers).map(id => parseInt(id))) {
             stream.WriteDataReference(16, CardId);
             stream.WriteVInt(-1);
             stream.WriteVInt(3000);
         }
 
         stream.WriteVInt(OwnedBrawlersCount); // Power Level
-        for (const CardId of Object.keys(LogicPlayerData.OwnedBrawlers).map(id => parseInt(id))) {
+        for (const CardId of Object.keys(OwnedBrawlers).map(id => parseInt(id))) {
             stream.WriteDataReference(16, CardId);
             stream.WriteVInt(-1);
             stream.WriteVInt(11 - 1);
@@ -106,8 +108,8 @@ class LogicClientAvatar {
         stream.WriteVInt(0); // Array
         stream.WriteVInt(0); // Array
 
-        stream.WriteVInt(6777777);
-        stream.WriteVInt(6777777);
+        stream.WriteVInt(LogicPlayerData.GetCurrencys().FreeDiamonds);
+        stream.WriteVInt(LogicPlayerData.GetCurrencys().Diamonds);
         stream.WriteVInt(10);
         stream.WriteVInt(0);
         stream.WriteVInt(0);
@@ -127,6 +129,11 @@ class LogicClientAvatar {
         stream.WriteVInt(0);
         stream.WriteVInt(0);
         stream.WriteBoolean(false);
+    }
+
+    static UseDiamonds(UsedDiamonds: number) {
+        LogicPlayerData.GetCurrencys().Diamonds -= UsedDiamonds;
+        LogicPlayerData.GetCurrencys().FreeDiamonds -= UsedDiamonds;
     }
 }
 

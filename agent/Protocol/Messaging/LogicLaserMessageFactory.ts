@@ -9,6 +9,7 @@ import UdpConnectionInfoMessage from "../../Packets/Server/Battles/UdpConnection
 import PlayerProfileMessage from "../../Packets/Server/Home/PlayerProfileMessage.js";
 import TeamMessage from "../../Packets/Server/Home/TeamMessage.js";
 import VisionUpdateMessage from "../../Packets/Server/Battles/VisionUpdateMessage.js";
+import AvatarNameCheckRequestMessage from "../../Packets/Client/AvatarNameCheckRequestMessage.js";
 
 import Debugger from "../../Utils/Debugger.js";
 import LogicBattleModeServer from "../../Packets/Server/Battles/LogicBattleModeServer.js";
@@ -35,6 +36,8 @@ class LogicLaserMessageFactory {
             case 15081:
                 LogicLaserMessageFactory.CreateMessageByType(PlayerProfileMessage.GetMessageType());
                 break;
+            case 14600:
+                // AvatarNameCheckRequestMessage.Execute();
             case 17750:
                 LogicLaserMessageFactory.CreateMessageByType(OwnHomeDataMessage.GetMessageType());
                 break;

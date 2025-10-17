@@ -71,7 +71,7 @@ class BattleEndMessage { // kinda place holder but right struct i'll fix this la
   }
 }
 
-
+export default BattleEndMessage
 /*
 __int64 __fastcall BattleEndMessage::encode(__int64 a1)
 {

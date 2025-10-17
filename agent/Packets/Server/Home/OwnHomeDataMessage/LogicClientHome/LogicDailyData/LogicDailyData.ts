@@ -15,13 +15,13 @@ class LogicDailyData {
         stream.WriteVInt(2025257);
         stream.WriteVInt(40312);
 
-        stream.WriteVInt(LogicPlayerData.MiscData.Trophies);
-        stream.WriteVInt(LogicPlayerData.MiscData.HighestTrophies);
-        stream.WriteVInt(LogicPlayerData.MiscData.HighestTrophies);
-        stream.WriteVInt(LogicPlayerData.MiscData.TrophyRoadTier);
-        stream.WriteVInt(LogicPlayerData.MiscData.ExperienceLevel);
-        stream.WriteDataReference(28, LogicPlayerData.MiscData.Thumbnail);
-        stream.WriteDataReference(43, LogicPlayerData.MiscData.NameColor);
+        stream.WriteVInt(LogicPlayerData.GetMiscData().Trophies);
+        stream.WriteVInt(LogicPlayerData.GetMiscData().HighestTrophies);
+        stream.WriteVInt(LogicPlayerData.GetMiscData().HighestTrophies);
+        stream.WriteVInt(LogicPlayerData.GetMiscData().TrophyRoadTier);
+        stream.WriteVInt(LogicPlayerData.GetMiscData().ExperienceLevel);
+        stream.WriteDataReference(28, LogicPlayerData.GetMiscData().Thumbnail);
+        stream.WriteDataReference(43, LogicPlayerData.GetMiscData().NameColor);
 
         stream.WriteVInt(26);
         for (let x = 0; x < 26; x++) {
@@ -44,11 +44,11 @@ class LogicDailyData {
         stream.WriteVInt(0);
 
         stream.WriteVInt(0);
-        stream.WriteVInt(LogicPlayerData.MiscData.HighestTrophies); // Trophy Road Highest Trophies
+        stream.WriteVInt(LogicPlayerData.GetMiscData().HighestTrophies); // Trophy Road Highest Trophies
         stream.WriteVInt(1337); // Tokens Used in Battles
         stream.WriteVInt(LogicPlayer.ControlMode); // Control Mode
         stream.WriteBoolean(true); // Battle Hints
-        stream.WriteVInt(LogicPlayerData.MiscData.TokenDoubler); // Tokens Doubler
+        stream.WriteVInt(LogicPlayerData.GetMiscData().TokenDoubler); // Tokens Doubler
         stream.WriteVInt(144); // Brawl Pass Season Timer
         stream.WriteVInt(1509112); // Brawl Pass Season Timer
         stream.WriteVInt(144); // Brawl Pass Season Timer
@@ -77,8 +77,8 @@ class LogicDailyData {
         stream.WriteByte(1); // Selected Brawler
         stream.WriteDataReference(16, 1);
 
-        stream.WriteString(LogicPlayerData.MiscData.Region);
-        stream.WriteString(LogicPlayerData.MiscData.CreatorCode);
+        stream.WriteString(LogicPlayerData.GetMiscData().Region);
+        stream.WriteString(LogicPlayerData.GetMiscData().CreatorCode);
 
         IntValueEntry.Encode(stream);
         CooldownEntry.Encode(stream);

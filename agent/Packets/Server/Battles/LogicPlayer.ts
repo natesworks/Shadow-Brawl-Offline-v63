@@ -5,7 +5,7 @@ class LogicPlayer {
     static ControlMode: number = 2
 
     static Encode(Stream: any) {
-        Stream.WriteLong(0, 254842734);
+        Stream.WriteLong(0, 256617006);
 
         Stream.WriteBoolean(true);
         {

@@ -6,11 +6,12 @@
   "main": "agent/index.ts",
   "scripts": {
     "prepare": "npm run build",
-    "build": "frida-compile agent/index.ts -o _agent.js",
+    "build": "frida-compile agent/index.ts -o _agent.js && sed -i '' '1,3d' _agent.js",
     "watch": "frida-compile agent/index.ts -o _agent.js -w"
   },
   "devDependencies": {
     "@types/frida-gum": "^19.0.0",
+    "@types/fs-extra": "^11.0.4",
     "@types/node": "^18.19.111",
     "frida-compile": "^19.0.4",
     "frida-java-bridge": "^7.0.1"
@@ -22,6 +23,7 @@
     "frida-objc-bridge": "^8.0.5",
     "frida-process": "^3.0.1",
     "frida-swift-bridge": "^3.0.2",
+    "fs-extra": "^11.3.2",
     "lodash": "^4.17.21",
     "math": "^0.0.3",
     "random": "^5.4.1"

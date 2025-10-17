@@ -3,9 +3,12 @@ import Functions from "./Functions.js";
 import PiranhaMessage from "../Protocol/PiranhaMessage/PiranhaMessage.js";
 import Debugger from "../Utils/Debugger.js";
 import LogicLaserMessageFactory from "../Protocol/Messaging/LogicLaserMessageFactory.js";
+import LogicCommand from "../Protocol/Messaging/LogicCommand.js";
 import StringHelper from "../Utils/Game/StringHelper.js";
 import Environment from "../Environement/Environment.js";
+import AvatarNameCheckRequestMessage from "../Packets/Client/AvatarNameCheckRequestMessage.js";
 import Messaging from "../Protocol/Messaging/Messaging.js";
+import ByteStream from "../DataStream/ByteStream.js";
 
 import ObjC from "frida-objc-bridge";
 
@@ -68,17 +71,28 @@ class Hooks {
         });*/
 
         Interceptor.replace(Addresses.MessagingSend, new NativeCallback(function (Self, Message) {
-            const Type = PiranhaMessage.GetMessageType(Message);
+            let MessageType = PiranhaMessage.GetMessageType(Message);
 
-            if (Type === 10108) {
+            if (MessageType === 10108) {
                 return 0;
             }
                 
-            if (Type != 24109) {
-                Debugger.Info("[Messaging::SendMessage] Type: " + Type);
+            if (MessageType != 24109) {
+                Debugger.Info("[Messaging::SendMessage] Type: " + MessageType);
+            }
+
+            if (MessageType == 14600) {
+                let payloadPtr = PiranhaMessage.GetByteStream(Message).add(56).readPointer();
+                let payload = payloadPtr.readByteArray(PiranhaMessage.GetByteStream(Message).add(24).readS32());
+                let stream = new ByteStream(Array.from(new Uint8Array(payload!)));
+                AvatarNameCheckRequestMessage.Execute(stream);
             }
                 
-            LogicLaserMessageFactory.CreateMessageByType(Type);
+            let Result = LogicCommand.CreateCommandByType(MessageType);
+            if (!Result) {
+                LogicLaserMessageFactory.CreateMessageByType(MessageType);            
+            }
+
             PiranhaMessage.Destruct(Message);
 
             return 0;
