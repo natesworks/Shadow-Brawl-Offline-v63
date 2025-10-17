@@ -3,15 +3,13 @@ import LogicBattleModeServer from "./LogicBattleModeServer.js";
 import LogicPlayer from "./LogicPlayer.js";
 
 class StartLoadingMessage {
-    static GameModeVariation = 8;
+    static GameModeVariation = 13;
     static Encode(): number[] {
         let Stream = new ByteStream([]);
         
         Stream.WriteInt(LogicBattleModeServer.PlayerCount);
         Stream.WriteInt(LogicBattleModeServer.PlayerIndex);
         Stream.WriteInt(LogicBattleModeServer.TeamIndex);
-
-        console.log("Player Count:", LogicBattleModeServer.PlayerCount);
 
         Stream.WriteInt(LogicBattleModeServer.PlayerCount);
         for (let i = 0; i < LogicBattleModeServer.PlayerCount; i++) 
@@ -31,7 +29,7 @@ class StartLoadingMessage {
 
         Stream.WriteVInt(8); // GameType
         Stream.WriteVInt(1); // Map Mode
-        Stream.WriteVInt(13); // Game Mode Variation
+        Stream.WriteVInt(StartLoadingMessage.GameModeVariation); // Game Mode Variation
         Stream.WriteVInt(0);
         Stream.WriteBoolean(false);
         Stream.WriteVInt(LogicPlayer.IsSpectator);

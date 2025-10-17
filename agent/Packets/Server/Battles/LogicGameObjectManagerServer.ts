@@ -76,7 +76,7 @@ class LogicGameObjectManagerServer {
         Stream.WritePositiveIntMax127(0);
         Stream.WritePositiveIntMax127(0);
 
-        Stream.WritePositiveVIntMax65535(0); // GameObjects Count
+        Stream.WritePositiveVIntMax65535(1); // GameObjects Count
         {
             Stream.WritePositiveIntMax127(16); // Type : Brawler
             Stream.WritePositiveVIntMax65535(1); // CSV ID : Colt

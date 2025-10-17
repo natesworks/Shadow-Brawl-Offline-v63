@@ -19,8 +19,15 @@ class Environment {
         else if (ObjC.available) {
             Environment.platform = "iOS";
         }
-        else {
-            Debugger.Error("wrong way ever to check if a device is ios or android but ngl im lazy bruh");
+        else if (Process.platform == "linux") {
+            Environment.platform = "Android";
+        }
+        else if (Process.platform == "darwin") {
+            Environment.platform = "iOS";
+        }
+        else 
+        {
+            Debugger.Error("bro are you on windows phone or what");
         }
 
 

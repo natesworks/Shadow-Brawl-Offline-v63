@@ -64,9 +64,9 @@ class LogicLaserMessageFactory {
                 Messaging.SendOfflineMessage(UdpConnectionInfoMessage.GetMessageType(), UdpConnectionInfoMessage.Encode());
                 break;
             case 10555:
-                const intervalId = setInterval(() => {
+                const Interval = setInterval(() => {
                     if (LogicBattleModeServer.Ticks >= 1000) {
-                        clearInterval(intervalId);
+                        clearInterval(Interval);
                         return;
                     }
                     LogicLaserMessageFactory.CreateMessageByType(VisionUpdateMessage.GetMessageType());

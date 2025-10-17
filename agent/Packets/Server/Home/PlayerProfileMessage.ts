@@ -19,7 +19,7 @@ class PlayerProfileMessage {
             Stream.WriteVInt(0);
         }
 
-        Stream.WriteVInt(27);
+        Stream.WriteVInt(26);
         {
             Stream.WriteDataReference(1, 99) // 3v3 Wins
             Stream.WriteDataReference(3, 97) // Trophies

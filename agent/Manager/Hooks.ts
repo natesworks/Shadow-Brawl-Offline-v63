@@ -14,24 +14,28 @@ class Hooks {
         Interceptor.attach(Addresses.ServerConnectionUpdate, {
             onEnter: function (args) {
                 this.ServerConnection = args[0];
-                this.ServerConnection.add(8).readPointer().add(8).writeU8(0);
-                this.ServerConnection.add(8).readPointer().add(181).writeInt(5);
+                this.ServerConnection.add(8).readPointer().add(8).writeU8(0); // Messaging::hasConnectFailed
+                this.ServerConnection.add(8).readPointer().add(181).writeInt(5); // Messaging::State
             }
         });
 
         Interceptor.attach(Addresses.MessageManagerReceiveMessage, {
-            onEnter(Args) {
-                const Message = Args[1];
+            onEnter(args) {
+                let Message = args[1];
                 if (PiranhaMessage.GetMessageType(Message) != 24109) {
                     Debugger.Info("Received " + PiranhaMessage.GetMessageType(Message));
                 }
             },
-            onLeave(Retval) {
-                Retval.replace(ptr(1));
+            onLeave(retval) {
+                retval.replace(ptr(1));
             }
         });
 
-        Interceptor.replace(Environment.LaserBase.add(0xB62864), new NativeCallback(function() {
+        Interceptor.replace(Environment.LaserBase.add(0x38FDF0), new NativeCallback(function() { // LogicVersion::isDev
+            return 1;
+        }, 'int', []));
+
+        Interceptor.replace(Environment.LaserBase.add(0xB62864), new NativeCallback(function() { // Messaging::decryptData
             return 1;
         }, 'int', []));
 
@@ -45,7 +49,7 @@ class Hooks {
 
 		    },
 		    onLeave(retval) {
-			    (Memory as any).writeU32(this.messaging.add(24), 5);
+			    (Memory as any).writeU64(this.messaging.add(24), 5);
                 console.warn("[+][PepperState::State][3] Pepper State Is", (Memory as any).readU32(this.messaging.add(24)));
 		    }
 	    });
@@ -54,41 +58,48 @@ class Hooks {
 		    (this.context as any).x0 = (this.context as any).x8;
 	    });
 
-        Interceptor.replace(Addresses.MessagingSend,
-            new NativeCallback(function (Self, Message) {
-                const Type = PiranhaMessage.GetMessageType(Message);
+        /*Interceptor.attach(Environment.LaserBase.add(0x232658), { // MessageManager::sendMessage
+            onEnter(args) {
+                // this.message = args[1];
+                // PiranhaMessage.Encode(args[1]);
+                // this.messaging2 = args[0].add(72).readPointer();
+                // this.messaging2.add(24).writeU64(5); // Messaging State                
+            }
+        });*/
 
-                if (Type === 10108) {
-                    return 0;
-                }
-                
-                if (Type != 24109) {
-                    Debugger.Info("[Messaging::SendMessage] Type: " + Type);
-                }
+        Interceptor.replace(Addresses.MessagingSend, new NativeCallback(function (Self, Message) {
+            const Type = PiranhaMessage.GetMessageType(Message);
 
-                if (Type === 14102) {
-                    PiranhaMessage.Decode(Message);
-                    return 0;
-                }
-                
-                LogicLaserMessageFactory.CreateMessageByType(Type);
-                PiranhaMessage.Destruct(Message);
-
+            if (Type === 10108) {
                 return 0;
-            }, "int", ["pointer", "pointer"])
-        );
+            }
+                
+            if (Type != 24109) {
+                Debugger.Info("[Messaging::SendMessage] Type: " + Type);
+            }
+                
+            LogicLaserMessageFactory.CreateMessageByType(Type);
+            PiranhaMessage.Destruct(Message);
+
+            return 0;
+        }, "int", ["pointer", "pointer"]));
 
         Interceptor.replace(Environment.LaserBase.add(0xB61904), new NativeCallback(function() {
             return 1;
+        }, 'int', []));
+
+        Interceptor.replace(Environment.LaserBase.add(0xB61928), new NativeCallback(function() {
+            return 5;
         }, 'int', []));
 
         // Misc Hooks
 
         Interceptor.attach(Environment.LaserBase.add(0x325900), {
             onEnter: function (args) {
-                args[3] = ptr(3); // Offline Battles
+                // Hooks.messstate.add(24).writeInt(2);
+                // args[3] = ptr(3); // Offline Battles
                 // args[6] = ptr(1); // Maxed Brawlers
-                // args[8] = ptr(1); // Accessorys enabled/disabled
+                // args[8] = ptr(0); // Accessorys enabled/disabled
             }
         });
 
@@ -220,6 +231,7 @@ Version: ${Environment.script_version}
                 Interceptor.attach(Addresses.CustomButton_buttonPressed, {
 			        onEnter(args) {
 				        if (TextPtr.toInt32() === (args[0] as NativePointer).toInt32()) {
+                            // Functions.Application.OpenUrl(StringHelper.scptr("https://t.me/laserx_framework"));
                             const NSURL = ObjC.classes.NSURL;
                             const NSWorkspace = ObjC.classes.NSWorkspace;
 

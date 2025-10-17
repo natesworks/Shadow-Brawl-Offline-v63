@@ -23,6 +23,7 @@
     "frida-process": "^3.0.1",
     "frida-swift-bridge": "^3.0.2",
     "lodash": "^4.17.21",
+    "math": "^0.0.3",
     "random": "^5.4.1"
   }
 }
