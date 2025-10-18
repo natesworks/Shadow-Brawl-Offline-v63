@@ -34,7 +34,7 @@ class Addresses {
     static GameButtonCtor: NativePointer;
     static MovieClipHelper_setTextFieldVerticallyCentered: NativePointer;
     static MovieClipHelper_setTextAndScaleIfNecessary: NativePointer;
-
+    static Application_openUrl: NativePointer;
 
     static ServerConnectionUpdate: NativePointer;
     static State: NativePointer;
@@ -102,6 +102,7 @@ class Addresses {
         Addresses.GameButtonCtor = Environment.LaserBase.add(0x0A72F0);
         Addresses.MovieClipHelper_setTextFieldVerticallyCentered = Environment.LaserBase.add(0x384960);
         Addresses.MovieClipHelper_setTextAndScaleIfNecessary = Environment.LaserBase.add(0x384CB4);
+        Addresses.Application_openUrl = Environment.LaserBase.add(0xB78D80);
 
         Addresses.ServerConnectionUpdate = Environment.LaserBase.add(0x23AE30);
         Addresses.State = ptr(Process.pointerSize * 4);

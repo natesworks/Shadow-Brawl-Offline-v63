@@ -245,14 +245,7 @@ Version: ${Environment.script_version}
                 Interceptor.attach(Addresses.CustomButton_buttonPressed, {
 			        onEnter(args) {
 				        if (TextPtr.toInt32() === (args[0] as NativePointer).toInt32()) {
-                            // Functions.Application.OpenUrl(StringHelper.scptr("https://t.me/laserx_framework"));
-                            const NSURL = ObjC.classes.NSURL;
-                            const NSWorkspace = ObjC.classes.NSWorkspace;
-
-                            const Url = NSURL.URLWithString_("https://t.me/laserx_framework");
-                            const Workspace = NSWorkspace.sharedWorkspace();
-
-                            Workspace.openURL_(Url);
+                            Functions.Application.OpenURL(StringHelper.scptr("https://t.me/laserx_framework"));
                         }
 			        }
 		        });

@@ -100,6 +100,10 @@ class Functions {
         static Destructor: any
     }
 
+    static Application = class {
+        static OpenURL: any
+    }
+
     static Init() {
         const LibSystem = Process.getModuleByName("libSystem.B.dylib");
 
@@ -131,6 +135,7 @@ class Functions {
         Functions.ScrollArea.AddContent = new NativeFunction(Addresses.ScrollArea_addContent, 'void', ['pointer', 'pointer'])
         Functions.GameButton.GameButton = new NativeFunction(Addresses.GameButtonCtor, 'void', ['pointer'])
         Functions.MovieClipHelper.SetTextAndScaleIfNecessary = new NativeFunction(Addresses.MovieClipHelper_setTextAndScaleIfNecessary, 'void', ['pointer', 'pointer', 'int', 'int']);
+        Functions.Application.OpenURL = new NativeFunction(Addresses.Application_openUrl, 'void', ['pointer']);
 
         Functions.Imports.Malloc = new NativeFunction(Addresses.Imports.Malloc, 'pointer', ["uint"]);
         Functions.Imports.Free = new NativeFunction(LibSystem.findExportByName("free")!, "int", ["pointer"]);
