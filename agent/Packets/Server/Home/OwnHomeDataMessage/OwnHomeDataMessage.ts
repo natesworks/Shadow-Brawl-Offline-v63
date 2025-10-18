@@ -13,7 +13,7 @@ class OwnHomeDataMessage {
         stream.WriteVInt(1757882887);
         stream.WriteVInt(-1230828389);
 
-        OwnHomeDataMessage.ClientHome = LogicClientHome.Encode(stream);
+        OwnHomeDataMessage.ClientHome = new LogicClientHome(stream);
         OwnHomeDataMessage.ClientAvatar = new LogicClientAvatar(stream);
         
         return stream.Payload;

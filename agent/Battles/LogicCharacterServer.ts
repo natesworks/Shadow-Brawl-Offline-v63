@@ -1,6 +1,9 @@
 import Environment from "../Environement/Environment";
 import Functions from "../Manager/Functions";
 
+const {GUI, ResourceManager, GUIContainer, DisplayObject, LogicDataTables, DecoratedTextField, MovieClip, GameButton, MovieClipHelper, Sprite, String, ResourceListenner, Stage, ScrollArea, Imports, LogicLaserMessageFactory, Messaging, LogicGameModeUtil, LogicSkillServer, Application} = Functions;
+
+
 class LogicCharacterServer {
     static Init() {
         //LogicCharacterServer.PlaceHooks();
@@ -17,8 +20,8 @@ class LogicCharacterServer {
         if (![0, 1].includes(a2)) {
             return
         }
-        let NewSkill: NativePointer = Functions.Imports.Malloc(72)
-        let result = Functions.LogicSkillServer.Constructor(NewSkill, a3);
+        let NewSkill: NativePointer = Imports.Malloc(72)
+        let result = LogicSkillServer.Constructor(NewSkill, a3);
 
         let SkillContainer = a1.add(424).readPointer()
         let SkillCount = a1.add(436).readInt();
@@ -26,8 +29,8 @@ class LogicCharacterServer {
         let SkillServer = SkillContainer.add(a2 * 8).readPointer()
         if (!SkillServer.isNull()) {
             SkillContainer.add(8).writeInt(SkillCount - 1);
-            Functions.LogicSkillServer.Destructor(SkillServer);
-            Functions.Imports.Free(SkillServer);
+            LogicSkillServer.Destructor(SkillServer);
+            Imports.Free(SkillServer);
         }
 
         SkillContainer.add(8).writeInt(SkillCount + 1);

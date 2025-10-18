@@ -1,5 +1,3 @@
-import ByteStream from "../../../../../DataStream/ByteStream.js";
-
 import LogicConfData from "./LogicConfData/LogicConfData.js";
 import LogicDailyData from "./LogicDailyData/LogicDailyData.js";
 
@@ -20,142 +18,155 @@ import NotificationFactory from "../NotificationFactory/NotificationFactory.js";
 import LogicGatchaDrop from "./Arrays/LogicGatchaDrop.js";
 
 class LogicClientHome {
-    static Encode(stream: any): void {
-        LogicDailyData.Encode(stream);
-        LogicConfData.Encode(stream);
+    private stream: any;
 
-        stream.WriteLong(0, 1);
+    static LogicDailyData: any
+    static LogicConfData: any
 
-        NotificationFactory.Encode(stream);
+    static NotificationFactory: any
 
-        stream.WriteVInt(1337);
+    constructor(stream: any) {
+        this.stream = stream
 
-        if (stream.WriteBoolean(true)) 
+        this.Encode();
+    }
+
+    public Encode(): void {
+        LogicClientHome.LogicDailyData = LogicDailyData.Encode(this.stream);
+        LogicClientHome.LogicConfData = LogicConfData.Encode(this.stream);
+
+        this.stream.WriteLong(0, 1);
+
+        LogicClientHome.NotificationFactory = new NotificationFactory(this.stream);
+
+        this.stream.WriteVInt(1337);
+
+        if (this.stream.WriteBoolean(true)) 
         {
-            stream.WriteVInt(1);
+            this.stream.WriteVInt(1);
             {
-                LogicGatchaDrop.Encode(stream); // LogicGatchDrop::encode
+                LogicGatchaDrop.Encode(this.stream); // LogicGatchDrop::encode
             }
         }
         else 
         {
-            stream.WriteVInt(0);
+            this.stream.WriteVInt(0);
         }
 
-        stream.WriteVInt(1); // Array
+        this.stream.WriteVInt(1); // Array
         {
-            stream.WriteDataReference(0);
+            this.stream.WriteDataReference(0);
         }
 
-        stream.WriteVInt(1); // Array
+        this.stream.WriteVInt(1); // Array
         {
-            stream.WriteDataReference(0);
-            stream.WriteDataReference(0);
-            stream.WriteByte(0);
+            this.stream.WriteDataReference(0);
+            this.stream.WriteDataReference(0);
+            this.stream.WriteByte(0);
         }
         
-        if (stream.WriteBoolean(true)) {
-            LogicLoginCalendar.Encode(stream);
+        if (this.stream.WriteBoolean(true)) {
+            LogicLoginCalendar.Encode(this.stream);
         }
-        if (stream.WriteBoolean(true)) {
-            LogicLoginCalendar.Encode(stream);
+        if (this.stream.WriteBoolean(true)) {
+            LogicLoginCalendar.Encode(this.stream);
         }
-        if (stream.WriteBoolean(true)) {
-            LogicLoginCalendar.Encode(stream);
+        if (this.stream.WriteBoolean(true)) {
+            LogicLoginCalendar.Encode(this.stream);
         }
-        if (stream.WriteBoolean(true)) {
-            LogicLoginCalendar.Encode(stream);
-        }
-
-        LogicHeroGears.Encode(stream)
-
-        if (stream.WriteBoolean(true)) {
-            LogicBrawlerRecruitRoad.Encode(stream);
+        if (this.stream.WriteBoolean(true)) {
+            LogicLoginCalendar.Encode(this.stream);
         }
 
-        LogicMastery.Encode(stream);
-        LogicBattleIntro.Encode(stream);
-        LogicRandomRewardManager.Encode(stream);
+        LogicHeroGears.Encode(this.stream)
 
-        if (stream.WriteBoolean(false)) {
-            LogicPlayerAlliancePiggyBankData.Encode(stream);
+        if (this.stream.WriteBoolean(true)) {
+            LogicBrawlerRecruitRoad.Encode(this.stream);
+        }
+
+        LogicMastery.Encode(this.stream);
+        LogicBattleIntro.Encode(this.stream);
+        LogicRandomRewardManager.Encode(this.stream);
+
+        if (this.stream.WriteBoolean(false)) {
+            LogicPlayerAlliancePiggyBankData.Encode(this.stream);
         }
         
-        if (stream.WriteBoolean(true)) {
-            LogicPlayerCollabEventData.Encode(stream);
+        if (this.stream.WriteBoolean(true)) {
+            LogicPlayerCollabEventData.Encode(this.stream);
         }
 
-        if (stream.WriteBoolean(true)) {
-            LogicPlayerSpecialEventData.Encode(stream);
+        if (this.stream.WriteBoolean(true)) {
+            LogicPlayerSpecialEventData.Encode(this.stream);
         }
 
-        LogicDataSeenStates.Encode(stream);
+        LogicDataSeenStates.Encode(this.stream);
 
-        if (stream.WriteBoolean(false)) {
-            LogicPlayerContestEventData.Encode(stream);
+        if (this.stream.WriteBoolean(false)) {
+            LogicPlayerContestEventData.Encode(this.stream);
         }
 
-        if (stream.WriteBoolean(true)) {
-            LogicPlayerRecordsData.Encode(stream);
+        if (this.stream.WriteBoolean(true)) {
+            LogicPlayerRecordsData.Encode(this.stream);
         }
 
-        stream.WriteBoolean(true);
+        this.stream.WriteBoolean(true);
         {
-            stream.WriteVInt(0);
-            stream.WriteVInt(0);
-            stream.WriteVInt(0);
-            stream.WriteVInt(0);
-            stream.WriteVInt(0);
-            stream.WriteVInt(0);
+            this.stream.WriteVInt(0);
+            this.stream.WriteVInt(0);
+            this.stream.WriteVInt(0);
+            this.stream.WriteVInt(0);
+            this.stream.WriteVInt(0);
+            this.stream.WriteVInt(0);
 
-            stream.WriteVInt(1);
+            this.stream.WriteVInt(1);
             {
-                stream.WriteBoolean(true);
+                this.stream.WriteBoolean(true);
                 {
-                    LogicGemOffer.Encode(stream, 57, 14888, 0, 0, 0);
+                    LogicGemOffer.Encode(this.stream, 57, 14888, 0, 0, 0);
                 }
             }
 
-            stream.WriteVInt(1);
+            this.stream.WriteVInt(1);
             {
-                stream.WriteBoolean(true);
+                this.stream.WriteBoolean(true);
                 {
-                    LogicGemOffer.Encode(stream, 57, 14888, 0, 0, 0);
+                    LogicGemOffer.Encode(this.stream, 57, 14888, 0, 0, 0);
                 }
             }
             
-            stream.WriteVInt(0);
-            stream.WriteVInt(0);
+            this.stream.WriteVInt(0);
+            this.stream.WriteVInt(0);
         }
 
-        stream.WriteBoolean(true);
+        this.stream.WriteBoolean(true);
         {
-            stream.WriteVInt(1);
+            this.stream.WriteVInt(1);
             {
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
             }
         }
 
-        stream.WriteVInt(1); // Array
+        this.stream.WriteVInt(1); // Array
         {
-            stream.WriteBoolean(true);
+            this.stream.WriteBoolean(true);
             {
-                stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
 
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
 
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
-                stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
+                this.stream.WriteVInt(0);
             }
         }
     }

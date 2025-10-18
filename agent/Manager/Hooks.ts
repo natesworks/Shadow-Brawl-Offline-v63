@@ -9,6 +9,8 @@ import Environment from "../Environement/Environment.js";
 import AvatarNameCheckRequestMessage from "../Packets/Client/AvatarNameCheckRequestMessage.js";
 import Messaging from "../Protocol/Messaging/Messaging.js";
 import ByteStream from "../DataStream/ByteStream.js";
+import LobbyInfo from "../Utils/Game/LobbyInfo.js";
+import ModMenu from "./ModMenu.js";
 
 import ObjC from "frida-objc-bridge";
 
@@ -167,88 +169,15 @@ Version: ${Environment.script_version}
 
             return StringTable__getString(a1);
         }, 'pointer', ['pointer']));
-        /*
-        const DisplayObject_setXY = new NativeFunction(Environment.LaserBase.add(0x9A6760), 'void', ['pointer', 'float', 'float']);
-        const GenericPopup_setTitleTid = new NativeFunction(Environment.LaserBase.add(0x186EB0), 'void', ['pointer', 'pointer']);
-        const ListContainer_clearEntries = new NativeFunction(Environment.LaserBase.add(0x0AE548), 'void', ['pointer']);
 
-        function ModMenu(a1: NativePointer) {
-            new NativeFunction(Environment.LaserBase.add(0x35C50C), 'void', ["pointer"])(a1); // 0x2D3644 // 0x1F550C // 0x0F8A08 // 0x35BC38 // 0x35E340
-            GenericPopup_setTitleTid(a1, StringHelper.scptr("Battle Settings"))
-            DisplayObject_setXY(a1, 512, 0);
-            ListContainer_clearEntries(a1.add(72 * 8).readPointer());
 
-            function CreateModMenuButton() {
-
-            }
-        }
-
-        function ShowPopupMenu() {
-            const GUI_showPopup = new NativeFunction(Environment.LaserBase.add(0x0A734C), 'void', ['pointer', 'pointer', 'int', 'int', 'int']); // v44.242
-	        let ModMenuPopupInstance = Functions.Imports.Malloc(440);
-	        ModMenu(ModMenuPopupInstance);
-	        GUI_showPopup(Environment.LaserBase.add(0xEE61B8).readPointer(), ModMenuPopupInstance, 0, 0, 0);
-        }
-        
-        Interceptor.replace(Environment.LaserBase.add(0x08C834), new NativeCallback(() => {
-            console.log("hi!!!");
-            ShowPopupMenu();
-            return 1;
-        }, 'int', []));*/
-
-        /*function DumpStructure() {
-            Interceptor.attach(Environment.LaserBase.add(0x4D92A8), {
-                onLeave: function(retval) {
-                    console.log("stream.writeBoolean(" + retval.toInt32() + ")");
-                }
-            });
-
-            Interceptor.attach(Environment.LaserBase.add(0x4D9538), {
-                onLeave: function(retval) {
-                    console.log("stream.writePositiveVInt(" + retval.toInt32() + ")");
-                }
-            });
-
-            Interceptor.attach(Environment.LaserBase.add(0x4D9760), {
-                onLeave: function(retval) {
-                    console.log("stream.writeBoolean(" + retval.toInt32() + ")");
-                }
-            });
-        }
-
-        DumpStructure();*/
-
-        // Credits to gud
         Interceptor.attach(Environment.LaserBase.add(0x31D454), { // HomePage::HomePage
             onEnter: function(args) {
                 this.x = args[0];
             },
             onLeave: function(retval) {
-                let HomePageInstance = this.x.add(112).readPointer();
-
-                let TextPtr = Functions.Imports.Malloc(524);
-                let MovieClip = Functions.ResourceManager.GetMovieClip(StringHelper.ptr("sc/debug.sc"), StringHelper.ptr("debug_menu_text"))
-
-                Functions.GameButton.GameButton(TextPtr);
-                new NativeFunction(TextPtr.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(TextPtr, MovieClip, 1);
-                Functions.DisplayObject.SetXY(TextPtr, 140, 90);
-
-                TextPtr.add(16).writeFloat(1.65); // height
-                TextPtr.add(28).writeFloat(1.65); // width
-
-                let ColorGradientByName2 = Functions.LogicDataTables.GetColorGradientByName(StringHelper.scptr("Name6"), 1);
-                let version = Functions.MovieClip.GetTextFieldByName(MovieClip, StringHelper.ptr("Text"));
-                Functions.DecoratedTextField.SetupDecoratedText(version, StringHelper.scptr("Shadow Brawl Offline - v63.265\nBy @soufgamev2"), ColorGradientByName2);
-
-                Functions.Sprite.AddChild(HomePageInstance, TextPtr)
-
-                Interceptor.attach(Addresses.CustomButton_buttonPressed, {
-			        onEnter(args) {
-				        if (TextPtr.toInt32() === (args[0] as NativePointer).toInt32()) {
-                            Functions.Application.OpenURL(StringHelper.scptr("https://t.me/laserx_framework"));
-                        }
-			        }
-		        });
+                LobbyInfo.CreateLobbyInfo(this.x);
+                ModMenu.LoadModMenuButton(this.x);
             }
         });
     }

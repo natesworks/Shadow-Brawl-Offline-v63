@@ -21,6 +21,8 @@ class Functions {
     static DisplayObject = class {
         static SetPixelSnappedXY: any;
         static SetXY: any;
+        static SetHeight: any
+        static SetWidth: any
     }
 
     static LogicDataTables = class {
@@ -34,6 +36,8 @@ class Functions {
     static MovieClip = class {
         static GetTextFieldByName: any;
         static SetText: any;
+        static GetMovieClipByName: any;
+        static GotoAndStopFrameIndex: any;
     }
 
     static GameButton = class {
@@ -116,6 +120,8 @@ class Functions {
         Functions.GUIContainer.CreateScrollArea = new NativeFunction(Addresses.GUIContainer_createScrollArea, 'pointer', ['pointer', 'pointer', 'int']);
         Functions.DisplayObject.SetPixelSnappedXY = new NativeFunction(Addresses.DisplayObject_setPixelSnappedXY, 'float', ['pointer', 'float', 'float']);
         Functions.DisplayObject.SetXY = new NativeFunction(Addresses.DisplayObject_setXY, 'float', ['pointer', 'float', 'float']);
+        Functions.DisplayObject.SetHeight = new NativeFunction(Addresses.DisplayObject_setHeight, 'float', ['pointer', 'float']);
+        Functions.DisplayObject.SetWidth = new NativeFunction(Addresses.DisplayObject_setWidth, 'float', ['pointer', 'float']);
         Functions.LogicDataTables.GetColorGradientByName = new NativeFunction(Addresses.LogicDataTables_getColorGradientByName, 'pointer', ['pointer', 'int']);
         Functions.DecoratedTextField.SetupDecoratedText = new NativeFunction(Addresses.DecoratedTextField_setupDecoratedText, 'void', ['pointer', 'pointer', 'pointer']);
         Functions.MovieClip.GetTextFieldByName = new NativeFunction(Addresses.MovieClip_getTextFieldByName, 'pointer', ['pointer', 'pointer']);
@@ -136,6 +142,8 @@ class Functions {
         Functions.GameButton.GameButton = new NativeFunction(Addresses.GameButtonCtor, 'void', ['pointer'])
         Functions.MovieClipHelper.SetTextAndScaleIfNecessary = new NativeFunction(Addresses.MovieClipHelper_setTextAndScaleIfNecessary, 'void', ['pointer', 'pointer', 'int', 'int']);
         Functions.Application.OpenURL = new NativeFunction(Addresses.Application_openUrl, 'void', ['pointer']);
+        Functions.MovieClip.GetMovieClipByName = new NativeFunction(Addresses.MovieClip_getMovieClipByName, 'pointer', ['pointer', 'pointer']);
+        Functions.MovieClip.GotoAndStopFrameIndex = new NativeFunction(Addresses.MovieClip_gotoAndStopFrameIndex, 'void', ['pointer', 'int']),
 
         Functions.Imports.Malloc = new NativeFunction(Addresses.Imports.Malloc, 'pointer', ["uint"]);
         Functions.Imports.Free = new NativeFunction(LibSystem.findExportByName("free")!, "int", ["pointer"]);
@@ -154,5 +162,28 @@ class Functions {
         Functions.LogicSkillServer.Destructor = new NativeFunction(Addresses.LogicSkillServerDtor, 'pointer', ['pointer']);
     }
 }
+
+export const {
+    GUI,
+    ResourceManager,
+    GUIContainer,
+    DisplayObject,
+    LogicDataTables,
+    DecoratedTextField,
+    MovieClip,
+    GameButton,
+    MovieClipHelper,
+    Sprite,
+    String,
+    ResourceListenner,
+    Stage,
+    ScrollArea,
+    Imports,
+    LogicLaserMessageFactory,
+    Messaging,
+    LogicGameModeUtil,
+    LogicSkillServer,
+    Application
+} = Functions;
 
 export default Functions;

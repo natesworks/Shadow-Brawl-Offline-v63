@@ -1,11 +1,21 @@
 class NotificationFactoryConfig {
-    static NotificationCount = 0;
+    public NotificationsCount: number;
 
-    static NotificationID = [28];
-    static NotificationIndex = [0];
-    static IsRead = [false];
-    static NotificationTime = [100000];
-    static NotificationMessage = ["Hello"];
+    public NotificationID: number[];
+    public NotificationIndex: number[];
+    public IsRead: boolean[];
+    public NotificationTime: number[];
+    public NotificationMessage: string[];
+
+    constructor(NotificationsCount: number, NotificationsID: number[], NotificationIndex: number[], IsRead: boolean[], NotificationTime: number[], NotificationMessage: string[]) 
+    {
+        this.NotificationsCount = NotificationsCount;
+        this.NotificationID = NotificationsID;
+        this.NotificationIndex = NotificationIndex;
+        this.IsRead = IsRead;
+        this.NotificationTime = NotificationTime;
+        this.NotificationMessage = NotificationMessage;
+    }
 }
 
-export default NotificationFactoryConfig
+export default NotificationFactoryConfig;

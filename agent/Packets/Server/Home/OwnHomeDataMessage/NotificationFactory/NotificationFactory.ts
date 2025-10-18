@@ -4,13 +4,23 @@ import NotificationFactoryConfig from "../NotificationFactory/NotificationFactor
 import ChallengeRewardNotification from "./Notifications/ChallengeRewardNotification.js";
 
 class NotificationFactory {
-    static Encode(stream: any): void {
-        stream.WriteVInt(NotificationFactoryConfig.NotificationCount);
+    private stream: any;
+    private NotificationConfig: any;
 
-        for (let i = 0; i < NotificationFactoryConfig.NotificationCount; i++) {
-            switch (NotificationFactoryConfig.NotificationID[i]) {
+    constructor(stream: any) {
+        this.stream = stream;
+        this.NotificationConfig = new NotificationFactoryConfig(1, [28], [0], [false], [100000], ["hi"]);
+
+        this.Encode();
+    }
+
+    public Encode(): void {
+        this.stream.WriteVInt(this.NotificationConfig.NotificationCount);
+
+        for (let i = 0; i < this.NotificationConfig.NotificationCount; i++) {
+            switch (this.NotificationConfig.NotificationID[i]) {
                 case 28:
-                    BaseNotification.Encode(stream, NotificationFactoryConfig.NotificationID[i], NotificationFactoryConfig.NotificationIndex[i], NotificationFactoryConfig.IsRead[i], NotificationFactoryConfig.NotificationTime[i], NotificationFactoryConfig.NotificationMessage[i]);
+                    new BaseNotification(this.stream, this.NotificationConfig.NotificationID[i], this.NotificationConfig.NotificationIndex[i], this.NotificationConfig.IsRead[i], this.NotificationConfig.NotificationTime[i], this.NotificationConfig.NotificationMessage[i]);
                     break;
                 case 29:
                     break;
@@ -79,7 +89,7 @@ class NotificationFactory {
                 case 62:
                     break;
                 case 63:
-                    BaseNotification.Encode(stream, NotificationFactoryConfig.NotificationID[i], NotificationFactoryConfig.NotificationIndex[i], NotificationFactoryConfig.IsRead[i], NotificationFactoryConfig.NotificationTime[i], NotificationFactoryConfig.NotificationMessage[i]);
+                    new BaseNotification(this.stream, this.NotificationConfig.NotificationID[i], this.NotificationConfig.NotificationIndex[i], this.NotificationConfig.IsRead[i], this.NotificationConfig.NotificationTime[i], this.NotificationConfig.NotificationMessage[i]);
                     break;
                 case 64:
                     break;
@@ -94,8 +104,8 @@ class NotificationFactory {
                 case 69:
                     break;
                 case 70:
-                    BaseNotification.Encode(stream, NotificationFactoryConfig.NotificationID[i], NotificationFactoryConfig.NotificationIndex[i], NotificationFactoryConfig.IsRead[i], NotificationFactoryConfig.NotificationTime[i], NotificationFactoryConfig.NotificationMessage[i]);
-                    ChallengeRewardNotification.Encode(stream);
+                    new BaseNotification(this.stream, this.NotificationConfig.NotificationID[i], this.NotificationConfig.NotificationIndex[i], this.NotificationConfig.IsRead[i], this.NotificationConfig.NotificationTime[i], this.NotificationConfig.NotificationMessage[i]);
+                    ChallengeRewardNotification.Encode(this.stream);
                     break;
                 case 71:
                     break;
@@ -146,14 +156,7 @@ class NotificationFactory {
                 case 96:
                     break;
                 default:
-                    BaseNotification.Encode(
-                        stream,
-                        NotificationFactoryConfig.NotificationID[i],
-                        NotificationFactoryConfig.NotificationIndex[i],
-                        NotificationFactoryConfig.IsRead[i],
-                        NotificationFactoryConfig.NotificationTime[i],
-                        NotificationFactoryConfig.NotificationMessage[i]
-                    );
+                    new BaseNotification(this.stream, this.NotificationConfig.NotificationID[i], this.NotificationConfig.NotificationIndex[i], this.NotificationConfig.IsRead[i], this.NotificationConfig.NotificationTime[i], this.NotificationConfig.NotificationMessage[i]);
                     break;
             }
         }

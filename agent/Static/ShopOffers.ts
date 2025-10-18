@@ -47,7 +47,7 @@ const CurrentShopOffers: ShopOffers = {
 			DailyOffer: false,
 			OldPrice: 0,
 			Text: "C*ndy Brawl!",
-            ShowAtLaunch: true,
+            ShowAtLaunch: false,
 			Background: "offer_bgr_carretabrawl",
 			Processed: false,
 			TypeBenefit: 0,

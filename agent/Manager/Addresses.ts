@@ -18,6 +18,8 @@ class Addresses {
     static Sprite_addChild: NativePointer;
     static DisplayObject_setPixelSnappedXY: NativePointer;
     static DisplayObject_setXY: NativePointer;
+    static DisplayObject_setHeight: NativePointer;
+    static DisplayObject_setWidth: NativePointer
     static LogicDataTables_getColorGradientByName: NativePointer;
     static DecoratedTextField_setupDecoratedText: NativePointer;
     static MovieClip_getTextFieldByName: NativePointer;
@@ -35,6 +37,7 @@ class Addresses {
     static MovieClipHelper_setTextFieldVerticallyCentered: NativePointer;
     static MovieClipHelper_setTextAndScaleIfNecessary: NativePointer;
     static Application_openUrl: NativePointer;
+    static MovieClip_gotoAndStopFrameIndex: NativePointer
 
     static ServerConnectionUpdate: NativePointer;
     static State: NativePointer;
@@ -66,6 +69,7 @@ class Addresses {
     static Version: NativePointer;
     static LogicGameModeUtil_getPlayerCount: NativePointer;
     static sm_offlineLocation: NativePointer;
+    static MovieClip_getMovieClipByName: NativePointer;
 
     static LogicSkillServerCtor: NativePointer;
     static LogicSkillServerDtor: NativePointer;
@@ -83,9 +87,10 @@ class Addresses {
         Addresses.GUIContainer_setMovieClip = Environment.LaserBase.add(0x0A8454);
         Addresses.SpriteCtor = Environment.LaserBase.add(0x9B7BA4);
         Addresses.Sprite_addChild = Environment.LaserBase.add(0x9B7E20);
-        new NativeFunction(Environment.LaserBase.add(0x9B7E20), 'pointer', ['pointer', 'pointer']);
         Addresses.DisplayObject_setPixelSnappedXY = Environment.LaserBase.add(0x9A24EC);
         Addresses.DisplayObject_setXY = Environment.LaserBase.add(0x9A24D0);
+        Addresses.DisplayObject_setHeight = Environment.LaserBase.add(0x9A2B0C);
+        Addresses.DisplayObject_setWidth = Environment.LaserBase.add(0x9A2AC4);
         Addresses.LogicDataTables_getColorGradientByName = Environment.LaserBase.add(0x3EED64);
         Addresses.DecoratedTextField_setupDecoratedText = Environment.LaserBase.add(0x0A1944);
         Addresses.MovieClip_getTextFieldByName = Environment.LaserBase.add(0x9A7E94);
@@ -103,6 +108,8 @@ class Addresses {
         Addresses.MovieClipHelper_setTextFieldVerticallyCentered = Environment.LaserBase.add(0x384960);
         Addresses.MovieClipHelper_setTextAndScaleIfNecessary = Environment.LaserBase.add(0x384CB4);
         Addresses.Application_openUrl = Environment.LaserBase.add(0xB78D80);
+        Addresses.MovieClip_getMovieClipByName = Environment.LaserBase.add(0x9A7B8C);
+        Addresses.MovieClip_gotoAndStopFrameIndex = Environment.LaserBase.add(0x9A6F60);
 
         Addresses.ServerConnectionUpdate = Environment.LaserBase.add(0x23AE30);
         Addresses.State = ptr(Process.pointerSize * 4);

@@ -1,13 +1,13 @@
 class IntValueEntry {
     static Encode(stream: any): void {
-        stream.WriteVInt(19);
+        stream.WriteVInt(17);
         stream.WriteDataReference(2, 1); // Unknown
         stream.WriteDataReference(6, 0); // Demo Account
         stream.WriteDataReference(7, 0); // Is Invite Block On
         stream.WriteDataReference(1, 9); // Show Star Points
         stream.WriteDataReference(10, 0); // Power Play Trophies Gained
         stream.WriteDataReference(1, 12); // Unknown
-        stream.WriteDataReference(1, 15); // Should Show Age Popup
+        // stream.WriteDataReference(0, 15); // Should Show Age Popup
         stream.WriteDataReference(16, 60); // Player Age
         stream.WriteDataReference(17, 0); // Team Chat Muted
         stream.WriteDataReference(1, 18); // Esport Button
@@ -19,7 +19,7 @@ class IntValueEntry {
         stream.WriteDataReference(100, 41); // Ranked Reputation
         stream.WriteDataReference(100, 45); // Visible Max Ranked Reputation
         stream.WriteDataReference(100, 46); // Max Ranked Reputation
-        stream.WriteDataReference(1, 52); // Trophy Box Feature Unlocked
+        // stream.WriteDataReference(1, 52); // Trophy Box Feature Unlocked
     }
 }
 
