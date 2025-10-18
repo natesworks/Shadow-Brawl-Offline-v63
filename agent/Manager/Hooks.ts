@@ -111,9 +111,9 @@ class Hooks {
         Interceptor.attach(Environment.LaserBase.add(0x325900), {
             onEnter: function (args) {
                 // Hooks.messstate.add(24).writeInt(2);
-                // args[3] = ptr(3); // Offline Battles
+                args[3] = ptr(3); // Offline Battles
                 // args[6] = ptr(1); // Maxed Brawlers
-                // args[8] = ptr(0); // Accessorys enabled/disabled
+                args[8] = ptr(1); // Accessorys enabled/disabled
             }
         });
 

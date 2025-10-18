@@ -4,12 +4,14 @@ import BitStream from "../DataStream/BitStream";
 import LogicAccessoryData from "./LogicAccessoryData";
 import LogicCharacterServer from "./LogicCharacterServer";
 import LogicMath from "../Utils/Math/LogicMath";
+import Debugger from "../Utils/Debugger";
 
 class LogicAccessory {
     static X = 0;
     static Y = 0;
 
-    static IsOwn = 1;
+    static Gadget: NativePointer
+    static IsGadgetEnabled: boolean = false
     static State = 0;
     static ActivationDelay = 0;
     static StartUsingTick = 0;
@@ -24,25 +26,50 @@ class LogicAccessory {
 
 
     static Init() {
-        //LogicAccessory.PlaceHooks();
+        // LogicAccessory.PlaceHooks();
     }
     
     static PlaceHooks() {
-        Interceptor.replace(Environment.LaserBase.add(0x009F34), new NativeCallback(function (a1, a2, a3) {
-                return LogicAccessory.Encode(a1, a2, a3);
-            }, "void", ["pointer", "pointer", "int"])
-        );
+        Interceptor.attach(Environment.LaserBase.add(0x009F34), {
+            onEnter(args) {
+                console.log("FUCK LINK TIME OPTIMISATION")
+                if ((this.context as Arm64CpuContext).lr.equals(Environment.LaserBase.add(0x4507E0)))
+                {
+                    console.log("Encode called");
+                    LogicAccessory.Encode(args[0], args[1], args[2].toInt32());
+                }
 
-        Interceptor.replace(Environment.LaserBase.add(0x43F934), new NativeCallback(function (a1, a2, a3, a4) {
-                console.log("nigger")
-                return LogicAccessory.TriggerAccessory(a1, a2, a3, a4)
-            }, "void", ["pointer", "pointer", "int", "int"])
-        );
+                if ((this.context as Arm64CpuContext).lr.equals(Environment.LaserBase.add(0x4C3C74)))
+                {
+                    console.log("TriggerAccessory called");
+                    LogicAccessory.TriggerAccessory(args[0], args[1], args[2].toInt32(), args[3].toInt32());
+                }
+            }
+        });
 
-        Interceptor.replace(Environment.LaserBase.add(0x423850), new NativeCallback(function (a1, a2) {
+        /*Interceptor.replace(Environment.LaserBase.add(0x423850), new NativeCallback(function (a1, a2) {
                 return LogicAccessory.UpdateAccessory(a1, a2)
             }, "void", ["pointer", "pointer"])
-        );
+        );*/
+
+        Interceptor.attach(Environment.LaserBase.add(0x426C18), { // LogicAccessory::LogicAccessory
+            onEnter(args) {
+                LogicAccessory.LogicAccessory();
+            }
+        })
+    }
+
+    static LogicAccessory() {
+        /*LogicAccessory.Gadget = LogicAccessory.GetGadgetType(args[1])
+        LogicAccessory.IsGadgetEnabled = false;
+        LogicAccessory.State = 0;
+        LogicAccessory.CoolDown = 0;
+        LogicAccessory.Uses = 0;
+        LogicAccessoryData.Type = LogicAccessory.GetGadgetType(args[1])
+        LogicAccessoryData.SubType = LogicAccessory.GetSubType(args[1])
+        LogicAccessoryData.CustomValueValue1 = LogicAccessory.GetCustomValue1(args[1])*/
+                
+        Debugger.Info("[* LogicAccessory::LogicAccessory] Gadget created with type: " + LogicAccessory.Gadget + " and subtype: " + LogicAccessoryData.SubType)
     }
 
     static UpdateAccessory(a1: NativePointer, a2: NativePointer) {
@@ -113,19 +140,15 @@ class LogicAccessory {
         const BitStream_writePositiveVInt = new NativeFunction(Environment.LaserBase.add(0x4DD444), 'pointer', ['pointer', 'int', 'int']);
 
         BitStream_writePositiveInt(a2, LogicAccessory.IsActive, 1);
-        if (LogicAccessory.IsActive == 1) {
-            BitStream_writePositiveVInt(a2, LogicAccessory.CoolDown, 4);
-        }
-
-        
+        BitStream_writePositiveVInt(a2, LogicAccessory.State, 4);        
         BitStream_writePositiveInt(a2, 0, 1);
-        BitStream_writePositiveVInt(a2, 7, 3);
-        
+        BitStream_writePositiveVInt(a2, LogicAccessory.CoolDown, 3);
         
         if (LogicAccessory.State == 1) {
             BitStream_writePositiveInt(a2, LogicAccessory.StartUsingTick, 14);
             BitStream_writePositiveInt(a2, LogicAccessory.Angle, 9);
         }
+
         BitStream_writePositiveInt(a2, LogicAccessory.Uses, 3);
     }
 }

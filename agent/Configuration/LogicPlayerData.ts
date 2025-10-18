@@ -5,8 +5,9 @@ import path from "path";
 import Java from "frida-java-bridge";
 import ObjC from "frida-objc-bridge";
 import Debugger from "../Utils/Debugger";
+import StringHelper from "../Utils/Game/StringHelper";
 
-interface Brawler {
+export interface Brawler {
 	CardID: number;
 	Trophies: number;
 	HighestTrophies: number;
@@ -17,7 +18,7 @@ interface Brawler {
 	State: number;
 }
 
-interface Currencys {
+export interface Currencys {
 	FreeDiamonds: number;
 	Diamonds: number;
 	Gold: number;
@@ -27,7 +28,7 @@ interface Currencys {
 	Blings: number;
 }
 
-interface MiscData {
+export interface MiscData {
 	Trophies: number;
 	HighestTrophies: number;
 	TrophyRoadTier: number;
@@ -115,7 +116,7 @@ class LogicPlayerData {
 				};
 
 				const json = JSON.stringify(this.Data, null, 2);
-				const nsString = NSString.stringWithUTF8String_(json);
+				const nsString = NSString.stringWithUTF8String_(StringHelper.ptr(json));
 				const nsData = nsString.dataUsingEncoding_(NSUTF8StringEncoding);
 				nsData.writeToFile_atomically_(dataPath, true);
 

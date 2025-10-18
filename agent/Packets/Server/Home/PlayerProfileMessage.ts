@@ -45,7 +45,7 @@ class PlayerProfileMessage {
             Stream.WriteDataReference(24, 13000); // Ranked Points
             Stream.WriteDataReference(25, 13000); // Highest Ranked Points
             Stream.WriteDataReference(27, 2025); // Account Create Date
-            Stream.WriteDataReference(29, 2024); // Highest Season Trophies
+            Stream.WriteDataReference(29, LogicPlayerData.GetMiscData().Trophies); // Highest Season Trophies
             Stream.WriteDataReference(30, 1); // Prestige Count
             Stream.WriteDataReference(31, 2039); // Records Points
             Stream.WriteDataReference(32, 12); // Records Rank

@@ -1,5 +1,7 @@
 class LogicAccessoryData {
-    static Type = "dash"
+    static Type = "";
+    static SubType = "";
+    static CustomValueValue1 = ""
     static ActiveTicks = 8;
 }
 
