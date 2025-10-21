@@ -14,14 +14,18 @@ class ModMenu {
 
     static LoadModMenuButton(HomePage: NativePointer) {
         let HomePageMovieClip = HomePage.add(112).readPointer();
+        let ddd = new NativeFunction(Environment.LaserBase.add(0x9A6A30), 'pointer', ['pointer', 'pointer'])(HomePage, StringHelper.ptr("mainscreen_hud_left"))
+        console.log(ddd);
 
         let TextPtr = Imports.Malloc(524);
-        let MovieClipInstance = ResourceManager.GetMovieClip(StringHelper.ptr("sc/ui.sc"), StringHelper.ptr("button_navi_news_custom"))
+        let MovieClipInstance = ResourceManager.GetMovieClip(StringHelper.ptr("sc/ui.sc"), StringHelper.ptr("button_navi_news_custom")); // battle_card_titles_config_item
 
         GameButton.GameButton(TextPtr);
         new NativeFunction(TextPtr.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(TextPtr, MovieClipInstance, 1);
-        // Functions.MovieClip.GotoAndStopFrameIndex(TextPtr, 0);
         DisplayObject.SetXY(TextPtr, 970, 150);
+
+        let NotificationChild = new NativeFunction(Environment.LaserBase.add(0x9A6A30), 'pointer', ['pointer', 'pointer'])(MovieClipInstance, StringHelper.ptr("notification"))
+        Functions.MovieClip.GotoAndStopFrameIndex(NotificationChild, 2);
 
         let ColorGradientByName2 = LogicDataTables.GetColorGradientByName(StringHelper.scptr(ColorGradients.Subwaysurfersrainbow.Name), 1);
         let version = MovieClip.GetTextFieldByName(MovieClipInstance, StringHelper.ptr("txt"));
@@ -37,9 +41,9 @@ class ModMenu {
 		    }
 		});
     }
-
+    
     static ModMenuButtonClicked() {
-        let ModMenuPopupInstance = Imports.Malloc(1024);
+        let ModMenuPopupInstance = Imports.Malloc(4096);
         ModMenu.ModMenuPopup(ModMenuPopupInstance);
 
         GUI.ShowPopup(Environment.LaserBase.add(0xEC2908).readPointer(), ModMenuPopupInstance, 1, 0, 1);
@@ -72,14 +76,18 @@ class ModMenu {
 		    }
 		});
 
+        ModMenu.ButtonX = -280;
+        ModMenu.ButtonY = -100;
+        ModMenu.ButtonCount = 0;
+
         ModMenu.CreateModMenuItem(ModMenuPopupInstance, "Hello");
-        ModMenu.CreateModMenuItem(ModMenuPopupInstance, "Toilet");
+        /*ModMenu.CreateModMenuItem(ModMenuPopupInstance, "Toilet");
         ModMenu.CreateModMenuItem(ModMenuPopupInstance, "Sigma");
         ModMenu.CreateModMenuItem(ModMenuPopupInstance, "Skibidi");
 
         ModMenu.CreateModMenuItem(ModMenuPopupInstance, "Tung");
         ModMenu.CreateModMenuItem(ModMenuPopupInstance, "Sahar");
-        ModMenu.CreateModMenuItem(ModMenuPopupInstance, "TripiTropa");
+        ModMenu.CreateModMenuItem(ModMenuPopupInstance, "TripiTropa");*/
 
         // Functions.MovieClip.SetText(ModMenuPopupInstance, StringHelper.scptr("txt"), StringHelper.scptr("i love skibidi toilet sigma"));
     }
@@ -89,13 +97,12 @@ class ModMenu {
         if (!ModMenu.ButtonY) ModMenu.ButtonY = -100;
 
         let TextPtr = Imports.Malloc(524);
-        let MovieClipInstance = ResourceManager.GetMovieClip(StringHelper.ptr("sc/ui.sc"), StringHelper.ptr("country_item"));
+        let MovieClipInstance = ResourceManager.GetMovieClip(StringHelper.ptr("sc/ui.sc"), StringHelper.ptr("battle_card_titles_config_item"));
 
         GameButton.GameButton(TextPtr);
         new NativeFunction(TextPtr.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(TextPtr, MovieClipInstance, 1);
-        MovieClip.GotoAndStopFrameIndex(MovieClipInstance, 1);
-
-        DisplayObject.SetXY(TextPtr, ModMenu.ButtonX, ModMenu.ButtonY);
+        MovieClip.GotoAndStopFrameIndex(MovieClipInstance, 2);
+        DisplayObject.SetXY(TextPtr, 0, -80);
 
         ModMenu.ButtonX += 180;
         ModMenu.ButtonCount++;
@@ -105,11 +112,24 @@ class ModMenu {
             ModMenu.ButtonY += 80;
         }
 
+        let NotificationChild = new NativeFunction(Environment.LaserBase.add(0x9A6A30), 'pointer', ['pointer', 'pointer'])(MovieClipInstance, StringHelper.ptr("notification"))
+        // NotificationChild.add(8).writeU8(0);
+
+        let TextMovieClip = new NativeFunction(Environment.LaserBase.add(0x9A6A30), 'pointer', ['pointer', 'pointer'])(MovieClipInstance, StringHelper.ptr("title"))
+
         let ColorGradientByName2 = LogicDataTables.GetColorGradientByName(StringHelper.scptr(ColorGradients.Subwaysurfersrainbow.Name), 1);
-        let version = MovieClip.GetTextFieldByName(MovieClipInstance, StringHelper.ptr("Text"));
+        let version = MovieClip.GetTextFieldByName(TextMovieClip, StringHelper.ptr("txt"));
         DecoratedTextField.SetupDecoratedText(version, StringHelper.scptr(Text), ColorGradientByName2);
 
         Sprite.AddChild(ModMenuPopupInstance, TextPtr);
+
+        Interceptor.attach(Addresses.CustomButton_buttonPressed, {
+		    onEnter(args) {
+			    if (TextPtr.toInt32() === (args[0] as NativePointer).toInt32()) {
+                    MovieClip.GotoAndStopFrameIndex(MovieClipInstance, 3);
+                }
+		    }
+		});
 }
 }
 
