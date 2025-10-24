@@ -70,6 +70,10 @@ class Addresses {
     static HomePageCtor: NativePointer;
     static StageInstance: NativePointer;
     static GUI_Update: NativePointer;
+    static MovieClip_GetChildByName: NativePointer;
+    static GenericPopupConstructor: NativePointer;
+    static GenericPopup_setTitleTid: NativePointer
+    static GenericPopup_addButton: NativePointer;
 
     static InitIOS() {
         Addresses.Imports.Malloc = Process.getModuleByName("libSystem.B.dylib").findExportByName("malloc")!;
@@ -127,6 +131,10 @@ class Addresses {
         Addresses.HomePageCtor = Environment.LaserBase.add(0x31D454);
         Addresses.StageInstance = Environment.LaserBase.add(0xF026A8);
         Addresses.GUI_Update = Environment.LaserBase.add(0x0A40B4);
+        Addresses.MovieClip_GetChildByName = Environment.LaserBase.add(0x9A6A30);
+        Addresses.GenericPopupConstructor = Environment.LaserBase.add(0x184684);
+        Addresses.GenericPopup_setTitleTid = Environment.LaserBase.add(0x184A88);
+        Addresses.GenericPopup_addButton = Environment.LaserBase.add(0x184F2C);
     }
 
     static InitAndroid() {
@@ -164,7 +172,7 @@ class Addresses {
         Addresses.MovieClipHelper_setTextAndScaleIfNecessary = Environment.LaserBase.add(0x860a34);
         Addresses.Application_openUrl = Environment.LaserBase.add(0xB78D80);
         Addresses.MovieClip_getMovieClipByName = Environment.LaserBase.add(0x8631c8);
-        Addresses.MovieClip_gotoAndStopFrameIndex = Environment.LaserBase.add(0x9A6F60);
+        Addresses.MovieClip_gotoAndStopFrameIndex = Environment.LaserBase.add(0xa9d26c);
         Addresses.ServerConnectionUpdate = Environment.LaserBase.add(0x6c2090);
         Addresses.MessagingSend = Environment.LaserBase.add(0xc32cbc);
         Addresses.MessageManagerReceiveMessage = Environment.LaserBase.add(0x6b6b08);
@@ -183,6 +191,10 @@ class Addresses {
         Addresses.HomePageCtor = Environment.LaserBase.add(0x7e0abc);
         Addresses.StageInstance = Environment.LaserBase.add(0x10a0500);
         Addresses.GUI_Update = Environment.LaserBase.add(0x4cb67c);
+        Addresses.MovieClip_GetChildByName = Environment.LaserBase.add(0xa9ccf4);
+        Addresses.GenericPopupConstructor = Environment.LaserBase.add(0x5dfbec);
+        Addresses.GenericPopup_setTitleTid = Environment.LaserBase.add(0x5e00d0);
+        Addresses.GenericPopup_addButton = Environment.LaserBase.add(0x5e0ad0);
     }
 
     static Init() {

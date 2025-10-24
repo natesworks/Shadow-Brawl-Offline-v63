@@ -20,11 +20,9 @@ class ModMenu {
 
         GameButton.GameButton(TextPtr);
         new NativeFunction(TextPtr.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(TextPtr, MovieClipInstance, 1);
-        DisplayObject.SetXY(TextPtr, 970, 150);
+        DisplayObject.SetXY(TextPtr, 100, 100);
 
-        // now here
-        /*
-        let NotificationChild = new NativeFunction(Environment.LaserBase.add(0x9A6A30), 'pointer', ['pointer', 'pointer'])(MovieClipInstance, StringHelper.ptr("notification"))
+        let NotificationChild = new NativeFunction(Addresses.MovieClip_GetChildByName, 'pointer', ['pointer', 'pointer'])(MovieClipInstance, StringHelper.ptr("notification"))
         Functions.MovieClip.GotoAndStopFrameIndex(NotificationChild, 2);
 
         let ColorGradientByName2 = LogicDataTables.GetColorGradientByName(StringHelper.scptr(ColorGradients.Subwaysurfersrainbow.Name), 1);
@@ -32,7 +30,7 @@ class ModMenu {
         DecoratedTextField.SetupDecoratedText(version, StringHelper.scptr("Mod Menu"), ColorGradientByName2);
 
         Sprite.AddChild(HomePageMovieClip, TextPtr);
-        */
+        console.log("h");
 
         Interceptor.attach(Addresses.CustomButton_buttonPressed, {
 		    onEnter(args) {
@@ -51,9 +49,9 @@ class ModMenu {
     }
 
     static ModMenuPopup(ModMenuPopupInstance: NativePointer) {
-        const GenericPopup = new NativeFunction(Environment.LaserBase.add(0x184684), 'void', ['pointer', 'pointer', 'int', 'int', 'pointer', 'pointer', 'pointer', 'pointer']);
-	    const GenericPopup_setTitleTid = new NativeFunction(Environment.LaserBase.add(0x184A88), 'void', ['pointer', 'pointer']);
-        const GenericPopup_addButton = new NativeFunction(Environment.LaserBase.add(0x184F2C), 'pointer', ['pointer', 'pointer', 'bool']);
+        const GenericPopup = new NativeFunction(Environment.LaserBase.add(Addresses.GenericPopupConstructor), 'void', ['pointer', 'pointer', 'int', 'int', 'pointer', 'pointer', 'pointer', 'pointer']);
+	    const GenericPopup_setTitleTid = new NativeFunction(Environment.LaserBase.add(Addresses.GenericPopup_setTitleTid), 'void', ['pointer', 'pointer']);
+        const GenericPopup_addButton = new NativeFunction(Environment.LaserBase.add(Addresses.GenericPopup_addButton), 'pointer', ['pointer', 'pointer', 'bool']);
 
         let s1 = StringHelper.scptr("login_calendar_notifications_popup");
         let s2 = StringHelper.scptr("");
