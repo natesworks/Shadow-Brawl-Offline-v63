@@ -3,7 +3,7 @@ import Environment from "../Environement/Environment";
 import Addresses from "../Manager/Addresses";
 import Functions from "../Manager/Functions";
 
-const {GUI, ResourceManager, GUIContainer, DisplayObject, LogicDataTables, DecoratedTextField, MovieClip, GameButton, MovieClipHelper, Sprite, String, ResourceListenner, Stage, ScrollArea, Imports, LogicLaserMessageFactory, Messaging, LogicGameModeUtil, LogicSkillServer, Application} = Functions;
+const {ResourceManager, DisplayObject, MovieClip, GameButton, Stage, Imports} = Functions;
 
 import DebugMenuBase from "./DebugMenuBase";
 import DebugMenu from "./DebugMenu";
@@ -27,7 +27,7 @@ class DebugButton {
 
         DisplayObject.SetXY(DebugButton.DebugButtonInstance, 5, 710);
         MovieClip.SetText(DebugButton.DebugButtonMovieClip, StringHelper.ptr("Txt"), StringHelper.scptr("D"));
-        Stage.AddChild(Stage.sm_instance.readPointer(), DebugButton.DebugButtonInstance);
+        Stage.AddChild(Addresses.StageInstance.readPointer(), DebugButton.DebugButtonInstance);
         Debugger.Info("[DebugButton::LoadDebugButton] Loaded debug button!");
 
         DebugButton.isDebugMenuLoaded = true;

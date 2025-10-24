@@ -62,9 +62,12 @@ class Functions {
         static AddFile: any;
     }
 
+    static StringTable = class {
+        static GetString: any;
+    }
+
     static Stage = class {
         static AddChild: any;
-        static sm_instance: NativePointer;
     }
 
     static ScrollArea = class {
@@ -94,10 +97,6 @@ class Functions {
         static ReceiveMessage: any;
         static Send: any;
     }
-    
-    static LogicGameModeUtil = class {
-        static GetPlayerCount: any
-    }
 
     static LogicSkillServer = class {
         static Constructor: any
@@ -109,7 +108,7 @@ class Functions {
     }
 
     static Init() {
-        const LibSystem = Process.getModuleByName("libSystem.B.dylib");
+        const LibSystem = Process.getModuleByName(Environment.platform == "iOS" ? "libSystem.B.dylib" : "libc.so");
 
         Functions.GUI.ShowFloaterTextAtDefaultPos = new NativeFunction(Addresses.GUI_ShowFloaterTextAtDefaultPos, 'void', ['pointer', 'pointer', 'float', 'int']);
         Functions.GUI.ShowPopup = new NativeFunction(Addresses.GUI_showPopup, 'void', ['pointer', 'pointer', 'int', 'int', 'int']);
@@ -131,8 +130,8 @@ class Functions {
         Functions.String.StringCtor = new NativeFunction(Addresses.StringCtor, 'void', ['pointer', 'pointer']);
         Functions.Sprite.AddChild = new NativeFunction(Addresses.Sprite_addChild, 'pointer', ['pointer', 'pointer']);
         Functions.ResourceListenner.AddFile = new NativeFunction(Addresses.AddFile, 'int', ['pointer', 'pointer', 'int', 'int', 'int', 'int', 'int']);
+        Functions.StringTable.GetString = new NativeFunction(Addresses.StringTable_GetString, 'pointer', ['pointer']);
         Functions.Stage.AddChild = new NativeFunction(Addresses.StageAddChild, 'pointer', ['pointer', 'pointer']);
-        Functions.Stage.sm_instance = Environment.LaserBase.add(0xF026A8);
         Functions.ScrollArea.EnablePinching = new NativeFunction(Addresses.ScrollArea_enablePinching, 'void', ['pointer', 'int']);
         Functions.ScrollArea.EnableHorizontalDrag = new NativeFunction(Addresses.ScrollArea_enableHorizontalDrag, 'void', ['pointer', 'int']);
         Functions.ScrollArea.EnableVerticalDrag = new NativeFunction(Addresses.ScrollArea_enableVerticalDrag, 'void', ['pointer', 'int']);
@@ -156,10 +155,6 @@ class Functions {
         Functions.LogicLaserMessageFactory.CreateMessageByType = new NativeFunction(Addresses.CreateMessageByType, "pointer", ["pointer", "int"]);
         Functions.Messaging.ReceiveMessage = new NativeFunction(Addresses.MessageManagerReceiveMessage, "int", ["pointer", "pointer"]);
         Functions.Messaging.Send = new NativeFunction(Addresses.MessagingSend, "int", ["pointer", "pointer"]);
-        Functions.LogicGameModeUtil.GetPlayerCount = new NativeFunction(Addresses.LogicGameModeUtil_getPlayerCount, 'int', ['pointer']);
-
-        Functions.LogicSkillServer.Constructor = new NativeFunction(Addresses.LogicSkillServerCtor, 'pointer', ['pointer', 'pointer']);
-        Functions.LogicSkillServer.Destructor = new NativeFunction(Addresses.LogicSkillServerDtor, 'pointer', ['pointer']);
     }
 }
 
@@ -181,7 +176,6 @@ export const {
     Imports,
     LogicLaserMessageFactory,
     Messaging,
-    LogicGameModeUtil,
     LogicSkillServer,
     Application
 } = Functions;

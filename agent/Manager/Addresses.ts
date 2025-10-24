@@ -52,12 +52,7 @@ class Addresses {
     static Decode: NativePointer;
     static PiranhaMessage: NativePointer;
     static GetLength: NativePointer;
-    static IsServerShuttingDown: NativePointer;
-    static ByteStreamWriteIntToByteArray: NativePointer;
-    static LoginOkMessage: NativePointer;
-    static HomePageButtonClicked: NativePointer;
     static LogicConfDataGetIntValue: NativePointer;
-    static LogicLocalizationGetString: NativePointer;
     static StringConstructor: NativePointer;
     static PayloadSize: NativePointer;
     static PayloadPtr: NativePointer;
@@ -70,11 +65,13 @@ class Addresses {
     static LogicGameModeUtil_getPlayerCount: NativePointer;
     static sm_offlineLocation: NativePointer;
     static MovieClip_getMovieClipByName: NativePointer;
+    static StringTable_GetString: NativePointer;
+    static HomePage_StartGame: NativePointer;
+    static HomePageCtor: NativePointer;
+    static StageInstance: NativePointer;
+    static GUI_Update: NativePointer;
 
-    static LogicSkillServerCtor: NativePointer;
-    static LogicSkillServerDtor: NativePointer;
-
-    static Init() {
+    static InitIOS() {
         Addresses.Imports.Malloc = Process.getModuleByName("libSystem.B.dylib").findExportByName("malloc")!;
         Addresses.GUI_ShowFloaterTextAtDefaultPos = Environment.LaserBase.add(0x0A4984);
         Addresses.GUI_showPopup = Environment.LaserBase.add(0x0A509C);
@@ -110,40 +107,100 @@ class Addresses {
         Addresses.Application_openUrl = Environment.LaserBase.add(0xB78D80);
         Addresses.MovieClip_getMovieClipByName = Environment.LaserBase.add(0x9A7B8C);
         Addresses.MovieClip_gotoAndStopFrameIndex = Environment.LaserBase.add(0x9A6F60);
-
         Addresses.ServerConnectionUpdate = Environment.LaserBase.add(0x23AE30);
-        Addresses.State = ptr(Process.pointerSize * 4);
-        Addresses.HasConnectFailed = ptr(Process.pointerSize);
         Addresses.MessagingSend = Environment.LaserBase.add(0xB6193C);
         Addresses.MessageManagerReceiveMessage = Environment.LaserBase.add(0x232704);
         Addresses.MessageManagerInstance = Environment.LaserBase.add(0xEC2A58);
         Addresses.CreateMessageByType = Environment.LaserBase.add(0x474204);
-        Addresses.GetMessageType = ptr(Process.pointerSize * 5);
-        Addresses.Destruct = ptr(Process.pointerSize * 7);
         Addresses.LogicLaserMessageFactory = Environment.LaserBase.add(0xD93D16);
-        Addresses.Decode = ptr(3 * Process.pointerSize);
         Addresses.PiranhaMessage = Environment.LaserBase.add(0x10D4A62);
         Addresses.GetLength = Environment.LaserBase.add(0xa961f8);
-        Addresses.IsServerShuttingDown = Environment.LaserBase.add(0x7ae610);
-        Addresses.ByteStreamWriteIntToByteArray = Environment.LaserBase.add(0xc8dd20);
-        Addresses.LoginOkMessage = Environment.LaserBase.add(0x5514c4);
-        Addresses.HomePageButtonClicked = Environment.LaserBase.add(0x3fca84);
         Addresses.LogicConfDataGetIntValue = Environment.LaserBase.add(0xc2fb88);
-        Addresses.LogicLocalizationGetString = Environment.LaserBase.add(0x50da0c);
         Addresses.StringConstructor = Environment.LaserBase.add(0xca8264);
-        Addresses.PayloadSize = ptr(Process.pointerSize + Process.pointerSize * 4);
-        Addresses.PayloadPtr = ptr(9 * Process.pointerSize);
         Addresses.LogicVersionIsDev = Environment.LaserBase.add(0xbc54cc);
         Addresses.LogicVersionIsProd = Environment.LaserBase.add(0x4aa080);
         Addresses.LogicVersionIsDeveloperBuild = Environment.LaserBase.add(0x6c70b8);
-        Addresses.MessageLength = ptr(Process.pointerSize * 2 + Process.pointerSize * 4 + Process.pointerSize);
-        Addresses.ByteStream = ptr(Process.pointerSize * 2);
-        Addresses.Version = ptr(Process.pointerSize);
         Addresses.LogicGameModeUtil_getPlayerCount = Environment.LaserBase.add(0x4DB678);
         Addresses.sm_offlineLocation = Environment.LaserBase.add(0xEE6740).add(96);
+        Addresses.StringTable_GetString = Environment.LaserBase.add(0x3703C4);
+        Addresses.HomePage_StartGame = Environment.LaserBase.add(0x325900);
+        Addresses.HomePageCtor = Environment.LaserBase.add(0x31D454);
+        Addresses.StageInstance = Environment.LaserBase.add(0xF026A8);
+        Addresses.GUI_Update = Environment.LaserBase.add(0x0A40B4);
+    }
 
-        Addresses.LogicSkillServerCtor = Environment.LaserBase.add(0x459380);
-        Addresses.LogicSkillServerDtor = Environment.LaserBase.add(0x459384);
+    static InitAndroid() {
+        Addresses.Imports.Malloc = Process.getModuleByName("libc.so").findExportByName("malloc")!;
+        Addresses.GUI_ShowFloaterTextAtDefaultPos = Environment.LaserBase.add(0x4cc0bc);
+        Addresses.GUI_showPopup = Environment.LaserBase.add(0x4ccc68);
+        Addresses.GUIInstance = Environment.LaserBase.add(0x109b2a0);
+        Addresses.StringCtor = Environment.LaserBase.add(0xc44060);
+        Addresses.HomeMode_Enter = Environment.LaserBase.add(0x83c680);
+        Addresses.AddFile = Environment.LaserBase.add(0xb09228);
+        Addresses.StageAddChild = Environment.LaserBase.add(0xab6d6c);
+        Addresses.GUIContainer = Environment.LaserBase.add(0xacf674);
+        Addresses.GUIContainer_setMovieClip = Environment.LaserBase.add(0xacf8ec);
+        Addresses.SpriteCtor = Environment.LaserBase.add(0xaada14);
+        Addresses.Sprite_addChild = Environment.LaserBase.add(0xaadc74);
+        Addresses.DisplayObject_setPixelSnappedXY = Environment.LaserBase.add(0xa987f4);
+        Addresses.DisplayObject_setXY = Environment.LaserBase.add(0xa987d4);
+        Addresses.DisplayObject_setHeight = Environment.LaserBase.add(0xa98dcc);
+        Addresses.DisplayObject_setWidth = Environment.LaserBase.add(0xa98e18);
+        Addresses.LogicDataTables_getColorGradientByName = Environment.LaserBase.add(0x8f3340);
+        Addresses.DecoratedTextField_setupDecoratedText = Environment.LaserBase.add(0x4c847c);
+        Addresses.MovieClip_getTextFieldByName = Environment.LaserBase.add(0xa9e2b4);
+        Addresses.ResourceManager_getMovieClip = Environment.LaserBase.add(0xa70848);
+        Addresses.GUIContainer_createScrollArea = Environment.LaserBase.add(0xacfe60);
+        Addresses.ScrollArea_enablePinching = Environment.LaserBase.add(0xad1114);
+        Addresses.ScrollArea_enableHorizontalDrag = Environment.LaserBase.add(0xad119c);
+        Addresses.ScrollArea_enableVerticalDrag = Environment.LaserBase.add(0xad1190);
+        Addresses.ScrollArea_setAlignment = Environment.LaserBase.add(0xad15c4);
+        Addresses.ScrollArea_update = Environment.LaserBase.add(0xad0e0c);
+        Addresses.ScrollArea_addContent = Environment.LaserBase.add(0xad0bdc);
+        Addresses.CustomButton_buttonPressed = Environment.LaserBase.add(0xacedd4);
+        Addresses.MovieClip_setText = Environment.LaserBase.add(0xa9e4c0);
+        Addresses.GameButtonCtor = Environment.LaserBase.add(0x4d1968);
+        Addresses.MovieClipHelper_setTextFieldVerticallyCentered = Environment.LaserBase.add(0x86065c);
+        Addresses.MovieClipHelper_setTextAndScaleIfNecessary = Environment.LaserBase.add(0x860a34);
+        Addresses.Application_openUrl = Environment.LaserBase.add(0xB78D80);
+        Addresses.MovieClip_getMovieClipByName = Environment.LaserBase.add(0x8631c8);
+        Addresses.MovieClip_gotoAndStopFrameIndex = Environment.LaserBase.add(0x9A6F60);
+        Addresses.ServerConnectionUpdate = Environment.LaserBase.add(0x6c2090);
+        Addresses.MessagingSend = Environment.LaserBase.add(0xc32cbc);
+        Addresses.MessageManagerReceiveMessage = Environment.LaserBase.add(0x6b6b08);
+        Addresses.MessageManagerInstance = Environment.LaserBase.add(0x109b910);
+        Addresses.CreateMessageByType = Environment.LaserBase.add(0x9a71e0);
+        Addresses.LogicLaserMessageFactory = Environment.LaserBase.add(0xfc028e);
+        Addresses.PiranhaMessage = Environment.LaserBase.add(0xae9318);
+        Addresses.GetLength = Environment.LaserBase.add(0xae0b78);
+        Addresses.LogicConfDataGetIntValue = Environment.LaserBase.add(0x9dd9d4);
+        Addresses.StringConstructor = Environment.LaserBase.add(0xc44060);
+        Addresses.LogicVersionIsDev = Environment.LaserBase.add(0x86cf94);
+        Addresses.LogicVersionIsProd = Environment.LaserBase.add(0x86cfa8);
+        Addresses.LogicVersionIsDeveloperBuild = Environment.LaserBase.add(0x86d008);
+        Addresses.StringTable_GetString = Environment.LaserBase.add(0x84580c);
+        Addresses.HomePage_StartGame = Environment.LaserBase.add(0x7eca28);
+        Addresses.HomePageCtor = Environment.LaserBase.add(0x7e0abc);
+        Addresses.StageInstance = Environment.LaserBase.add(0x10a0500);
+        Addresses.GUI_Update = Environment.LaserBase.add(0x4cb67c);
+    }
+
+    static Init() {
+        if (Environment.platform == "iOS") {
+            this.InitIOS();
+        } else {
+            this.InitAndroid();
+        }
+        Addresses.State = ptr(Process.pointerSize * 4);
+        Addresses.HasConnectFailed = ptr(Process.pointerSize);
+        Addresses.GetMessageType = ptr(Process.pointerSize * 5);
+        Addresses.Destruct = ptr(Process.pointerSize * 7);
+        Addresses.Decode = ptr(3 * Process.pointerSize);
+        Addresses.PayloadSize = ptr(Process.pointerSize + Process.pointerSize * 4);
+        Addresses.PayloadPtr = ptr(9 * Process.pointerSize);
+        Addresses.MessageLength = ptr(Process.pointerSize * 2 + Process.pointerSize * 4 + Process.pointerSize);
+        Addresses.ByteStream = ptr(Process.pointerSize * 2);
+        Addresses.Version = ptr(136);
     }
 }
 

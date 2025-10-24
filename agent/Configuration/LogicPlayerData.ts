@@ -1,6 +1,5 @@
 // Thanks GPT
 import fs from "fs";
-import FsExtra from 'fs-extra';
 import path from "path";
 import Java from "frida-java-bridge";
 import ObjC from "frida-objc-bridge";
@@ -41,8 +40,8 @@ export interface MiscData {
 }
 
 interface PlayerData {
-	OwnedBrawlers: Record < number,
-	Brawler > ;
+	OwnedBrawlers: Record<number,
+		Brawler>;
 	Currencys: Currencys,
 	MiscData: MiscData;
 	PlayerName: string;
@@ -79,28 +78,23 @@ class LogicPlayerData {
 	public static Load() {
 		let dataPath = this.GetDataPath();
 		let fileExists = false;
-
-		// ✅ iOS / macOS path handling
 		if (ObjC.available) {
 			const NSFileManager = ObjC.classes.NSFileManager.defaultManager();
 			const NSString = ObjC.classes.NSString;
 			const NSUTF8StringEncoding = 4;
-
 			fileExists = NSFileManager.fileExistsAtPath_(dataPath);
-
 			if (!fileExists) {
-				// Create new default data
 				this.Data = {
 					OwnedBrawlers: this.DefaultBrawlers(),
 					Currencys: {
-  						FreeDiamonds: 10000,
-  						Diamonds: 10000,
-  						Gold: 10000,
-  						PowerPoints: 0,
-  						CollabPoints: 0,
-  						ChromaCredits: 0,
-  						Blings: 0
-  					},
+						FreeDiamonds: 10000,
+						Diamonds: 10000,
+						Gold: 10000,
+						PowerPoints: 0,
+						CollabPoints: 0,
+						ChromaCredits: 0,
+						Blings: 0
+					},
 					MiscData: {
 						Trophies: 100000,
 						HighestTrophies: 100000,
@@ -114,52 +108,45 @@ class LogicPlayerData {
 					},
 					PlayerName: "@soufgamev2",
 				};
-
 				const json = JSON.stringify(this.Data, null, 2);
 				const nsString = NSString.stringWithUTF8String_(StringHelper.ptr(json));
 				const nsData = nsString.dataUsingEncoding_(NSUTF8StringEncoding);
 				nsData.writeToFile_atomically_(dataPath, true);
-
 				Debugger.Info("[LogicPlayerData::Load] Created new config at:", dataPath);
 				return;
 			}
-
-			try {
-				const nsString = NSString.stringWithContentsOfFile_encoding_error_(
-					dataPath,
-					NSUTF8StringEncoding,
-					NULL
-				);
-				this.Data = JSON.parse(nsString.toString());
-				Debugger.Info("[LogicPlayerData::Load] Loaded config successfully (ObjC).");
-			} catch (e: any) {
-				Debugger.Warn("[LogicPlayerData::Load] Failed to read JSON (ObjC):", e);
+			const nsString = NSString.stringWithContentsOfFile_encoding_error_(
+				dataPath,
+				NSUTF8StringEncoding,
+				NULL
+			);
+			const content = nsString.toString();
+			if (!content || content.trim() === '') {
+				Debugger.Error("[LogicPlayerData::Load] Config file is empty.");
+				return;
 			}
-
-			// ✅ Android path handling
+			this.Data = JSON.parse(content);
+			Debugger.Info("[LogicPlayerData::Load] Loaded config successfully (ObjC).");
 		} else if (Java.available) {
 			Java.perform(() => {
 				const File = Java.use("java.io.File");
 				const FileInputStream = Java.use("java.io.FileInputStream");
 				const FileOutputStream = Java.use("java.io.FileOutputStream");
 				const StringClass = Java.use("java.lang.String");
-
 				const file = File.$new(dataPath);
 				fileExists = file.exists();
-
 				if (!fileExists) {
-					// Create default data
 					this.Data = {
 						OwnedBrawlers: this.DefaultBrawlers(),
 						Currencys: {
-  							FreeDiamonds: 10000,
-  							Diamonds: 10000,
-  							Gold: 10000,
-  							PowerPoints: 0,
-  							CollabPoints: 0,
-  							ChromaCredits: 0,
-  							Blings: 0
-  						},
+							FreeDiamonds: 10000,
+							Diamonds: 10000,
+							Gold: 10000,
+							PowerPoints: 0,
+							CollabPoints: 0,
+							ChromaCredits: 0,
+							Blings: 0
+						},
 						MiscData: {
 							Trophies: 100000,
 							HighestTrophies: 100000,
@@ -173,28 +160,32 @@ class LogicPlayerData {
 						},
 						PlayerName: "@soufgamev2",
 					};
-
 					const json = JSON.stringify(this.Data, null, 2);
+					const str = StringClass.$new(json);
+					const bytes = str.getBytes("UTF-8");
 					const fos = FileOutputStream.$new(file);
-					fos.write(StringClass.$new(json).getBytes());
+					fos.write(bytes);
 					fos.close();
-
 					Debugger.Info("[LogicPlayerData::Load] Created new config at:", dataPath);
 					return;
 				}
-
-				try {
-					const fis = FileInputStream.$new(file);
-					const bytes = Java.array('byte', Array(file.length()).fill(0));
-					fis.read(bytes);
-					fis.close();
-
-					const content = StringClass.$new(bytes).toString();
-					this.Data = JSON.parse(content);
-					Debugger.Info("[LogicPlayerData::Load] Loaded config successfully (Java).");
-				} catch (e: any) {
-					Debugger.Warn("[LogicPlayerData::Load] Failed to read JSON (Java):", e);
+				const length = file.length();
+				if (length === 0n) {
+					Debugger.Error("[LogicPlayerData::Load] Config file is empty.");
+					return;
 				}
+				const fis = FileInputStream.$new(file);
+				const available = fis.available();
+				const bytes = Java.array('byte', new Array(available).fill(0));
+				fis.read(bytes);
+				fis.close();
+				const content = StringClass.$new(bytes, "UTF-8");
+				if (!content || content.trim() === '') {
+					Debugger.Error("[LogicPlayerData::Load] Config file is empty after reading.");
+					return;
+				}
+				this.Data = JSON.parse(content);
+				Debugger.Info("[LogicPlayerData::Load] Loaded config successfully (Java).");
 			});
 		}
 	}
@@ -204,7 +195,7 @@ class LogicPlayerData {
 
 	}
 
-	public static GetOwnedBrawlers(): Record < number, Brawler > {
+	public static GetOwnedBrawlers(): Record<number, Brawler> {
 		return this.Data.OwnedBrawlers;
 	}
 	public static GetCurrencys(): Currencys {
@@ -224,7 +215,7 @@ class LogicPlayerData {
 		}
 	}
 
-	private static DefaultBrawlers(): Record < number, Brawler > {
+	private static DefaultBrawlers(): Record<number, Brawler> {
 		return {
 			0: {
 				CardID: 0,

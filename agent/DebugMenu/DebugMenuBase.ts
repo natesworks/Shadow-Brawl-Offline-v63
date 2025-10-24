@@ -1,16 +1,14 @@
-import Environment from "../Environement/Environment";
 
 import Addresses from "../Manager/Addresses";
 import Functions from "../Manager/Functions";
 
-const {GUI, ResourceManager, GUIContainer, DisplayObject, LogicDataTables, DecoratedTextField, MovieClip, GameButton, MovieClipHelper, Sprite, String, ResourceListenner, Stage, Imports, LogicLaserMessageFactory, Messaging, LogicGameModeUtil, LogicSkillServer, Application, ScrollArea} = Functions;
+const {ResourceManager, GUIContainer, DisplayObject, LogicDataTables, DecoratedTextField, MovieClip, GameButton, MovieClipHelper, Sprite, Imports, ScrollArea} = Functions;
 
 import StringHelper from "../Utils/Game/StringHelper";
 
 import ReloadGame from "../Utils/Game/ReloadGame";
 import Popups from "./DebugUtils/Popups/Popups";
 import Dumper from "./DebugUtils/Dumper/Dumper";
-import Debugger from "../Utils/Debugger";
 
 class DebugMenuBase {
     static TabScrollArea: any
@@ -51,7 +49,7 @@ class DebugMenuBase {
         let search_help = MovieClip.GetTextFieldByName(DebugMenuClip, StringHelper.ptr("search_help"));
         DecoratedTextField.SetupDecoratedText(search_help, StringHelper.scptr("@soufgamev2"), ColorGradientByName3);
 
-        let v15 = Stage.sm_instance.readPointer().add(0x1CD0).readInt() - (Stage.sm_instance.readPointer().add(84).readFloat() + Stage.sm_instance.readPointer().add(88).readFloat()) / (Stage.sm_instance.readPointer().add(0x1C40).readFloat() != 0.0 ? Stage.sm_instance.readPointer().add(0x1C40).readFloat() : 0.1);
+        let v15 = Addresses.StageInstance.readPointer().add(0x1CD0).readInt() - (Addresses.StageInstance.readPointer().add(84).readFloat() + Addresses.StageInstance.readPointer().add(88).readFloat()) / (Addresses.StageInstance.readPointer().add(0x1C40).readFloat() != 0.0 ? Addresses.StageInstance.readPointer().add(0x1C40).readFloat() : 0.1);
         DisplayObject.SetXY(Instance, v15, 0);
 
         let v17 = GUIContainer.CreateScrollArea(Instance, StringHelper.ptr("tab_area"), 1);
@@ -134,7 +132,7 @@ class DebugMenuBase {
         let MovieClipInstance = ResourceManager.GetMovieClip(StringHelper.ptr('sc/debug.sc'), StringHelper.ptr('debug_menu_category_mini'));
         new NativeFunction(ButtonInstance.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(ButtonInstance, MovieClipInstance, 1);
         let TextField = MovieClip.GetTextFieldByName(MovieClipInstance, StringHelper.ptr("Text"));
-        MovieClipHelper.SetTextAndScaleIfNecessary(TextField, StringHelper.scptr(Text), 1, 0)
+        MovieClipHelper.SetTextAndScaleIfNecessary(TextField, StringHelper.scptr(Text), 1, 0);
         MovieClip.SetText(MovieClipInstance, StringHelper.ptr("Text"), StringHelper.scptr(Text));
         DisplayObject.SetPixelSnappedXY(ButtonInstance, 20 + DebugMenuBase.MiniCategorysX, 20);
         DebugMenuBase.MiniCategorysX += 45;

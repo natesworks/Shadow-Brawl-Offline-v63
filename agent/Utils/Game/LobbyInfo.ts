@@ -1,8 +1,9 @@
 import Functions from "../../Manager/Functions";
 import Addresses from "../../Manager/Addresses";
 import StringHelper from "./StringHelper";
+import Environment from "../../Environement/Environment";
 
-const {GUI, ResourceManager, GUIContainer, DisplayObject, LogicDataTables, DecoratedTextField, MovieClip, GameButton, MovieClipHelper, Sprite, String, ResourceListenner, Stage, ScrollArea, Imports, LogicLaserMessageFactory, Messaging, LogicGameModeUtil, LogicSkillServer, Application} = Functions;
+const {ResourceManager, DisplayObject, LogicDataTables, DecoratedTextField, MovieClip, GameButton, Sprite, Imports, Application} = Functions;
 
 class LobbyInfo {
     static CreateLobbyInfo(a1: NativePointer) {
@@ -23,7 +24,9 @@ class LobbyInfo {
 
         let ColorGradientByName2 = LogicDataTables.GetColorGradientByName(StringHelper.scptr("Name6"), 1);
         let version = MovieClip.GetTextFieldByName(MovieClipInstance, StringHelper.ptr("Text"));
-        DecoratedTextField.SetupDecoratedText(version, StringHelper.scptr("Shadow Brawl Offline - v63.265\nBy @soufgamev2"), ColorGradientByName2);
+        let text = "Shadow Brawl Offline - v63.265\nBy @soufgamev2";
+        if (Environment.platform == "Android") text += "\nAndroid offsets by Natesworks"
+        DecoratedTextField.SetupDecoratedText(version, StringHelper.scptr(text), ColorGradientByName2);
 
         Sprite.AddChild(HomePageInstance, TextPtr)
 

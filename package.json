@@ -6,7 +6,7 @@
   "main": "agent/index.ts",
   "scripts": {
     "prepare": "npm run build",
-    "build": "frida-compile agent/index.ts -o _agent.js && sed -i '' '1,3d' _agent.js",
+    "build": "frida-compile agent/index.ts -o _agent.js",
     "watch": "frida-compile agent/index.ts -o _agent.js -w"
   },
   "devDependencies": {

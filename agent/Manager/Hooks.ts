@@ -36,14 +36,13 @@ class Hooks {
             }
         });
 
-        Interceptor.replace(Environment.LaserBase.add(0x38FDF0), new NativeCallback(function() { // LogicVersion::isDev
+        /*
+        Interceptor.replace(Environment.LaserBase.add(Addresses.LogicVersionIsDev), new NativeCallback(function() { // LogicVersion::isDev
             return 1;
         }, 'int', []));
+        */
 
-        Interceptor.replace(Environment.LaserBase.add(0xB62864), new NativeCallback(function() { // Messaging::decryptData
-            return 1;
-        }, 'int', []));
-
+        // todo
         Interceptor.attach(Environment.LaserBase.add(0xB63060), { // Messaging::sendPepperAuthentication
 		    onEnter(args) {
 			    this.messaging = args[0];
@@ -57,10 +56,6 @@ class Hooks {
 			    (Memory as any).writeU64(this.messaging.add(24), 5);
                 console.warn("[+][PepperState::State][3] Pepper State Is", (Memory as any).readU32(this.messaging.add(24)));
 		    }
-	    });
-
-        Interceptor.attach(Environment.LaserBase.add(0xB63744), function() { // Messaging::encryptAndWrite
-		    (this.context as any).x0 = (this.context as any).x8;
 	    });
 
         /*Interceptor.attach(Environment.LaserBase.add(0x232658), { // MessageManager::sendMessage
@@ -100,17 +95,13 @@ class Hooks {
             return 0;
         }, "int", ["pointer", "pointer"]));
 
-        Interceptor.replace(Environment.LaserBase.add(0xB61904), new NativeCallback(function() {
-            return 1;
-        }, 'int', []));
-
         Interceptor.replace(Environment.LaserBase.add(0xB61928), new NativeCallback(function() {
             return 5;
         }, 'int', []));
 
         // Misc Hooks
 
-        Interceptor.attach(Environment.LaserBase.add(0x325900), {
+        Interceptor.attach(Addresses.HomePage_StartGame, {
             onEnter: function (args) {
                 // Hooks.messstate.add(24).writeInt(2);
                 args[3] = ptr(3); // Offline Battles
@@ -131,8 +122,6 @@ class Hooks {
             }
         })*/
 
-        const StringTable__getString = new NativeFunction(Environment.LaserBase.add(0x3703C4), 'pointer', ['pointer']); // ill make it function from the func class later
-
         let AboutText = `╔════════════════════════╗
 <cff1f00>S<cff3f00>h<cff5f00>a<cff7f00>d<cff9f00>o<cffbf00>w<cffdf00> <cffff00>B<cfff000>r<cffe100>a<cffd200>w<cffc300>l<cffb400>┃<cffa500>S<cff9600>H<cff8800>B</c>
 
@@ -152,26 +141,26 @@ Platform: ${Environment.platform}
 Version: ${Environment.script_version}
 ╚════════════════════════╝`
 
-        Interceptor.replace(StringTable__getString, new NativeCallback(function(a1) {
-            let value = (Memory as any).readUtf8String(a1);
+        Interceptor.replace(Addresses.StringTable_GetString, new NativeCallback(function(a1) {
+            let value = a1.readUtf8String();
             if (value === "TID_CONNECTING_TO_SERVER") { // we cant even see it lol the game is loadikg too fast
-                return StringTable__getString((Memory as any).allocUtf8String("<cfe0e00>[<cfe1c00>+<cfe2a00>]<cfe3800>[<cfd4600>S<cfd5500>h<cfd6300>a<cfd7100>d<cfd7f00>o<cfc8d00>w<cfc9b00>B<cfcaa00>r<cfcb800>a<cfbc600>w<cfbd400>l<cfbe200>O<cfbf000>f<cfaff00>f<cfbff00>l<cfbf00b>i<cfbe216>n<cfbd421>e<cfbc62c>:<cfcb837>:<cfca942>C<cfc9b4d>o<cfc8d58>n<cfd7f64>n<cfd716f>e<cfd637a>c<cfd5485>t<cfd4690>i<cfe389b>n<cfe2aa6>g<cfe1cb1>]</c>"));
+                return Functions.StringTable.GetString((Memory as any).allocUtf8String("<cfe0e00>[<cfe1c00>+<cfe2a00>]<cfe3800>[<cfd4600>S<cfd5500>h<cfd6300>a<cfd7100>d<cfd7f00>o<cfc8d00>w<cfc9b00>B<cfcaa00>r<cfcb800>a<cfbc600>w<cfbd400>l<cfbe200>O<cfbf000>f<cfaff00>f<cfbff00>l<cfbf00b>i<cfbe216>n<cfbd421>e<cfbc62c>:<cfcb837>:<cfca942>C<cfc9b4d>o<cfc8d58>n<cfd7f64>n<cfd716f>e<cfd637a>c<cfd5485>t<cfd4690>i<cfe389b>n<cfe2aa6>g<cfe1cb1>]</c>"));
             }
             if (value === "TID_EDIT_CONTROLS") { // i tried making mod menu but it only works when youre not in battles
-                return StringTable__getString((Memory as any).allocUtf8String("Battle Settings"));
+                return Functions.StringTable.GetString((Memory as any).allocUtf8String("Battle Settings"));
             }
             if (value === "TID_EDIT_MOVEMENT") { // uhhhhh.. dw
-                return StringTable__getString((Memory as any).allocUtf8String("testing"));
+                return Functions.StringTable.GetString((Memory as any).allocUtf8String("testing"));
             }
             if (value === "TID_ABOUT") { // abput text credits
-                return StringTable__getString((Memory as any).allocUtf8String(AboutText));
+                return Functions.StringTable.GetString((Memory as any).allocUtf8String(AboutText));
             }
 
-            return StringTable__getString(a1);
+            return Functions.StringTable.GetString(a1);
         }, 'pointer', ['pointer']));
 
 
-        Interceptor.attach(Environment.LaserBase.add(0x31D454), { // HomePage::HomePage
+        Interceptor.attach(Addresses.HomePageCtor, { // HomePage::HomePage
             onEnter: function(args) {
                 this.x = args[0];
             },

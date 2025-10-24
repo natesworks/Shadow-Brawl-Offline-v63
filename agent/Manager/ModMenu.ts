@@ -4,7 +4,7 @@ import StringHelper from "../Utils/Game/StringHelper";
 import Environment from "../Environement/Environment";
 import ColorGradients from "../Utils/CSV/csv_client/Colorgradients";
 
-const {GUI, ResourceManager, GUIContainer, DisplayObject, LogicDataTables, DecoratedTextField, MovieClip, GameButton, MovieClipHelper, Sprite, String, ResourceListenner, Stage, ScrollArea, Imports, LogicLaserMessageFactory, Messaging, LogicGameModeUtil, LogicSkillServer, Application} = Functions;
+const {GUI, ResourceManager, DisplayObject, LogicDataTables, DecoratedTextField, MovieClip, GameButton, Sprite, Imports, Application} = Functions;
 
 class ModMenu {
     static Buttons = [];
@@ -14,8 +14,6 @@ class ModMenu {
 
     static LoadModMenuButton(HomePage: NativePointer) {
         let HomePageMovieClip = HomePage.add(112).readPointer();
-        let ddd = new NativeFunction(Environment.LaserBase.add(0x9A6A30), 'pointer', ['pointer', 'pointer'])(HomePage, StringHelper.ptr("mainscreen_hud_left"))
-        console.log(ddd);
 
         let TextPtr = Imports.Malloc(524);
         let MovieClipInstance = ResourceManager.GetMovieClip(StringHelper.ptr("sc/ui.sc"), StringHelper.ptr("button_navi_news_custom")); // battle_card_titles_config_item
@@ -24,6 +22,8 @@ class ModMenu {
         new NativeFunction(TextPtr.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(TextPtr, MovieClipInstance, 1);
         DisplayObject.SetXY(TextPtr, 970, 150);
 
+        // now here
+        /*
         let NotificationChild = new NativeFunction(Environment.LaserBase.add(0x9A6A30), 'pointer', ['pointer', 'pointer'])(MovieClipInstance, StringHelper.ptr("notification"))
         Functions.MovieClip.GotoAndStopFrameIndex(NotificationChild, 2);
 
@@ -31,7 +31,8 @@ class ModMenu {
         let version = MovieClip.GetTextFieldByName(MovieClipInstance, StringHelper.ptr("txt"));
         DecoratedTextField.SetupDecoratedText(version, StringHelper.scptr("Mod Menu"), ColorGradientByName2);
 
-        Sprite.AddChild(HomePageMovieClip, TextPtr)
+        Sprite.AddChild(HomePageMovieClip, TextPtr);
+        */
 
         Interceptor.attach(Addresses.CustomButton_buttonPressed, {
 		    onEnter(args) {
@@ -112,7 +113,6 @@ class ModMenu {
             ModMenu.ButtonY += 80;
         }
 
-        let NotificationChild = new NativeFunction(Environment.LaserBase.add(0x9A6A30), 'pointer', ['pointer', 'pointer'])(MovieClipInstance, StringHelper.ptr("notification"))
         // NotificationChild.add(8).writeU8(0);
 
         let TextMovieClip = new NativeFunction(Environment.LaserBase.add(0x9A6A30), 'pointer', ['pointer', 'pointer'])(MovieClipInstance, StringHelper.ptr("title"))
