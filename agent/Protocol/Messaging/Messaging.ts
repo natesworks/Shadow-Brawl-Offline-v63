@@ -40,12 +40,7 @@ class Messaging {
         let Decode = new NativeFunction(DecodeFnPtr, "void", ["pointer"]);
         Decode(Message);
 
-        try {
-            Functions.Messaging.ReceiveMessage(Addresses.MessageManagerInstance.readPointer(), Message);
-        }
-        catch (e) {
-            Debugger.Error((e as Error).message);
-        }
+        Functions.Messaging.ReceiveMessage(Addresses.MessageManagerInstance.readPointer(), Message);
         return Message;
     }
 }

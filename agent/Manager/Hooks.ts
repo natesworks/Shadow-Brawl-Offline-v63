@@ -13,14 +13,15 @@ import LobbyInfo from "../Utils/Game/LobbyInfo.js";
 import ModMenu from "./ModMenu.js";
 
 import ObjC from "frida-objc-bridge";
+import OwnHomeDataMessage from "../Packets/Server/Home/OwnHomeDataMessage/OwnHomeDataMessage.js";
 
 class Hooks {
     static InstallHooks() {
         Interceptor.attach(Addresses.ServerConnectionUpdate, {
             onEnter: function (args) {
                 this.ServerConnection = args[0];
-                this.ServerConnection.add(8).readPointer().add(8).writeU8(0); // Messaging::hasConnectFailed
-                this.ServerConnection.add(8).readPointer().add(181).writeInt(5); // Messaging::State
+                this.ServerConnection.add(8).readPointer().add(Addresses.HasConnectFailed).writeU8(0); // Messaging::hasConnectFailed
+                this.ServerConnection.add(8).readPointer().add(Addresses.State).writeInt(5); // Messaging::State
             }
         });
 
@@ -94,10 +95,6 @@ class Hooks {
 
             return 0;
         }, "int", ["pointer", "pointer"]));
-
-        Interceptor.replace(Environment.LaserBase.add(0xB61928), new NativeCallback(function () {
-            return 5;
-        }, 'int', []));
 
         // Misc Hooks
 
@@ -176,14 +173,6 @@ Version: ${Environment.script_version}
                 ModMenu.LoadModMenuButton(this.x);
             }
         });
-
-        Interceptor.replace(Addresses.Messaging_IsConnected, new NativeCallback(function () {
-            return 1;
-        }, 'int', []));
-
-        Interceptor.replace(Addresses.Messaging_HasConnectFailed, new NativeCallback(function () {
-            return 0;
-        }, 'int', []));
     }
 };
 

@@ -3,7 +3,7 @@ import Environment from "../Environement/Environment";
 import Addresses from "../Manager/Addresses";
 import Functions from "../Manager/Functions";
 
-const {Stage, Imports} = Functions;
+const { Stage, Imports } = Functions;
 
 import DebugMenuBase from "./DebugMenuBase";
 import StringHelper from "../Utils/Game/StringHelper";
@@ -13,6 +13,7 @@ class DebugMenu {
     static DebugMenuInstance: NativePointer
 
     static NewDebugMenu() {
+        if (Environment.platform != "iOS") return; // todo
         DebugMenu.DebugMenuInstance = Imports.Malloc(5200);
 
         let SCFile = StringHelper.ptr("sc/debug.sc");

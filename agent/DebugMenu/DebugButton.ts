@@ -3,7 +3,7 @@ import Environment from "../Environement/Environment";
 import Addresses from "../Manager/Addresses";
 import Functions from "../Manager/Functions";
 
-const {ResourceManager, DisplayObject, MovieClip, GameButton, Stage, Imports} = Functions;
+const { ResourceManager, DisplayObject, MovieClip, GameButton, Stage, Imports } = Functions;
 
 import DebugMenuBase from "./DebugMenuBase";
 import DebugMenu from "./DebugMenu";
@@ -14,11 +14,12 @@ import ShowFloaterText from "../Utils/Game/ShowFloaterText";
 class DebugButton {
     static IsDebugMenuOpenned: boolean = false;
     static isDebugMenuLoaded: boolean = false;
-    
+
     static DebugButtonInstance: NativePointer;
     static DebugButtonMovieClip: NativePointer;
 
     static LoadDebugButton() {
+        if (Environment.platform != "iOS") return; // todo
         DebugButton.DebugButtonInstance = Imports.Malloc(5200);
 
         GameButton.GameButton(DebugButton.DebugButtonInstance);
@@ -36,16 +37,16 @@ class DebugButton {
         DebugMenu.NewDebugMenu();
 
         Interceptor.attach(Addresses.CustomButton_buttonPressed, {
-			onEnter(args) {
-				DebugButton.ButtonClicked(args);
-			}
-		});
+            onEnter(args) {
+                DebugButton.ButtonClicked(args);
+            }
+        });
     }
 
     static ButtonClicked(args: InvocationArguments) {
         if (DebugButton.DebugButtonInstance.toInt32() === (args[0] as NativePointer).toInt32()) {
             Debugger.Debug("[DebugButton::ButtonClicked] Button Clicked!");
-            ShowFloaterText.Execute("[DebugButton::ButtonClicked] Button Clicked!")
+            //ShowFloaterText.Execute("[DebugButton::ButtonClicked] Button Clicked!")
             if (DebugButton.IsDebugMenuOpenned === false) {
                 if (DebugButton.isDebugMenuLoaded == false) {
                     DebugMenu.NewDebugMenu();
