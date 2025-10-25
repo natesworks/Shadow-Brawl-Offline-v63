@@ -25,7 +25,7 @@ class DebugButton {
         DebugButton.DebugButtonMovieClip = ResourceManager.GetMovieClip(StringHelper.ptr("sc/debug.sc"), StringHelper.ptr("debug_button"));
         new NativeFunction(DebugButton.DebugButtonInstance.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(DebugButton.DebugButtonInstance, DebugButton.DebugButtonMovieClip, 1);
 
-        DisplayObject.SetXY(DebugButton.DebugButtonInstance, 5, 710);
+        DisplayObject.SetXY(DebugButton.DebugButtonInstance, 100, 100);
         MovieClip.SetText(DebugButton.DebugButtonMovieClip, StringHelper.ptr("Txt"), StringHelper.scptr("D"));
         Stage.AddChild(Addresses.StageInstance.readPointer(), DebugButton.DebugButtonInstance);
         Debugger.Info("[DebugButton::LoadDebugButton] Loaded debug button!");

@@ -74,6 +74,8 @@ class Addresses {
     static GenericPopupConstructor: NativePointer;
     static GenericPopup_setTitleTid: NativePointer
     static GenericPopup_addButton: NativePointer;
+    static Messaging_IsConnected: NativePointer;
+    static Messaging_HasConnectFailed: NativePointer;
 
     static InitIOS() {
         Addresses.Imports.Malloc = Process.getModuleByName("libSystem.B.dylib").findExportByName("malloc")!;
@@ -135,6 +137,8 @@ class Addresses {
         Addresses.GenericPopupConstructor = Environment.LaserBase.add(0x184684);
         Addresses.GenericPopup_setTitleTid = Environment.LaserBase.add(0x184A88);
         Addresses.GenericPopup_addButton = Environment.LaserBase.add(0x184F2C);
+        Addresses.Messaging_IsConnected = Environment.LaserBase.add(0xB61928);
+        Addresses.Messaging_HasConnectFailed = Environment.LaserBase.add(0xB61904);
     }
 
     static InitAndroid() {
@@ -195,6 +199,8 @@ class Addresses {
         Addresses.GenericPopupConstructor = Environment.LaserBase.add(0x5dfbec);
         Addresses.GenericPopup_setTitleTid = Environment.LaserBase.add(0x5e00d0);
         Addresses.GenericPopup_addButton = Environment.LaserBase.add(0x5e0ad0);
+        Addresses.Messaging_IsConnected = Environment.LaserBase.add(0xc32c84);
+        Addresses.Messaging_HasConnectFailed = Environment.LaserBase.add(0xc33274);
     }
 
     static Init() {

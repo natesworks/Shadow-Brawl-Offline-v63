@@ -13,6 +13,7 @@ class ModMenu {
     static ButtonCount = 0;
 
     static LoadModMenuButton(HomePage: NativePointer) {
+        if (Environment.platform != "iOS") return; // todo
         let HomePageMovieClip = HomePage.add(112).readPointer();
 
         let TextPtr = Imports.Malloc(524);

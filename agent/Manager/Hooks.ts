@@ -44,19 +44,19 @@ class Hooks {
 
         // todo
         Interceptor.attach(Environment.LaserBase.add(0xB63060), { // Messaging::sendPepperAuthentication
-		    onEnter(args) {
-			    this.messaging = args[0];
+            onEnter(args) {
+                this.messaging = args[0];
                 console.warn("[+][PepperState::State][1] Pepper State Is", (Memory as any).readU32(this.messaging.add(24)));
-			    (Memory as any).writeU64(this.messaging.add(24), 5);
+                (Memory as any).writeU64(this.messaging.add(24), 5);
                 args[1] = args[2];
                 console.warn("[+][PepperState::State][2] Pepper State Is", (Memory as any).readU32(this.messaging.add(24)));
 
-		    },
-		    onLeave(retval) {
-			    (Memory as any).writeU64(this.messaging.add(24), 5);
+            },
+            onLeave(retval) {
+                (Memory as any).writeU64(this.messaging.add(24), 5);
                 console.warn("[+][PepperState::State][3] Pepper State Is", (Memory as any).readU32(this.messaging.add(24)));
-		    }
-	    });
+            }
+        });
 
         /*Interceptor.attach(Environment.LaserBase.add(0x232658), { // MessageManager::sendMessage
             onEnter(args) {
@@ -73,7 +73,7 @@ class Hooks {
             if (MessageType === 10108) {
                 return 0;
             }
-                
+
             if (MessageType != 24109) {
                 Debugger.Info("[Messaging::SendMessage] Type: " + MessageType);
             }
@@ -84,10 +84,10 @@ class Hooks {
                 let stream = new ByteStream(Array.from(new Uint8Array(payload!)));
                 AvatarNameCheckRequestMessage.Execute(stream);
             }
-                
+
             let Result = LogicCommand.CreateCommandByType(MessageType);
             if (!Result) {
-                LogicLaserMessageFactory.CreateMessageByType(MessageType);            
+                LogicLaserMessageFactory.CreateMessageByType(MessageType);
             }
 
             PiranhaMessage.Destruct(Message);
@@ -95,7 +95,7 @@ class Hooks {
             return 0;
         }, "int", ["pointer", "pointer"]));
 
-        Interceptor.replace(Environment.LaserBase.add(0xB61928), new NativeCallback(function() {
+        Interceptor.replace(Environment.LaserBase.add(0xB61928), new NativeCallback(function () {
             return 5;
         }, 'int', []));
 
@@ -141,10 +141,17 @@ Platform: ${Environment.platform}
 Version: ${Environment.script_version}
 ╚════════════════════════╝`
 
-        Interceptor.replace(Addresses.StringTable_GetString, new NativeCallback(function(a1) {
+        Interceptor.replace(Addresses.StringTable_GetString, new NativeCallback(function (a1) {
             let value = a1.readUtf8String();
             if (value === "TID_CONNECTING_TO_SERVER") { // we cant even see it lol the game is loadikg too fast
-                return Functions.StringTable.GetString((Memory as any).allocUtf8String("<cfe0e00>[<cfe1c00>+<cfe2a00>]<cfe3800>[<cfd4600>S<cfd5500>h<cfd6300>a<cfd7100>d<cfd7f00>o<cfc8d00>w<cfc9b00>B<cfcaa00>r<cfcb800>a<cfbc600>w<cfbd400>l<cfbe200>O<cfbf000>f<cfaff00>f<cfbff00>l<cfbf00b>i<cfbe216>n<cfbd421>e<cfbc62c>:<cfcb837>:<cfca942>C<cfc9b4d>o<cfc8d58>n<cfd7f64>n<cfd716f>e<cfd637a>c<cfd5485>t<cfd4690>i<cfe389b>n<cfe2aa6>g<cfe1cb1>]</c>"));
+                if (Environment.platform == "iOS") {
+                    // trash code dont have time to fix
+                    return Functions.StringTable.GetString((Memory as any).allocUtf8String("<cfe0e00>[<cfe1c00>+<cfe2a00>]<cfe3800>[<cfd4600>S<cfd5500>h<cfd6300>a<cfd7100>d<cfd7f00>o<cfc8d00>w<cfc9b00>B<cfcaa00>r<cfcb800>a<cfbc600>w<cfbd400>l<cfbe200>O<cfbf000>f<cfaff00>f<cfbff00>l<cfbf00b>i<cfbe216>n<cfbd421>e<cfbc62c>:<cfcb837>:<cfca942>C<cfc9b4d>o<cfc8d58>n<cfd7f64>n<cfd716f>e<cfd637a>c<cfd5485>t<cfd4690>i<cfe389b>n<cfe2aa6>g<cfe1cb1>]</c>"));
+                }
+                else {
+                    // idk colors dont work on android too lazy to fix
+                    return Functions.StringTable.GetString((Memory as any).allocUtf8String("[+][ShadowBrawlOffline::Connecting]"));
+                }
             }
             if (value === "TID_EDIT_CONTROLS") { // i tried making mod menu but it only works when youre not in battles
                 return Functions.StringTable.GetString((Memory as any).allocUtf8String("Battle Settings"));
@@ -160,15 +167,23 @@ Version: ${Environment.script_version}
         }, 'pointer', ['pointer']));
 
 
-        Interceptor.attach(Addresses.HomePageCtor, { // HomePage::HomePage
-            onEnter: function(args) {
+        Interceptor.attach(Addresses.HomePageCtor, {
+            onEnter: function (args) {
                 this.x = args[0];
             },
-            onLeave: function(retval) {
+            onLeave: function (retval) {
                 LobbyInfo.CreateLobbyInfo(this.x);
                 ModMenu.LoadModMenuButton(this.x);
             }
         });
+
+        Interceptor.replace(Addresses.Messaging_IsConnected, new NativeCallback(function () {
+            return 1;
+        }, 'int', []));
+
+        Interceptor.replace(Addresses.Messaging_HasConnectFailed, new NativeCallback(function () {
+            return 0;
+        }, 'int', []));
     }
 };
 
