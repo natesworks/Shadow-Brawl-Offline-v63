@@ -16,8 +16,8 @@ class LobbyInfo {
         new NativeFunction(TextPtr.readPointer().add(352).readPointer(), 'void', ['pointer', 'pointer', 'bool'])(TextPtr, MovieClipInstance, 1);
 
         DisplayObject.SetXY(TextPtr, 140, 90);
-        TextPtr.add(16).writeFloat(1.65);
-        TextPtr.add(28).writeFloat(1.65);
+        TextPtr.add(16).writeFloat(2);
+        TextPtr.add(28).writeFloat(2);
 
         // DisplayObject.SetHeight(TextPtr, 1.65); 
         // DisplayObject.SetWidth(TextPtr, 1.65);
