@@ -21,7 +21,7 @@ class Messaging {
             Factory = Imports.Malloc(1024);
             Factory.writePointer(Addresses.LogicLaserMessageFactory);
         } else {
-            Factory = Environment.LaserBase.add(0x109b910).readPointer().add(72).readPointer().add(368).readPointer();
+            Factory = NULL;
         }
 
         let Message = LogicLaserMessageFactory.CreateMessageByType(Factory, Id);

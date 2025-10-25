@@ -43,22 +43,6 @@ class Hooks {
         }, 'int', []));
         */
 
-        // todo
-        Interceptor.attach(Environment.LaserBase.add(0xB63060), { // Messaging::sendPepperAuthentication
-            onEnter(args) {
-                this.messaging = args[0];
-                console.warn("[+][PepperState::State][1] Pepper State Is", (Memory as any).readU32(this.messaging.add(24)));
-                (Memory as any).writeU64(this.messaging.add(24), 5);
-                args[1] = args[2];
-                console.warn("[+][PepperState::State][2] Pepper State Is", (Memory as any).readU32(this.messaging.add(24)));
-
-            },
-            onLeave(retval) {
-                (Memory as any).writeU64(this.messaging.add(24), 5);
-                console.warn("[+][PepperState::State][3] Pepper State Is", (Memory as any).readU32(this.messaging.add(24)));
-            }
-        });
-
         /*Interceptor.attach(Environment.LaserBase.add(0x232658), { // MessageManager::sendMessage
             onEnter(args) {
                 // this.message = args[1];

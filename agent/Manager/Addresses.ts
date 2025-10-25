@@ -135,7 +135,6 @@ class Addresses {
         Addresses.GenericPopupConstructor = Environment.LaserBase.add(0x184684);
         Addresses.GenericPopup_setTitleTid = Environment.LaserBase.add(0x184A88);
         Addresses.GenericPopup_addButton = Environment.LaserBase.add(0x184F2C);
-        Addresses.HasConnectFailed = Environment.LaserBase.add(0xB61904);
     }
 
     static InitAndroid() {
@@ -196,7 +195,6 @@ class Addresses {
         Addresses.GenericPopupConstructor = Environment.LaserBase.add(0x5dfbec);
         Addresses.GenericPopup_setTitleTid = Environment.LaserBase.add(0x5e00d0);
         Addresses.GenericPopup_addButton = Environment.LaserBase.add(0x5e0ad0);
-        Addresses.HasConnectFailed = Environment.LaserBase.add(0xc33274);
     }
 
     static Init() {
